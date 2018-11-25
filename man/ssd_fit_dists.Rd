@@ -30,7 +30,7 @@ Fits one or more distributions to species sensitivity data.
 \details{
 By default the 'lnorm', 'llog', 'gompertz', 'lgumbel', 'gamma' and 'weibull'
 distributions are fitted to the data.
-The ssd_fit_dist and \code{\link{ssd_fit_dist}} functions have also been
+The ssd_fit_dists function has also been
 tested with the 'pareto' distribution.
 
 If weight specifies a column in the data frame with positive integers,
@@ -43,12 +43,9 @@ It may be possible to use artificial censoring to improve the estimates in the e
 }
 \examples{
 ssd_fit_dists(boron_data)
-data(fluazinam)
+data(fluazinam, package = "fitdistrplus")
 ssd_fit_dists(fluazinam, left = "left", right = "right")
 }
 \references{
 Liu, Y., Salibián-Barrera, M., Zamar, R.H., and Zidek, J.V. 2018. Using artificial censoring to improve extreme tail quantile estimates. Journal of the Royal Statistical Society: Series C (Applied Statistics).
-}
-\seealso{
-\code{\link{ssd_fit_dist}}
 }

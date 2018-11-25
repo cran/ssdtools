@@ -22,13 +22,13 @@ NULL
 #' @format NULL
 #' @usage NULL
 #' @export
-StatSsd <- ggplot2::ggproto(
-  "StatSsd", ggplot2::Stat,
+StatSsd <- ggproto(
+  "StatSsd", Stat,
   compute_panel = function(data, scales) {
     data$density <- ssd_ecd(data$x)
     data
   },
-  default_aes = ggplot2::aes(y = ..density..),
+  default_aes = aes(y = ..density..),
   required_aes = "x"
 )
 
@@ -36,13 +36,13 @@ StatSsd <- ggplot2::ggproto(
 #' @format NULL
 #' @usage NULL
 #' @export
-StatSsdcens <- ggplot2::ggproto(
-  "StatSsdcens", ggplot2::Stat,
+StatSsdcens <- ggproto(
+  "StatSsdcens", Stat,
   compute_panel = function(data, scales) {
     data$density <- ssd_ecd(rowMeans(data[c("xmin", "xmax")], na.rm = TRUE))
     data
   },
-  default_aes = ggplot2::aes(y = ..density..),
+  default_aes = aes(y = ..density..),
   required_aes = c("xmin", "xmax")
 )
 
@@ -50,16 +50,16 @@ StatSsdcens <- ggplot2::ggproto(
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSsd <- ggplot2::ggproto(
-  "GeomSsd", ggplot2::GeomPoint
+GeomSsd <- ggproto(
+  "GeomSsd", GeomPoint
 )
 
 #' @rdname ssdtools-ggproto
 #' @format NULL
 #' @usage NULL
 #' @export
-GeomSsdcens <- ggplot2::ggproto(
-  "GeomSsdcens", ggplot2::GeomPoint
+GeomSsdcens <- ggproto(
+  "GeomSsdcens", GeomPoint
 )
 
 #' @rdname ssdtools-ggproto
@@ -69,11 +69,16 @@ GeomSsdcens <- ggplot2::ggproto(
 GeomHcintersect <- ggproto(
   "GeomHcintersect", Geom,
   draw_panel = function(data, panel_params, coord) {
-
-    pieces <- data.frame(x = c(0.0001, data$xintercept, data$xintercept),
-                         y = c(data$yintercept, data$yintercept, -Inf))
-
-    data <- cbind(data, pieces)
+    
+    data$group <- 1:nrow(data)
+    data$x <- data$xintercept
+    data$y <- data$yintercept
+    start <- data
+    start$x <- 0.0001
+    end <- data
+    end$y <- -Inf
+    
+    data <- rbind(start, data, end)
     GeomPath$draw_panel(data, panel_params, coord)
   },
 
@@ -119,10 +124,10 @@ GeomXribbon <- ggproto(
                                  y = c(y, rev(y)), x = c(xmax, rev(xmin)), id = c(ids, rev(ids)))
     munched <- coord_munch(coord, positions, panel_params)
 
-    ggname("geom_ribbon", polygonGrob(
+    ggname("geom_ribbon", grid::polygonGrob(
       munched$x, munched$y, id = munched$id,
       default.units = "native",
-      gp = gpar(
+      gp = grid::gpar(
         fill = alpha(aes$fill, aes$alpha),
         col = aes$colour,
         lwd = aes$size * .pt,
@@ -139,12 +144,12 @@ plot_coord_scale <- function(data, xlab, ylab) {
     coord_trans(x = "log10"),
     scale_x_continuous(xlab, breaks = scales::trans_breaks("log10", function(x) 10^x),
                        labels = comma_signif),
-    scale_y_continuous(ylab, labels = percent, limits = c(0, 1),
+    scale_y_continuous(ylab, labels = scales::percent, limits = c(0, 1),
                        breaks = seq(0,1,by = 0.2), expand = c(0,0))
   )
 }
 
-#' Plot Species Sensitivy Data
+#' Plot Species Sensitivity Data
 #'
 #' Uses the empirical cumulative density/distribution to visualize species sensitivity data.
 #'
@@ -158,7 +163,7 @@ plot_coord_scale <- function(data, xlab, ylab) {
 stat_ssd <- function(mapping = NULL, data = NULL, geom = "point",
                      position = "identity", na.rm = FALSE, show.legend = NA,
                      inherit.aes = TRUE, ...) {
-  ggplot2::layer(
+  layer(
     stat = StatSsd, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
@@ -244,33 +249,33 @@ geom_hcintersect <- function(mapping = NULL, data = NULL, xintercept, yintercept
 }
 
 plot_fitdist <- function(x, breaks = "default", ...) {
-  par(oma=c(0,0,2,0))
-  plot(x, breaks = breaks, ...)
-  title(paste("Distribution:", x$distname), outer = TRUE)
+  graphics::par(oma=c(0,0,2,0))
+  graphics::plot(x, breaks = breaks, ...)
+  graphics::title(paste("Distribution:", x$distname), outer = TRUE)
 }
 
 #' @export
 plot.fitdists <- function(x, breaks = "default", ...) {
-  walk(x, plot_fitdist, breaks = breaks, ...)
+  lapply(x, plot_fitdist, breaks = breaks, ...)
   invisible()
 }
 
 #' Autoplot
 #'
 #' @param object The object to plot.
-#' @param ci A flag indicating wether to plot confidence intervals
+#' @param ci A flag indicating whether to plot confidence intervals
 #' @param hc A count between 1 and 99 indicating the percent hazard concentration to plot (or NULL).
 #' @param xlab A string of the x-axis label.
 #' @param ylab A string of the x-axis label.
 #' @param ... Unused.
 #' @export
 #' @examples
-#' autoplot(boron_lnorm)
+#' ggplot2::autoplot(boron_lnorm)
 autoplot.fitdist <- function(object, ci = FALSE, hc = 5L,
                              xlab = "Concentration", ylab = "Species Affected",
                              ...) {
   check_flag(ci)
-  checkor(check_null(hc), check_vector(hc, 1:99, length = 1))
+  checkor(check_null(hc), check_scalar(hc, c(1L,99L)))
   check_string(xlab)
   check_string(ylab)
 
@@ -297,12 +302,12 @@ autoplot.fitdist <- function(object, ci = FALSE, hc = 5L,
 #' @examples
 #' fluazinam_lnorm$censdata$right[3] <- fluazinam_lnorm$censdata$left[3] * 1.5
 #' fluazinam_lnorm$censdata$left[5] <- NA
-#' autoplot(fluazinam_lnorm)
+#' ggplot2::autoplot(fluazinam_lnorm)
 autoplot.fitdistcens <- function(object, ci = FALSE, hc = 5L,
                                  xlab = "Concentration", ylab = "Species Affected",
                                  ...) {
   check_flag(ci)
-  checkor(check_null(hc), check_vector(hc, 1:99, length = 1))
+  checkor(check_null(hc), check_scalar(hc, c(1L,99L)))
   check_string(xlab)
   check_string(ylab)
 
@@ -348,7 +353,7 @@ autoplot.fitdistcens <- function(object, ci = FALSE, hc = 5L,
 #' @export
 #' @examples
 #' \dontrun{
-#' autoplot(boron_dists)
+#' ggplot2::autoplot(boron_dists)
 #' }
 autoplot.fitdists <- function(object, xlab = "Concentration", ylab = "Species Affected", ic = "aicc", ...) {
   check_string(xlab)
@@ -375,7 +380,7 @@ autoplot.fitdists <- function(object, xlab = "Concentration", ylab = "Species Af
 #' @export
 #' @examples
 #' \dontrun{
-#' autoplot(boron_dists)
+#' ggplot2::autoplot(boron_dists)
 #' }
 autoplot.fitdistscens <- function(object, xlab = "Concentration", ylab = "Species Affected",
                                   ic = "aic", ...) {
@@ -417,7 +422,7 @@ ssd_plot <- function(data, pred, left = "Conc", right = left,
   checkor(check_string(shape), check_null(shape))
   check_flag(ci)
   check_flag(ribbon)
-  checkor(check_null(hc), check_vector(hc, 1:99, length = 1))
+  checkor(check_null(hc), check_vector(hc, pred$percent, only = TRUE, length = TRUE))
 
   check_colnames(data, unique(c(left, right, label, shape)))
 
@@ -440,7 +445,7 @@ ssd_plot <- function(data, pred, left = "Conc", right = left,
   gp <- gp + geom_line(aes_string(y = "percent/100"), color = if(ribbon) "black" else "red")
 
   if(!is.null(hc))
-    gp <- gp + geom_hcintersect(data = data, xintercept = pred$est[pred$percent == hc], yintercept = hc/100)
+    gp <- gp + geom_hcintersect(data = data, xintercept = pred$est[pred$percent %in% hc], yintercept = hc/100)
 
   if(left == right) {
     gp <- gp + geom_ssd(data = data, aes_string(x = left, shape = shape,
@@ -472,7 +477,7 @@ ssd_plot <- function(data, pred, left = "Conc", right = left,
 
   if(!is.null(label)) {
     data$percent <- ssd_ecd(data[[left]])
-    data[[left]] %<>% magrittr::multiply_by(shift_x)
+    data[[left]] <- data[[left]] * shift_x
     gp <- gp + geom_text(data = data, aes_string(x = left, y = "percent", label = label),
                          hjust = 0, size = size, fontface = "italic")
   }
@@ -485,7 +490,7 @@ ssd_plot <- function(data, pred, left = "Conc", right = left,
 #' Plots a Cullen and Frey graph of the skewness and kurtosis
 #' for non-censored data.
 #'
-#' @inheritParams ssd_fit_dist
+#' @inheritParams ssd_fit_dists
 #' @seealso \code{\link[fitdistrplus]{descdist}}
 #' @export
 #'

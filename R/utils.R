@@ -81,7 +81,7 @@ is.fitdistscens <- function(x) {
 #' @param ... Unused.
 #' @export
 #' @examples
-#' nobs(boron_lnorm)
+#' stats::nobs(boron_lnorm)
 nobs.fitdist <- function(object, ...) object$n
 
 #' Number of Observations
@@ -90,12 +90,12 @@ nobs.fitdist <- function(object, ...) object$n
 #' @param ... Unused.
 #' @export
 #' @examples
-#' nobs(boron_lnorm)
+#' stats::nobs(boron_lnorm)
 nobs.fitdistcens <- function(object, ...) nrow(object$censdata)
 
 #' @export
 nobs.fitdists <- function(object, ...) {
-  ns <- map_int(object, nobs)
+  ns <- vapply(object, stats::nobs, 1L)
   if(!all(ns == ns[1]))
     stop("the fitdists must have the same number of observations", call. = FALSE)
   names(ns) <- NULL
@@ -126,7 +126,7 @@ npars.fitdistcens <- function(x, ...) length(x$estimate)
 
 #' @describeIn npars Get the Number of parameters
 #' @export
-npars.fitdists <- function(x, ...) map_int(x, npars)
+npars.fitdists <- function(x, ...) vapply(x, npars, 1L)
 
 #' Comma and Significance Formatter
 #'
@@ -140,18 +140,19 @@ npars.fitdists <- function(x, ...) map_int(x, npars)
 #' @examples
 #' comma_signif(1199)
 comma_signif <- function(x, digits = 1, ...) {
-  x %<>% signif(digits = digits)
+  x <- signif(x, digits = digits)
   scales::comma(x, ...)
 }
 
 ggname <- function(prefix, grob) {
-  grob$name <- grobName(grob, prefix)
+  grob$name <- grid::grobName(grob, prefix)
   grob
 }
 
 #' @export
 print.fitdists <- function(x, ...) {
-  walk(x, print)
+  lapply(x, print)
+  invisible(x)
 }
 
 #' Empirical Cumulative Density

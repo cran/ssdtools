@@ -9,54 +9,41 @@ Status](https://assets.bcdevexchange.org/images/badges/exploration.svg)](https:/
 Status](https://travis-ci.org/bcgov/ssdtools.svg?branch=master)](https://travis-ci.org/bcgov/ssdtools)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/bcgov/ssdtools/master.svg)](https://codecov.io/github/bcgov/ssdtools?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/ssdtools)](https://cran.r-project.org/package=ssdtools)
 
 `ssdtools` is an R package to plot and fit Species Sensitivity
-Distributions (SSD). It uses Maximum Likelihood and
-Information-Theoretic based model averaging.
+Distributions (SSD).
+
+SSDs are cumulative probability distributions which are fitted to
+toxicity concentrations for multiple species. The ssdtools package uses
+Maximum Likelihood to fit log-normal, log-logistic, log-Gumbel,
+Gompertz, gamma or Weibull distributions. Multiple distributions can be
+averaged using Information Criteria. Confidence intervals on fits and
+hazard concentrations are produced by bootstrapping.
 
 ## Installation
 
-To quickly install the latest version:
+To install the latest version from
+[CRAN](https://CRAN.R-project.org/package=ssdtools)
 
 ``` r
-# install.packages("devtools")
+install.packages("ssdtools")
+```
+
+To install the latest development version:
+
+``` r
+install.packages("devtools")
 devtools::install_github("bcgov/ssdtools")
-```
-
-To install the latest version and build its vignette:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("bcgov/ssdtools", force = TRUE, build_vignettes = TRUE)
-```
-
-To view the vignette
-
-``` r
-vignette("ssdtools")
 ```
 
 ## Introduction
 
-`ssdtools` loads `fitdistrplus` and `ggplot2`, both of which it extends,
-as well as several other packages.
-
-``` r
-library(ssdtools)
-#> Loading required package: VGAM
-#> Loading required package: stats4
-#> Loading required package: splines
-#> Loading required package: ggplot2
-#> Loading required package: fitdistrplus
-#> Loading required package: MASS
-#> Loading required package: survival
-#> Loading required package: npsurv
-#> Loading required package: lsei
-```
-
 `ssdtools` provides a data set for several chemicals including Boron.
 
 ``` r
+library(ssdtools)
 boron_data
 #> # A tibble: 28 x 5
 #>    Chemical Species                  Conc Group        Units
@@ -83,11 +70,12 @@ boron_dists <- ssd_fit_dists(boron_data)
 and plot using the `ggplot2` generic `autoplot`
 
 ``` r
-theme_set(theme_bw()) # set plotting theme
+library(ggplot2)
+theme_set(theme_bw())
 autoplot(boron_dists)
 ```
 
-![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
 
 The goodness of fit can be assessed using `ssd_gof`
 
@@ -95,7 +83,7 @@ The goodness of fit can be assessed using `ssd_gof`
 ssd_gof(boron_dists)
 #> # A tibble: 6 x 9
 #>   dist        ad     ks    cvm   aic  aicc   bic delta weight
-#>   <chr>    <dbl>  <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
+#> * <chr>    <dbl>  <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
 #> 1 lnorm    0.507 0.107  0.0703  239.  240.  242. 1.42   0.133
 #> 2 llog     0.487 0.0993 0.0595  241.  241.  244. 3.40   0.049
 #> 3 gompertz 0.602 0.120  0.0822  238.  238.  240. 0      0.271
@@ -107,11 +95,15 @@ ssd_gof(boron_dists)
 and the model-averaged 5% hazard concentration estimated using `ssd_hc`
 
 ``` r
-ssd_hc(boron_dists)
+boron_hc5 <- ssd_hc(boron_dists, nboot = 10000)
+```
+
+``` r
+print(boron_hc5)
 #> # A tibble: 1 x 5
 #>   percent   est    se   lcl   ucl
-#>     <int> <dbl> <dbl> <dbl> <dbl>
-#> 1       5  1.25 0.717 0.619  3.13
+#> *   <int> <dbl> <dbl> <dbl> <dbl>
+#> 1       5  1.25 0.736 0.602  3.22
 ```
 
 Model-averaged predictions complete with confidence intervals can be
@@ -126,47 +118,23 @@ and plotted together with the original data using
 
 ``` r
 ssd_plot(boron_data, boron_pred, shape = "Group", color = "Group", label = "Species",
-         xlab = "Concentration (mg/L)")
+         xlab = "Concentration (mg/L)", ribbon = TRUE) + expand_limits(x = 3000)
 ```
 
-![](man/figures/README-unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/README-unnamed-chunk-10-1.png)<!-- -->
 
-For more information and examples of how to use `ssdtools` in conjuction
-with `fitdistrplus` to assess alternative fits and deal with weighted
-and censored data see the vignette `ssdtools`. The vignette also
-demonstrates how to use `ssdtools` in conjunction with `ggplot2` to
-produce custom plots.
+The ssdtools manual is available at
+<https://bcgov.github.io/ssdtools/articles/ssdtools-manual.html>.
 
-A shiny webpage developed by [Seb
-Dalgaro](https://github.com/sebdalgarno) of Poisson Consulting for
-non-users of R is available at
+A shiny webpage developed for non-R-users is available at
 <https://poissonconsulting.shinyapps.io/ssdtools/>.
 
 The data included in `ssdtools` are sourced from the Canadian
-environmental quality guidelines [published by the Canadian Council of
+environmental quality guidelines published by the [Canadian Council of
 Ministers of the Environment](http://ceqg-rcqe.ccme.ca/en/index.html).
-See the `data-raw` folder for more information.
-
-## Citation
-
-``` 
-
-To cite package 'ssdtools' in publications use:
-
-  Joe Thorley and Carl Schwarz (2018). ssdtools: Species
-  Sensitivity Distributions. R package version 0.0.1.9003.
-  https://github.com/bcgov/ssdca
-
-A BibTeX entry for LaTeX users is
-
-  @Manual{,
-    title = {ssdtools: Species Sensitivity Distributions},
-    author = {Joe Thorley and Carl Schwarz},
-    year = {2018},
-    note = {R package version 0.0.1.9003},
-    url = {https://github.com/bcgov/ssdca},
-  }
-```
+See the
+[`data-raw`](https://github.com/bcgov/ssdtools/tree/master/data-raw)
+folder for more information.
 
 ## Getting Help or Reporting an Issue
 

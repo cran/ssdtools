@@ -15,10 +15,11 @@
 predict_fitdist_percent <- function(percent, boot, level) {
   quantile <- quantile(boot, percent/100, CI.level = level)
   est <- quantile$quantiles[1,1]
-  se <- sd(quantile$bootquant[,1], 2)
+  se <- stats::sd(quantile$bootquant[,1], 2)
   lcl <- quantile$quantCI[1,1]
   ucl <- quantile$quantCI[2,1]
-  tibble::data_frame(percent = percent, est = est, se = se, lcl = lcl, ucl = ucl)
+  data.frame(percent = percent, est = est, se = se, lcl = lcl, ucl = ucl, 
+             stringsAsFactors = FALSE)
 }
 
 model_average <- function(x) {
@@ -26,7 +27,8 @@ model_average <- function(x) {
   se <- sqrt(sum(x$weight * (x$se^2 + (x$est - est)^2)))
   lcl <- sum(x$lcl * x$weight)
   ucl <- sum(x$ucl * x$weight)
-  tibble::data_frame(est = est, se = se, lcl = lcl, ucl = ucl)
+  data.frame(percent = x$percent[1], est = est, se = se, lcl = lcl, ucl = ucl,
+             stringsAsFactors = FALSE)
 }
 
 #' Predict fitdist
@@ -36,14 +38,15 @@ model_average <- function(x) {
 #' @examples
 #' predict(boron_lnorm, percent = c(5L, 50L))
 predict.fitdist <- function(object, percent = 1:99,
-                            nboot = 1001, level = 0.95, ...) {
-  check_vector(percent, c(1L, 99L), length = c(1, Inf),
-                          unique = TRUE)
+                            nboot = 1000, level = 0.95, ...) {
+  check_vector(percent, c(1L, 99L), length = TRUE, unique = TRUE)
   nboot <- check_count(nboot, coerce = TRUE)
   check_probability(level)
-  boot <- bootdist(object, niter = nboot)
-  prediction <- map_df(percent, predict_fitdist_percent, boot = boot, level = level)
-  prediction
+  boot <- fitdistrplus::bootdist(object, niter = nboot)
+  prediction <- lapply(percent, predict_fitdist_percent, boot = boot, level = level)
+  prediction$stringsAsFactors <- FALSE
+  prediction <- do.call("rbind", prediction)
+  as_conditional_tibble(prediction)
 }
 
 #' Predict censored fitdist
@@ -55,15 +58,16 @@ predict.fitdist <- function(object, percent = 1:99,
 #' predict(fluazinam_lnorm, percent = c(5L, 50L))
 #' }
 predict.fitdistcens <- function(object, percent = 1:99,
-                            nboot = 1001, level = 0.95, ...) {
-  check_vector(percent, c(1L, 99L), length = c(1, Inf),
-                          unique = TRUE)
+                            nboot = 1000, level = 0.95, ...) {
+  check_vector(percent, c(1L, 99L), length = TRUE, unique = TRUE)
   nboot <- check_count(nboot, coerce = TRUE)
   check_probability(level)
 
-  boot <- bootdistcens(object, niter = nboot)
-  prediction <- map_df(percent, predict_fitdist_percent, boot = boot, level = level)
-  prediction
+  boot <- fitdistrplus::bootdistcens(object, niter = nboot)
+  prediction <- lapply(percent, predict_fitdist_percent, boot = boot, level = level)
+  prediction$stringsAsFactors <- FALSE
+  prediction <- do.call("rbind", prediction)
+  as_conditional_tibble(prediction)
 }
 
 #' Predict fitdist
@@ -81,27 +85,32 @@ predict.fitdistcens <- function(object, percent = 1:99,
 #' predict(boron_dists)
 #' }
 predict.fitdists <- function(object, percent = 1:99,
-                             nboot = 1001, ic = "aicc", average = TRUE, level = 0.95, ...) {
-  check_vector(ic, c("aic", "aicc", "bic"), length = 1)
+                             nboot = 1000, ic = "aicc", average = TRUE, level = 0.95, ...) {
+  check_scalar(ic, c("aic", "aicc", "bic"))
 
   ic <- ssd_gof(object)[c("dist", ic)]
 
   ic$delta <- ic[[2]] - min(ic[[2]])
   ic$weight <- round(exp(-ic$delta/2)/sum(exp(-ic$delta/2)), 3)
 
-  ic %<>% split(., 1:nrow(.))
+  ic <- split(ic, 1:nrow(ic))
 
-  predictions <- lapply(object, predict, percent = percent, nboot = nboot, level = level) %>%
-    map2(ic, function(x, y) {x$weight <- y$weight; x}) %>%
-    dplyr::bind_rows(.id = "dist")
+  predictions <- lapply(object, predict, percent = percent, nboot = nboot, level = level)
+  predictions <- mapply(function(x, y) {x$weight <- y$weight; x}, predictions, ic,
+                        SIMPLIFY = FALSE)
+  predictions <- mapply(function(x, y) {x$dist <- y;x}, predictions, names(predictions),
+                        SIMPLIFY = FALSE)
+  predictions$stringsAsFactors <- FALSE
+  predictions <- do.call("rbind", predictions)
+  predictions <- predictions[c("dist", "percent", "est", "se", "lcl", "ucl", "weight")]
 
   if(!average) return(predictions)
-
-  predictions %<>%
-    plyr::ddply("percent", model_average) %>%
-    tibble::as_tibble()
-
-  predictions
+  
+  predictions <- split(predictions, predictions$percent)
+  predictions <- lapply(predictions, model_average)
+  predictions$stringsAsFactors <- FALSE
+  predictions <- do.call("rbind", predictions)
+  as_conditional_tibble(predictions)
 }
 
 #' Predict Censored fitdists
@@ -113,8 +122,8 @@ predict.fitdists <- function(object, percent = 1:99,
 #' predict(fluazinam_dists)
 #' }
 predict.fitdistscens <- function(object, percent = 1:99,
-                             nboot = 1001, ic = "aic", average = TRUE, level = 0.95, ...) {
-  check_vector(ic, c("aic", "bic"), length = 1)
+                             nboot = 1000, ic = "aic", average = TRUE, level = 0.95, ...) {
+  check_scalar(ic, c("aic", "bic", "bic"))
   NextMethod(object = object, percent = percent, nboot = nboot, ic = ic, average = average,
              level = level, ...)
 }

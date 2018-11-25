@@ -12,12 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-#' @import checkr ggplot2 purrr stats
-#' @importFrom FAdist dllog
-#' @importFrom fitdistrplus bootdist bootdistcens
-#' @importFrom graphics par plot title
-#' @importFrom grid grobName polygonGrob gpar
-#' @importFrom magrittr %<>% %>%
-#' @importFrom scales percent
-#' @importFrom VGAM dgompertz gompertz paretoff vglm
+#' @import checkr ggplot2
+#' @importFrom graphics plot
+#' @importFrom stats coef nobs predict
+#' @importFrom VGAM vglm
 NULL

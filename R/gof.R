@@ -54,7 +54,7 @@ ssd_gof <- function(x, ...) {
 #' @export
 ssd_gof.fitdist <- function(x, ...) {
   dist <- x$distname
-  n <- nobs(x)
+  n <- stats::nobs(x)
   k <- npars(x)
 
   aic <- x$aic
@@ -62,7 +62,7 @@ ssd_gof.fitdist <- function(x, ...) {
   bic <- x$bic
 
   if(n >= 8) {
-    x %<>% fitdistrplus::gofstat()
+    x <- fitdistrplus::gofstat(x)
     ad <- x$ad
     ks <- x$ks
     cvm <- x$cvm
@@ -71,27 +71,32 @@ ssd_gof.fitdist <- function(x, ...) {
     ks <- NA_real_
     cvm <- NA_real_
   }
-  dplyr::data_frame(dist = dist, ad = ad, ks = ks, cvm = cvm,
-                    aic = aic, aicc = aicc, bic = bic)
+  data <- data.frame(dist = dist, ad = ad, ks = ks, cvm = cvm,
+                    aic = aic, aicc = aicc, bic = bic, stringsAsFactors = FALSE)
+  as_conditional_tibble(data)
 }
 
 #' @describeIn ssd_gof Goodness of Fit
 #' @export
 ssd_gof.fitdistcens <- function(x, ...) {
   dist <- x$distname
-  dplyr::data_frame(dist = dist, aic = x$aic, bic = x$bic)
+  data <- data.frame(dist = dist, aic = x$aic, bic = x$bic, 
+                     stringsAsFactors = FALSE)
+  as_conditional_tibble(data)
 }
 
 #' @describeIn ssd_gof Goodness of Fit
 #' @export
 ssd_gof.fitdists <- function(x, ...) {
-  x %<>% map_df(ssd_gof)
+  x <- lapply(x, ssd_gof)
+  x$stringsAsFactors <- FALSE
+  x <- do.call("rbind", x)
   if(!is.null(x$aicc)) {
     x$delta <- x$aicc - min(x$aicc)
   } else # aicc not defined for censored data
     x$delta <- x$aic - min(x$aic)
   x$weight <- exp(-x$delta/2)/sum(exp(-x$delta/2))
-  x$weight %<>% round(3)
-  x$delta %<>% round(3)
+  x$weight <- round(x$weight, 3)
+  x$delta <- round(x$delta, 3)
   x
 }

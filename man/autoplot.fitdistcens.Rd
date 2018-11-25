@@ -10,7 +10,7 @@
 \arguments{
 \item{object}{The object to plot.}
 
-\item{ci}{A flag indicating wether to plot confidence intervals}
+\item{ci}{A flag indicating whether to plot confidence intervals}
 
 \item{hc}{A count between 1 and 99 indicating the percent hazard concentration to plot (or NULL).}
 
@@ -26,5 +26,5 @@ Autoplot
 \examples{
 fluazinam_lnorm$censdata$right[3] <- fluazinam_lnorm$censdata$left[3] * 1.5
 fluazinam_lnorm$censdata$left[5] <- NA
-autoplot(fluazinam_lnorm)
+ggplot2::autoplot(fluazinam_lnorm)
 }
