@@ -6,46 +6,53 @@
 \alias{qgompertz}
 \alias{pgompertz}
 \alias{rgompertz}
+\alias{sgompertz}
 \title{Gompertz Distribution}
 \usage{
-dgompertz(x, scale = 1, shape, log = FALSE)
+dgompertz(x, lscale = 0, lshape = 0, log = FALSE)
 
-qgompertz(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+qgompertz(p, lscale = 0, lshape = 0, lower.tail = TRUE, log.p = FALSE)
 
-pgompertz(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+pgompertz(q, lscale = 0, lshape = 0, lower.tail = TRUE, log.p = FALSE)
 
-rgompertz(n, scale = 1, shape)
+rgompertz(n, lscale = 0, lshape = 0)
+
+sgompertz(x)
 }
 \arguments{
-\item{x, q}{vector of quantiles.}
+\item{x}{A numeric vector of values.}
 
-\item{scale}{scale parameter.}
+\item{lscale}{scale parameter on the log scale.}
 
-\item{shape}{shape parameter.}
+\item{lshape}{shape parameter on the log scale.}
 
-\item{log, log.p}{logical; if TRUE, probabilities p are given as log(p).}
+\item{log}{logical; if TRUE, probabilities p are given as log(p).}
+
+\item{p}{vector of probabilities.}
 
 \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].}
 
-\item{p}{vector of probabilities.}
+\item{log.p}{logical; if TRUE, probabilities p are given as log(p).}
+
+\item{q}{vector of quantiles.}
 
 \item{n}{number of observations.}
 }
 \value{
-dgompertz gives the density, pgompertz gives the distribution function,
-qgompertz gives the quantile function, and rgompertz generates random deviates.
+A numeric vector.
 }
 \description{
-Density, distribution function, quantile function and random generation
-for the Gompertz distribution.
+Density, distribution function, quantile function, random generation
+and starting values for the
+Gompertz distribution.
+}
+\details{
 The functions are wrappers on the equivalent VGAM functions that
 return a zero length numeric vector if x, q or p are zero length.
 }
 \examples{
-x <- rgompertz(1000,1,0.1)
-hist(log(x),freq=FALSE,col='gray',border='white')
-hist(x,freq=FALSE,col='gray',border='white')
-curve(dgompertz(x,1,0.1),add=TRUE,col='red4',lwd=2)
+x <- seq(0.01, 5, by = 0.01)
+plot(x, dgompertz(x), type = "l")
 }
 \seealso{
 \code{\link[VGAM]{dgompertz}}

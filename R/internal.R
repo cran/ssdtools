@@ -1,13 +1,34 @@
-as_conditional_tibble <- function(x) {
-  if(requireNamespace("tibble", quietly = TRUE))
-    x <- tibble::as_tibble(x)
+#    Copyright 2015 Province of British Columbia
+#
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+probs <- function(level) {
+  probs <- (1 - level) / 2
+  c(probs, 1 - probs)
+}
+
+as_tibble <- function(x) {
+  stopifnot(is.data.frame(x))
+  class(x) <- c("tbl_df", "tbl", "data.frame")
   x
 }
 
 safely <- function(.f) {
   function(...) {
     x <- try(.f(...), silent = TRUE)
-    if(inherits(x, "try-error")) return(list(result = NULL, error = as.character(x)))
+    if (inherits(x, "try-error")) {
+      return(list(result = NULL, error = as.character(x)))
+    }
     list(result = x, error = NULL)
   }
 }

@@ -14,55 +14,56 @@
 
 #' Log-Gumbel Distribution
 #'
-#' Density, distribution function, quantile function and random generation
-#' for the Log-Gumbel distribution with \code{scale} and \code{location} parameters.
+#' Density, distribution function, quantile function, random generation
+#' and starting values for the
+#' Log-Gumbel distribution
+#' with \code{lscale} and \code{llocation} parameters.
 #'
-#' @param x,q	vector of quantiles.
-#' @param p	vector of probabilities.
-#' @param n	number of observations.
-#' @param scale	scale parameter.
-#' @param location location parameter.
-#' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
-#' @param lower.tail	logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].
-#' @return
-#' dlgumbel gives the density, plgumbel gives the distribution function,
-#' qlgumbel gives the quantile function, and rlgumbel generates random deviates.
+#' @param x A numeric vector of values.
+#' @inheritParams params
+#' @return A numeric vector.
 #' @name lgumbel
-#' @examples
-#' x <- rlgumbel(1000,1,0.1)
-#' hist(log(x),freq=FALSE,col='gray',border='white')
-#' hist(x,freq=FALSE,col='gray',border='white')
-#' curve(dlgumbel(x,1,0.1),add=TRUE,col='red4',lwd=2)
 NULL
 
 #' @rdname lgumbel
 #' @export
-dlgumbel <- function(x, location = 0, scale = 0, log = FALSE){
-  fx <- VGAM::dgumbel(log(x), location=location, scale=scale, log=FALSE)/x
-  if(log) fx <- log(fx)
+dlgumbel <- function(x, llocation = 0, lscale = 0, log = FALSE) {
+  fx <- VGAM::dgumbel(log(x), location = exp(llocation), scale = exp(lscale), log = FALSE) / x
+  if (log) fx <- log(fx)
   fx
 }
 
 #' @rdname lgumbel
 #' @export
-qlgumbel <- function(p, location = 0, scale = 0, lower.tail = TRUE, log.p = FALSE){
-  if(log.p) p<- exp(p)
-  if(!lower.tail) p <- 1-p
-  exp(VGAM::qgumbel(p, location=location, scale=scale))
+qlgumbel <- function(p, llocation = 0, lscale = 0, lower.tail = TRUE, log.p = FALSE) {
+  if (log.p) p <- exp(p)
+  if (!lower.tail) p <- 1 - p
+  exp(VGAM::qgumbel(p, location = exp(llocation), scale = exp(lscale)))
 }
 
 #' @rdname lgumbel
 #' @export
-plgumbel <- function(q, location = 0, scale = 0, lower.tail = TRUE, log.p = FALSE){
-  if(!length(q)) return(numeric(0))
-  Fq <- VGAM::pgumbel(log(q), location=location, scale=scale)
-  if(!lower.tail) Fq <- 1-Fq
-  if(log.p) Fq <- log(Fq)
+plgumbel <- function(q, llocation = 0, lscale = 0, lower.tail = TRUE, log.p = FALSE) {
+  if (!length(q)) {
+    return(numeric(0))
+  }
+  Fq <- VGAM::pgumbel(log(q), location = exp(llocation), scale = exp(lscale))
+  if (!lower.tail) Fq <- 1 - Fq
+  if (log.p) Fq <- log(Fq)
   Fq
 }
 
 #' @rdname lgumbel
 #' @export
-rlgumbel <- function(n, location = 0, scale = 0){
-  exp(VGAM::rgumbel(n, location=location, scale=scale))
+rlgumbel <- function(n, llocation = 0, lscale = 0) {
+  exp(VGAM::rgumbel(n, location = exp(llocation), scale = exp(lscale)))
+}
+
+#' @rdname lgumbel
+#' @export
+slgumbel <- function(x) {
+  list(start = list(
+    llocation = mean(log(x), na.rm = TRUE),
+    lscale = pi * sd(log(x), na.rm = TRUE) / sqrt(6)
+  ))
 }

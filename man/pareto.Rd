@@ -6,45 +6,53 @@
 \alias{qpareto}
 \alias{ppareto}
 \alias{rpareto}
+\alias{spareto}
 \title{Pareto Distribution}
 \usage{
-dpareto(x, scale = 1, shape, log = FALSE)
+dpareto(x, scale = 1, shape = 1, log = FALSE)
 
-qpareto(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+qpareto(p, scale = 1, shape = 1, lower.tail = TRUE, log.p = FALSE)
 
-ppareto(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE)
+ppareto(q, scale = 1, shape = 1, lower.tail = TRUE, log.p = FALSE)
 
-rpareto(n, scale = 1, shape)
+rpareto(n, scale = 1, shape = 1)
+
+spareto(x)
 }
 \arguments{
-\item{x, q}{vector of quantiles.}
+\item{x}{A numeric vector of values.}
 
-\item{scale}{alpha parameter.}
+\item{scale}{scale parameter.}
 
-\item{shape}{k parameter.}
+\item{shape}{A string of the column in data for the shape aesthetic.}
 
-\item{log, log.p}{logical; if TRUE, probabilities p are given as log(p).}
+\item{log}{logical; if TRUE, probabilities p are given as log(p).}
+
+\item{p}{vector of probabilities.}
 
 \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].}
 
-\item{p}{vector of probabilities.}
+\item{log.p}{logical; if TRUE, probabilities p are given as log(p).}
+
+\item{q}{vector of quantiles.}
 
 \item{n}{number of observations.}
 }
 \value{
-dpareto gives the density, ppareto gives the distribution function,
-qpareto gives the quantile function, and rpareto generates random deviates.
+A numeric vector.
 }
 \description{
-Density, distribution function, quantile function and random generation
-for the Pareto distribution with parameters scale and shape.
+Density, distribution function, quantile function, random generation
+and starting values for the
+Pareto distribution
+with scale and shape parameters.
+}
+\details{
 The functions are wrappers on the equivalent VGAM functions.
 }
 \examples{
-x <- rpareto(1000,1,0.1)
-hist(log(x),freq=FALSE,col='gray',border='white')
-hist(x,freq=FALSE,col='gray',border='white')
-curve(dpareto(x,1,0.1),add=TRUE,col='red4',lwd=2)
+x <- seq(0.01, 5, by = 0.01)
+plot(x, dpareto(x), type = "l")
 }
 \seealso{
 \code{\link[VGAM]{dpareto}}

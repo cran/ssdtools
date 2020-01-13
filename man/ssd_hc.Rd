@@ -2,6 +2,7 @@
 % Please edit documentation in R/hc.R
 \name{ssd_hc}
 \alias{ssd_hc}
+\alias{ssd_hc.list}
 \alias{ssd_hc.fitdist}
 \alias{ssd_hc.fitdistcens}
 \alias{ssd_hc.fitdists}
@@ -10,59 +11,106 @@
 \usage{
 ssd_hc(x, ...)
 
-\method{ssd_hc}{fitdist}(x, hc = 5L, nboot = 1000, level = 0.95, ...)
+\method{ssd_hc}{list}(x, percent = 5, hc = 5, ...)
 
-\method{ssd_hc}{fitdistcens}(x, hc = 5L, nboot = 1000, level = 0.95,
-  ...)
+\method{ssd_hc}{fitdist}(
+  x,
+  percent = 5,
+  hc = 5,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  ...
+)
 
-\method{ssd_hc}{fitdists}(x, hc = 5L, ic = "aicc", average = TRUE,
-  nboot = 1000, level = 0.95, ...)
+\method{ssd_hc}{fitdistcens}(
+  x,
+  percent = 5,
+  hc = 5,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  ...
+)
 
-\method{ssd_hc}{fitdistscens}(x, hc = 5L, ic = "aic", average = TRUE,
-  nboot = 1000, level = 0.95, ...)
+\method{ssd_hc}{fitdists}(
+  x,
+  percent = 5,
+  hc = 5,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  average = TRUE,
+  ic = "aicc",
+  ...
+)
+
+\method{ssd_hc}{fitdistscens}(
+  x,
+  percent = 5,
+  hc = 5,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  average = TRUE,
+  ic = "aic",
+  ...
+)
 }
 \arguments{
 \item{x}{The object.}
 
 \item{...}{Unused.}
 
-\item{hc}{A number between 0 and 1 indicating the percent hazard concentration to plot (or NULL).}
+\item{percent}{A numeric vector of percentages.}
+
+\item{hc}{A numeric vector of percentages.}
+
+\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+
+\item{level}{A number between 0 and 1 of the confidence level.}
 
 \item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits.}
 
-\item{level}{The confidence level.}
+\item{parallel}{A string specifying the type of parallel operation to be used ('no', 'snow' or 'multicore').}
 
-\item{ic}{A string indicating which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging.}
+\item{ncpus}{A count of the number of parallel processes to use.}
 
-\item{average}{A flag indicating whether to model-average.}
+\item{average}{A flag specifying whether to model average the estimates.}
+
+\item{ic}{A string specifying which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging .}
 }
 \value{
-A data frame of the estimate with the standard error and upper and lower confidence intervals.
+A data frame of the percent and concentrations.
 }
 \description{
-Estimates with bootstrap confidence intervals the hazard concentration
-at which by default 5\% of the species are affected.
+Gets concentrations that protect specified percentages of species.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{fitdist}: Hazard Concentration
+\item \code{list}: Hazard Percent list of distributions
 
-\item \code{fitdistcens}: Hazard Concentration
+\item \code{fitdist}: Hazard Percent fitdist
 
-\item \code{fitdists}: Hazard Concentration
+\item \code{fitdistcens}: Hazard Percent fitdistcens
 
-\item \code{fitdistscens}: Hazard Concentration
+\item \code{fitdists}: Hazard Percent fitdists
+
+\item \code{fitdistscens}: Hazard Percent fitdistcens
 }}
 
 \examples{
-ssd_hc(boron_lnorm)
-\dontrun{
-ssd_hc(fluazinam_lnorm)
-}
-\dontrun{
-ssd_hc(boron_dists)
-}
-\dontrun{
-ssd_hc(fluazinam_dists)
-}
+ssd_hc(list("lnorm" = NULL))
+ssd_hc(boron_lnorm, c(0, 1, 30, Inf))
+ssd_hc(fluazinam_lnorm, c(0, 1, 30, Inf))
+ssd_hc(boron_dists, c(0, 1, 30, Inf))
+ssd_hc(fluazinam_dists, c(0, 1, 30, Inf))
 }

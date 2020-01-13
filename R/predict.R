@@ -12,118 +12,69 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-predict_fitdist_percent <- function(percent, boot, level) {
-  quantile <- quantile(boot, percent/100, CI.level = level)
-  est <- quantile$quantiles[1,1]
-  se <- stats::sd(quantile$bootquant[,1], 2)
-  lcl <- quantile$quantCI[1,1]
-  ucl <- quantile$quantCI[2,1]
-  data.frame(percent = percent, est = est, se = se, lcl = lcl, ucl = ucl, 
-             stringsAsFactors = FALSE)
-}
-
-model_average <- function(x) {
-  est <- sum(x$est * x$weight)
-  se <- sqrt(sum(x$weight * (x$se^2 + (x$est - est)^2)))
-  lcl <- sum(x$lcl * x$weight)
-  ucl <- sum(x$ucl * x$weight)
-  data.frame(percent = x$percent[1], est = est, se = se, lcl = lcl, ucl = ucl,
-             stringsAsFactors = FALSE)
-}
-
 #' Predict fitdist
 #'
-#' @inheritParams predict.fitdists
+#' @inheritParams params
 #' @export
 #' @examples
 #' predict(boron_lnorm, percent = c(5L, 50L))
-predict.fitdist <- function(object, percent = 1:99,
-                            nboot = 1000, level = 0.95, ...) {
-  check_vector(percent, c(1L, 99L), length = TRUE, unique = TRUE)
-  nboot <- check_count(nboot, coerce = TRUE)
-  check_probability(level)
-  boot <- fitdistrplus::bootdist(object, niter = nboot)
-  prediction <- lapply(percent, predict_fitdist_percent, boot = boot, level = level)
-  prediction$stringsAsFactors <- FALSE
-  prediction <- do.call("rbind", prediction)
-  as_conditional_tibble(prediction)
+predict.fitdist <- function(object, percent = 1:99, ci = FALSE, level = 0.95,
+                            nboot = 1000, parallel = NULL, ncpus = 1,
+                            ...) {
+  chk_unused(...)
+  ssd_hc(object,
+    percent = percent, ci = ci, level = level,
+    nboot = nboot, parallel = parallel, ncpus = ncpus
+  )
 }
 
 #' Predict censored fitdist
 #'
-#' @inheritParams predict.fitdists
+#' @inheritParams params
 #' @export
 #' @examples
-#' \dontrun{
 #' predict(fluazinam_lnorm, percent = c(5L, 50L))
-#' }
-predict.fitdistcens <- function(object, percent = 1:99,
-                            nboot = 1000, level = 0.95, ...) {
-  check_vector(percent, c(1L, 99L), length = TRUE, unique = TRUE)
-  nboot <- check_count(nboot, coerce = TRUE)
-  check_probability(level)
-
-  boot <- fitdistrplus::bootdistcens(object, niter = nboot)
-  prediction <- lapply(percent, predict_fitdist_percent, boot = boot, level = level)
-  prediction$stringsAsFactors <- FALSE
-  prediction <- do.call("rbind", prediction)
-  as_conditional_tibble(prediction)
+predict.fitdistcens <- function(object, percent = 1:99, ci = FALSE, level = 0.95,
+                                nboot = 1000, parallel = NULL, ncpus = 1,
+                                ...) {
+  chk_unused(...)
+  ssd_hc(object,
+    percent = percent, ci = ci, level = level,
+    nboot = nboot, parallel = parallel, ncpus = ncpus
+  )
 }
 
-#' Predict fitdist
+#' Predict fitdists
 #'
-#' @param object The object.
-#' @param percent A numeric vector of the densities to calculate the estimated concentrations for.
-#' @param nboot A count of the number of bootstrap samples to use to estimate the se and confidence limits.
-#' @param ic A string indicating which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging.
-#' @param average A flag indicating whether to model-average.
-#' @param level The confidence level.
-#' @param ... Unused
+#' @inheritParams params
 #' @export
 #' @examples
-#' \dontrun{
 #' predict(boron_dists)
-#' }
-predict.fitdists <- function(object, percent = 1:99,
-                             nboot = 1000, ic = "aicc", average = TRUE, level = 0.95, ...) {
-  check_scalar(ic, c("aic", "aicc", "bic"))
-
-  ic <- ssd_gof(object)[c("dist", ic)]
-
-  ic$delta <- ic[[2]] - min(ic[[2]])
-  ic$weight <- round(exp(-ic$delta/2)/sum(exp(-ic$delta/2)), 3)
-
-  ic <- split(ic, 1:nrow(ic))
-
-  predictions <- lapply(object, predict, percent = percent, nboot = nboot, level = level)
-  predictions <- mapply(function(x, y) {x$weight <- y$weight; x}, predictions, ic,
-                        SIMPLIFY = FALSE)
-  predictions <- mapply(function(x, y) {x$dist <- y;x}, predictions, names(predictions),
-                        SIMPLIFY = FALSE)
-  predictions$stringsAsFactors <- FALSE
-  predictions <- do.call("rbind", predictions)
-  predictions <- predictions[c("dist", "percent", "est", "se", "lcl", "ucl", "weight")]
-
-  if(!average) return(predictions)
-  
-  predictions <- split(predictions, predictions$percent)
-  predictions <- lapply(predictions, model_average)
-  predictions$stringsAsFactors <- FALSE
-  predictions <- do.call("rbind", predictions)
-  as_conditional_tibble(predictions)
+predict.fitdists <- function(object, percent = 1:99, ci = FALSE,
+                             level = 0.95, nboot = 1000, parallel = NULL, ncpus = 1,
+                             average = TRUE, ic = "aicc",
+                             ...) {
+  chk_unused(...)
+  ssd_hc(object,
+    percent = percent, ci = ci, level = level,
+    nboot = nboot, parallel = parallel, ncpus = ncpus,
+    average = average, ic = ic
+  )
 }
 
-#' Predict Censored fitdists
+#' Predict censored fitdists
 #'
-#' @inheritParams predict.fitdists
+#' @inheritParams params
 #' @export
 #' @examples
-#' \dontrun{
 #' predict(fluazinam_dists)
-#' }
-predict.fitdistscens <- function(object, percent = 1:99,
-                             nboot = 1000, ic = "aic", average = TRUE, level = 0.95, ...) {
-  check_scalar(ic, c("aic", "bic", "bic"))
-  NextMethod(object = object, percent = percent, nboot = nboot, ic = ic, average = average,
-             level = level, ...)
+predict.fitdistscens <- function(object, percent = 1:99, ci = FALSE,
+                                 level = 0.95, nboot = 1000, parallel = NULL, ncpus = 1,
+                                 average = TRUE, ic = "aic", ...) {
+  chk_unused(...)
+  ssd_hc(object,
+    percent = percent, ci = ci, level = level,
+    nboot = nboot, parallel = parallel, ncpus = ncpus,
+    average = average, ic = ic
+  )
 }

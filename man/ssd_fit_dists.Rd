@@ -4,20 +4,28 @@
 \alias{ssd_fit_dists}
 \title{Fit Distributions}
 \usage{
-ssd_fit_dists(data, left = "Conc", right = left, weight = NULL,
-  dists = c("lnorm", "llog", "gompertz", "lgumbel", "gamma", "weibull"),
-  silent = FALSE)
+ssd_fit_dists(
+  data,
+  left = "Conc",
+  right = left,
+  weight = NULL,
+  dists = c("burrIII2", "gamma", "lnorm"),
+  computable = TRUE,
+  silent = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{left}{A string of the column in data with the left concentration values.}
+\item{left}{A string of the column in data with the concentrations.}
 
 \item{right}{A string of the column in data with the right concentration values.}
 
 \item{weight}{A string of the column in data with the weightings (or NULL)}
 
-\item{dists}{A character vector of the distributions to fit.}
+\item{dists}{A character vector of the distribution names.}
+
+\item{computable}{A flag specifying whether to only return fits with numerically computable standard errors.}
 
 \item{silent}{A flag indicating whether fits should fail silently.}
 }
@@ -28,10 +36,11 @@ An object of class fitdists (a list of \code{\link[fitdistrplus]{fitdist}} objec
 Fits one or more distributions to species sensitivity data.
 }
 \details{
-By default the 'lnorm', 'llog', 'gompertz', 'lgumbel', 'gamma' and 'weibull'
+By default the 'burrIII2', 'gamma' and 'lnorm'
 distributions are fitted to the data.
 The ssd_fit_dists function has also been
-tested with the 'pareto' distribution.
+tested with the 'burrIII3', 'gompertz', 'lgumbel', 'llogis', 'pareto'
+and 'weibull' distributions.
 
 If weight specifies a column in the data frame with positive integers,
 weighted estimation occurs.

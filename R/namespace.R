@@ -12,8 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-#' @import checkr ggplot2
+#' @import stats chk ggplot2 lifecycle
+#' @import abind abind
 #' @importFrom graphics plot
-#' @importFrom stats coef nobs predict
 #' @importFrom VGAM vglm
 NULL

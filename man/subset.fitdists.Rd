@@ -7,15 +7,15 @@
 \method{subset}{fitdists}(x, select = names(x), ...)
 }
 \arguments{
-\item{x}{The object to subset.}
+\item{x}{The object.}
 
 \item{select}{A character vector of the distributions to select.}
 
-\item{...}{Unused}
+\item{...}{Unused.}
 }
 \description{
 Subset fitdists
 }
 \examples{
-subset(boron_dists, c("gamma", "weibull"))
+subset(boron_dists, c("gamma", "lnorm"))
 }

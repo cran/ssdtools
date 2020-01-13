@@ -14,52 +14,63 @@
 
 #' Pareto Distribution
 #'
-#' Density, distribution function, quantile function and random generation
-#' for the Pareto distribution with parameters scale and shape.
+#' Density, distribution function, quantile function, random generation
+#' and starting values for the
+#' Pareto distribution
+#' with scale and shape parameters.
+#'
 #' The functions are wrappers on the equivalent VGAM functions.
 #'
-#' @param x,q	vector of quantiles.
-#' @param p	vector of probabilities.
-#' @param n	number of observations.
-#' @param scale	alpha parameter.
-#' @param shape k parameter.
-#' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
-#' @param lower.tail	logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].
-#' @return
-#' dpareto gives the density, ppareto gives the distribution function,
-#' qpareto gives the quantile function, and rpareto generates random deviates.
+#' @param x A numeric vector of values.
+#' @inheritParams params
+#' @return A numeric vector.
 #' @seealso \code{\link[VGAM]{dpareto}}
 #' @name pareto
 #' @examples
-#' x <- rpareto(1000,1,0.1)
-#' hist(log(x),freq=FALSE,col='gray',border='white')
-#' hist(x,freq=FALSE,col='gray',border='white')
-#' curve(dpareto(x,1,0.1),add=TRUE,col='red4',lwd=2)
+#' x <- seq(0.01, 5, by = 0.01)
+#' plot(x, dpareto(x), type = "l")
 NULL
 
 #' @rdname pareto
 #' @export
-dpareto <- function(x, scale = 1, shape, log = FALSE){
-  if(!length(x)) return(numeric(0))
-  VGAM::dpareto(x, scale = scale, shape = shape, log = log)
+dpareto <- function(x, scale = 1, shape = 1, log = FALSE) {
+  if (!length(x)) {
+    return(numeric(0))
+  }
+  x[!is.na(x)] <- VGAM::dpareto(x[!is.na(x)], scale = scale, shape = shape, log = log)
+  x
 }
 
 #' @rdname pareto
 #' @export
-qpareto <- function(q, scale = 1, shape, lower.tail = TRUE, log.p = FALSE){
-  if(!length(q)) return(numeric(0))
-  VGAM::qpareto(q, scale = scale, shape = shape, lower.tail = lower.tail, log.p = log.p)
+qpareto <- function(p, scale = 1, shape = 1, lower.tail = TRUE, log.p = FALSE) {
+  if (!length(p)) {
+    return(numeric(0))
+  }
+  VGAM::qpareto(p, scale = scale, shape = shape, lower.tail = lower.tail, log.p = log.p)
 }
 
 #' @rdname pareto
 #' @export
-ppareto <- function(p, scale = 1, shape, lower.tail = TRUE, log.p = FALSE){
-  if(!length(p)) return(numeric(0))
-  VGAM::ppareto(p, scale = scale, shape = shape, lower.tail = lower.tail, log.p = log.p)
+ppareto <- function(q, scale = 1, shape = 1, lower.tail = TRUE, log.p = FALSE) {
+  if (!length(q)) {
+    return(numeric(0))
+  }
+  VGAM::ppareto(q, scale = scale, shape = shape, lower.tail = lower.tail, log.p = log.p)
 }
 
 #' @rdname pareto
 #' @export
-rpareto <- function(n, scale = 1, shape){
+rpareto <- function(n, scale = 1, shape = 1) {
   VGAM::rpareto(n, scale = scale, shape = shape)
+}
+
+#' @rdname pareto
+#' @export
+spareto <- function(x) {
+  fit <- vglm(x ~ 1, VGAM::paretoff)
+  list(
+    start = list(shape = exp(unname(coef(fit)))),
+    fix.arg = list(scale = fit@extra$scale)
+  )
 }

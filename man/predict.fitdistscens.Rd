@@ -2,31 +2,45 @@
 % Please edit documentation in R/predict.R
 \name{predict.fitdistscens}
 \alias{predict.fitdistscens}
-\title{Predict Censored fitdists}
+\title{Predict censored fitdists}
 \usage{
-\method{predict}{fitdistscens}(object, percent = 1:99, nboot = 1000,
-  ic = "aic", average = TRUE, level = 0.95, ...)
+\method{predict}{fitdistscens}(
+  object,
+  percent = 1:99,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  average = TRUE,
+  ic = "aic",
+  ...
+)
 }
 \arguments{
 \item{object}{The object.}
 
-\item{percent}{A numeric vector of the densities to calculate the estimated concentrations for.}
+\item{percent}{A numeric vector of percentages.}
+
+\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+
+\item{level}{A number between 0 and 1 of the confidence level.}
 
 \item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits.}
 
-\item{ic}{A string indicating which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging.}
+\item{parallel}{A string specifying the type of parallel operation to be used ('no', 'snow' or 'multicore').}
 
-\item{average}{A flag indicating whether to model-average.}
+\item{ncpus}{A count of the number of parallel processes to use.}
 
-\item{level}{The confidence level.}
+\item{average}{A flag specifying whether to model average the estimates.}
 
-\item{...}{Unused}
+\item{ic}{A string specifying which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging .}
+
+\item{...}{Unused.}
 }
 \description{
-Predict Censored fitdists
+Predict censored fitdists
 }
 \examples{
-\dontrun{
 predict(fluazinam_dists)
-}
 }

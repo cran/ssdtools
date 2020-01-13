@@ -2,31 +2,45 @@
 % Please edit documentation in R/predict.R
 \name{predict.fitdists}
 \alias{predict.fitdists}
-\title{Predict fitdist}
+\title{Predict fitdists}
 \usage{
-\method{predict}{fitdists}(object, percent = 1:99, nboot = 1000,
-  ic = "aicc", average = TRUE, level = 0.95, ...)
+\method{predict}{fitdists}(
+  object,
+  percent = 1:99,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  parallel = NULL,
+  ncpus = 1,
+  average = TRUE,
+  ic = "aicc",
+  ...
+)
 }
 \arguments{
 \item{object}{The object.}
 
-\item{percent}{A numeric vector of the densities to calculate the estimated concentrations for.}
+\item{percent}{A numeric vector of percentages.}
+
+\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+
+\item{level}{A number between 0 and 1 of the confidence level.}
 
 \item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits.}
 
-\item{ic}{A string indicating which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging.}
+\item{parallel}{A string specifying the type of parallel operation to be used ('no', 'snow' or 'multicore').}
 
-\item{average}{A flag indicating whether to model-average.}
+\item{ncpus}{A count of the number of parallel processes to use.}
 
-\item{level}{The confidence level.}
+\item{average}{A flag specifying whether to model average the estimates.}
 
-\item{...}{Unused}
+\item{ic}{A string specifying which information-theoretic criterion ('aic', 'aicc' or 'bic') to use for model averaging .}
+
+\item{...}{Unused.}
 }
 \description{
-Predict fitdist
+Predict fitdists
 }
 \examples{
-\dontrun{
 predict(boron_dists)
-}
 }

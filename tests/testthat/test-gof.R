@@ -30,10 +30,11 @@ test_that("ssd_gof", {
   expect_is(xs, "tbl")
   expect_identical(colnames(xs), c("dist", "ad", "ks", "cvm", "aic", "aicc", "bic", "delta", "weight"))
   expect_identical(xs$dist, names(boron_dists))
-  expect_equal(xs[xs$dist == "lnorm",c("dist", "ad", "ks", "cvm", "aic", "aicc", "bic")], x,
-               check.attributes = FALSE)
+  expect_equal(xs[xs$dist == "lnorm", c("dist", "ad", "ks", "cvm", "aic", "aicc", "bic")], x,
+    check.attributes = FALSE
+  )
 
-  dists <- ssd_fit_dists(boron_data[1:6,])
+  dists <- ssd_fit_dists(boron_data[1:6, ], dists = c("burrIII2", "gamma", "lnorm"))
   xx <- ssd_gof(dists)
 
   expect_is(xx, "tbl")
@@ -41,3 +42,21 @@ test_that("ssd_gof", {
   expect_identical(xx$dist, names(boron_dists))
 })
 
+test_that("ssd_gof fitdistscens", {
+  expect_equal(
+    as.data.frame(ssd_gof(fluazinam_dists)),
+    structure(list(dist = c("burrIII2", "gamma", "lnorm"), aic = c(
+      150.229906959071,
+      152.809136132656, 149.625327602334
+    ), bic = c(
+      151.508021618302,
+      154.087250791887, 150.903442261564
+    ), delta = c(
+      0.605, 3.184,
+      0
+    ), weight = c(0.38, 0.105, 0.515)), row.names = c(
+      "burrIII2",
+      "gamma", "lnorm"
+    ), class = "data.frame")
+  )
+})

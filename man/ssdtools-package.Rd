@@ -6,16 +6,19 @@
 \alias{ssdtools-package}
 \title{ssdtools: Species Sensitivity Distributions}
 \description{
-\if{html}{\figure{logo.png}{options: align='right'}}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Species sensitivity distributions are cumulative probability 
-  distributions which are fitted to toxicity concentrations for multiple species.
-  The ssdtools package uses Maximum Likelihood to fit
-  log-normal, log-logistic, log-Gumbel, Gompertz, gamma or Weibull distributions.
+Species sensitivity distributions are 
+  cumulative probability distributions which are fitted to 
+  toxicity concentrations for different species as described by
+  Posthuma et al. (2001) <isbn:9781566705783>.
+  The ssdtools package uses Maximum Likelihood to fit distributions 
+  such as the log-normal, gamma, burr Type-III, log-logistic, 
+  log-Gumbel, Gompertz and Weibull.
+  The user can provide custom distributions.
   Multiple distributions can be averaged using Information Criteria.
-  Confidence intervals can be calculated for the fitted cumulative distribution 
-  function or specific hazard concentrations (percentiles).
-  Confidence intervals are currently produced by bootstrapping.
+  Confidence intervals on hazard concentrations and proportions are produced by 
+  parametric bootstrapping.
 }
 \seealso{
 Useful links:
@@ -26,7 +29,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Joe Thorley \email{joe@poissonconsulting.ca} (0000-0002-7683-4592) [contractor]
+\strong{Maintainer}: Joe Thorley \email{joe@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-7683-4592}{ORCID}) [contractor]
 
 Authors:
 \itemize{
@@ -35,13 +38,17 @@ Authors:
 
 Other contributors:
 \itemize{
-  \item Ali Azizishirazi \email{Ali.Azizishirazi@gov.bc.ca} [contributor]
   \item Angeline Tillmanns [contributor]
-  \item Stephanie Hazlitt [contributor]
+  \item Ali Azizishirazi [contributor]
+  \item Rebecca Fisher [contributor]
+  \item David Fox [contributor]
   \item Kathleen McTavish [contributor]
-  \item Emilie Doussantousse [contributor]
   \item Heather Thompson [contributor]
   \item Andy Teucher [contributor]
+  \item Emilie Doussantousse [contributor]
+  \item Stephanie Hazlitt [contributor]
+  \item Nan-Hung Hsieh [contributor]
+  \item Sergio Ibarra Espinosa [contributor]
   \item Province of British Columbia [copyright holder]
 }
 

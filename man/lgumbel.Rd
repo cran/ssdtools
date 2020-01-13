@@ -6,44 +6,44 @@
 \alias{qlgumbel}
 \alias{plgumbel}
 \alias{rlgumbel}
+\alias{slgumbel}
 \title{Log-Gumbel Distribution}
 \usage{
-dlgumbel(x, location = 0, scale = 0, log = FALSE)
+dlgumbel(x, llocation = 0, lscale = 0, log = FALSE)
 
-qlgumbel(p, location = 0, scale = 0, lower.tail = TRUE,
-  log.p = FALSE)
+qlgumbel(p, llocation = 0, lscale = 0, lower.tail = TRUE, log.p = FALSE)
 
-plgumbel(q, location = 0, scale = 0, lower.tail = TRUE,
-  log.p = FALSE)
+plgumbel(q, llocation = 0, lscale = 0, lower.tail = TRUE, log.p = FALSE)
 
-rlgumbel(n, location = 0, scale = 0)
+rlgumbel(n, llocation = 0, lscale = 0)
+
+slgumbel(x)
 }
 \arguments{
-\item{x, q}{vector of quantiles.}
+\item{x}{A numeric vector of values.}
 
-\item{location}{location parameter.}
+\item{llocation}{location parameter on the log scale.}
 
-\item{scale}{scale parameter.}
+\item{lscale}{scale parameter on the log scale.}
 
-\item{log, log.p}{logical; if TRUE, probabilities p are given as log(p).}
+\item{log}{logical; if TRUE, probabilities p are given as log(p).}
 
 \item{p}{vector of probabilities.}
 
 \item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].}
 
+\item{log.p}{logical; if TRUE, probabilities p are given as log(p).}
+
+\item{q}{vector of quantiles.}
+
 \item{n}{number of observations.}
 }
 \value{
-dlgumbel gives the density, plgumbel gives the distribution function,
-qlgumbel gives the quantile function, and rlgumbel generates random deviates.
+A numeric vector.
 }
 \description{
-Density, distribution function, quantile function and random generation
-for the Log-Gumbel distribution with \code{scale} and \code{location} parameters.
-}
-\examples{
-x <- rlgumbel(1000,1,0.1)
-hist(log(x),freq=FALSE,col='gray',border='white')
-hist(x,freq=FALSE,col='gray',border='white')
-curve(dlgumbel(x,1,0.1),add=TRUE,col='red4',lwd=2)
+Density, distribution function, quantile function, random generation
+and starting values for the
+Log-Gumbel distribution
+with \code{lscale} and \code{llocation} parameters.
 }

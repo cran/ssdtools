@@ -12,4 +12,22 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-. <- NULL
+#' Cullen and Frey Plot
+#'
+#' Plots a Cullen and Frey graph of the skewness and kurtosis
+#' for non-censored data.
+#'
+#' @inheritParams ssd_fit_dists
+#' @seealso \code{\link[fitdistrplus]{descdist}}
+#' @export
+#'
+#' @examples
+#' ssd_plot_cf(boron_data)
+ssd_plot_cf <- function(data, left = "Conc") {
+  chk_s3_class(data, "data.frame")
+  chk_string(left)
+  chk_superset(colnames(data), left)
+
+  fitdistrplus::descdist(data[[left]], boot = 100L)
+  invisible()
+}

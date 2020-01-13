@@ -22,7 +22,6 @@
   register_s3_method("ggplot2", "autoplot", "fitdist")
   register_s3_method("ggplot2", "autoplot", "fitdists")
   register_s3_method("ggplot2", "autoplot", "fitdistcens")
-  register_s3_method("ggplot2", "autoplot", "fitdistscens")
   invisible()
 }
 
@@ -33,8 +32,9 @@ register_s3_method <- function(pkg, generic, class) {
 
   fun <- get(paste0(generic, ".", class), envir = parent.frame())
 
-  if (pkg %in% loadedNamespaces())
+  if (pkg %in% loadedNamespaces()) {
     registerS3method(generic, class, fun, envir = asNamespace(pkg))
+  }
 
   setHook(
     packageEvent(pkg, "onLoad"),
