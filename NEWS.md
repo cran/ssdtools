@@ -1,3 +1,7 @@
+# ssdtools 0.1.1
+
+- Fix test for CRAN R 3.5
+
 # ssdtools 0.1.0
 
 ## Breaking Changes
