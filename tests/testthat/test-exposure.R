@@ -12,8 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-context("exposure")
-
 test_that("exposure fitdist", {
   set.seed(1)
   expect_equal(ssd_exposure(boron_lnorm), 0.0554388690712784)
@@ -25,7 +23,7 @@ test_that("exposure fitdist", {
 
 test_that("exposure fitdists", {
   set.seed(1)
-  expect_equal(ssd_exposure(boron_dists), 0.0646702629935565)
+  expect_equal(ssd_exposure(boron_dists), 0.0645298763981007)
 })
 
 test_that("exposure fitdistcens", {
@@ -35,5 +33,5 @@ test_that("exposure fitdistcens", {
 
 test_that("exposure fitdistscens", {
   set.seed(1)
-  expect_equal(ssd_exposure(fluazinam_dists), 0.0504310170098388)
+  expect_equal(ssd_exposure(fluazinam_dists), 0.0490348031201442)
 })

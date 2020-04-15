@@ -25,7 +25,7 @@ For example, consider the boron data that ships with the *ssdtools* package.
 library(ggplot2)
 library(ssdtools)
 data(boron_data)
-fit <- ssd_fit_dists(boron_data, dists = c("burrIII2", "lnorm", "gamma"))
+fit <- ssd_fit_dists(boron_data, dists = c("llogis", "lnorm", "gamma"))
 fit.plot <- autoplot(fit)
 fit.plot
 ```
@@ -93,9 +93,9 @@ Verdonck, F. A., Aldenberg, T. , Jaworska, J. and Vanrolleghem, P. A. (2003), Li
 
 -----
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
+<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
 style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span
 xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ssdtools</span> by <span
 xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of British Columbia
-</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+</span> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 Creative Commons Attribution 4.0 International License</a>.

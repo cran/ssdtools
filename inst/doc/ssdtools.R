@@ -23,7 +23,7 @@ boron_data <- ssdtools::boron_data
 print(boron_data)
 
 ## -----------------------------------------------------------------------------
-boron_dists <- ssd_fit_dists(boron_data, dists = c("burrIII2", "lnorm", "gamma"))
+boron_dists <- ssd_fit_dists(boron_data, dists = c("llogis", "lnorm", "gamma"))
 
 ## -----------------------------------------------------------------------------
 coef(boron_dists)

@@ -9,7 +9,7 @@ knitr::opts_chunk$set(
 library(ggplot2)
 library(ssdtools)
 data(boron_data)
-fit <- ssd_fit_dists(boron_data, dists = c("burrIII2", "lnorm", "gamma"))
+fit <- ssd_fit_dists(boron_data, dists = c("llogis", "lnorm", "gamma"))
 fit.plot <- autoplot(fit)
 fit.plot
 

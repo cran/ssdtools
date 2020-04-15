@@ -27,7 +27,7 @@ SSDs are cumulative probability distributions that are used to estimate the perc
 The concentration that affects 5% of the species is referred to as the 5% Hazard Concentration (HC).
 For more information on SSDs the reader is referred to @posthuma_species_2001.
 
-In order to use `ssdtools` you need to install R (see below) or use the Shiny [app](https://bcgov-env.shinyapps.io/ssdtools/).
+In order to use `ssdtools` you need to install R (see below) or use the Shiny [app](https://bcgov-env.shinyapps.io/ssdtools).
 The shiny app includes a user guide. 
 This vignette is a user manual for the R package.
 
@@ -84,19 +84,18 @@ print(boron_data)
 The function `ssd_fit_dists()` inputs a data frame and fits one or more distributions.
 The user can specify a subset of the 
 
-- Burr type-III 2-parameter (`burrIII2`),
 - Burr type-III 3-parameter (`burrIII3`),
+- [gamma](https://en.wikipedia.org/wiki/Gamma_distribution) (`gamma`) and 
+- [Gompertz](https://en.wikipedia.org/wiki/Gompertz_distribution) (`gompertz`),
 - [log-normal](https://en.wikipedia.org/wiki/Log-normal_distribution) (`lnorm`),
 - [log-logistic](https://en.wikipedia.org/wiki/Log-logistic_distribution) (`llog`),
 - [log-Gumbel](https://en.wikipedia.org/wiki/Gumbel_distribution) (`lgumbel`),
-- [Gompertz](https://en.wikipedia.org/wiki/Gompertz_distribution) (`gompertz`),
-- [gamma](https://en.wikipedia.org/wiki/Gamma_distribution) (`gamma`) and 
-- [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution) (`weibull`) 
 - [pareto](https://en.wikipedia.org/wiki/Pareto_distribution) (`pareto`)
+- [Weibull](https://en.wikipedia.org/wiki/Weibull_distribution) (`weibull`) 
 
 distribution using the `dists` argument.
 ```{r}
-boron_dists <- ssd_fit_dists(boron_data, dists = c("burrIII2", "lnorm", "gamma"))
+boron_dists <- ssd_fit_dists(boron_data, dists = c("llogis", "lnorm", "gamma"))
 ```
 
 The user can also specify one or more [custom distributions](https://bcgov.github.io/ssdtools/articles/faqs.html#how-do-i-fit-a-custom-distribution).
@@ -265,11 +264,15 @@ There are less goodness-of-fit statistics available for
 fits to censored data (currently just `aic` and `bic`).
 The `delta` values are calculated using `aic`.
 
+As the sample size `n` is undefined for censored data, `aicc` cannot be calculated.
+However, if all the models have the same number of parameters, the `aic` `delta` values are identical to those for `aicc`.
+For this reason, `ssdtools` only permits the analysis of censored data using two-parameter models.
+
 ```{r, eval = FALSE}
 fluazinam_dists <- ssd_fit_dists(fluazinam, left = "left", right = "right")
 ssd_gof(fluazinam_dists)
 ```
-But model-averaged predictions (and hazard concentrations complete with 95% confidence limits) can be calculated using `aic`
+The model-averaged predictions (and hazard concentrations complete with 95% confidence limits) can be calculated using `aic`
 ```{r, eval = FALSE}
 set.seed(99)
 fluazinam_pred <- predict(fluazinam_dists, ci = TRUE)
@@ -284,11 +287,11 @@ ssd_plot(fluazinam, fluazinam_pred,
 
 -----
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
+<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
 style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span
 xmlns:dct="http://purl.org/dc/terms/" property="dct:title">ssdtools</span> by <span
 xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">the Province of British Columbia
-</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">
+</span> is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
 Creative Commons Attribution 4.0 International License</a>.
 
 ## References

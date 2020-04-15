@@ -16,7 +16,7 @@ ssd_plot_cdf(ssd_match_moments(meanlog = 2, sdlog = 2))
 ## ----fig.height=5-------------------------------------------------------------
 set.seed(7)
 ssd_plot_cdf(ssd_match_moments(dists = c(
-  "burrIII2", "burrIII3", "gamma",
+  "burrIII3", "gamma",
   "gompertz", "lgumbel", "llogis",
   "lnorm", "weibull"
 ), meanlog = 2, sdlog = 2)) +

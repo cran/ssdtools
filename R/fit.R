@@ -55,8 +55,8 @@ remove_errors <- function(dist_fit, name, computable, silent) {
   }
   sd <- dist_fit$result$sd
   if (is.null(sd) || any(is.na(sd))) {
-    if (!silent) wrn("Distribution ", name, " failed to compute standard errors (try rescaling the data or increasing the sample size).", call. = FALSE)
     if (computable) {
+      if (!silent) wrn("Distribution ", name, " failed to compute standard errors (try rescaling the data or increasing the sample size).")
       return(NULL)
     }
   }
@@ -87,41 +87,56 @@ ssd_fit_dist <- function(
 #'
 #' Fits one or more distributions to species sensitivity data.
 #'
-#' By default the 'burrIII2', 'gamma' and 'lnorm'
+#' By default the 'llogis', 'gamma' and 'lnorm'
 #' distributions are fitted to the data.
 
 #' The ssd_fit_dists function has also been
-#' tested with the 'burrIII3', 'gompertz', 'lgumbel', 'llogis', 'pareto'
-#' and 'weibull' distributions.
+#' tested with the 'burrIII3', 'gompertz', 'lgumbel' and 'weibull' distributions.
 #'
 #' If weight specifies a column in the data frame with positive integers,
 #' weighted estimation occurs.
 #' However, currently only the resultant parameter estimates are available (via coef).
 #'
 #' If the `right` argument is different to the `left` argument then the data are considered to be censored.
-#' It may be possible to use artificial censoring to improve the estimates in the extreme tails
-#' (Liu et al 2018).
+#'
+#' The fits are performed using \code{\link[fitdistrplus]{fitdist}}
+#' (and \code{\link[fitdistrplus]{fitdistcens}} in the case of censored data).
+#' The method used is "mle" (maximum likelihood estimation)
+#' which means that numerical optimization is carried out in
+#' \code{\link[fitdistrplus]{mledist}} using \code{\link[stats]{optim}}
+#' unless finite bounds are supplied in the (lower and upper) in which
+#' it is carried out using \code{\link[stats]{constrOptim}}.
+#' In both cases the "Nelder-Mead" method is used.
+#'
 #' @inheritParams params
 #' @return An object of class fitdists (a list of \code{\link[fitdistrplus]{fitdist}} objects).
 #'
 #' @export
-#' @references
-#' Liu, Y., Salibián-Barrera, M., Zamar, R.H., and Zidek, J.V. 2018. Using artificial censoring to improve extreme tail quantile estimates. Journal of the Royal Statistical Society: Series C (Applied Statistics).
-#'
 #' @examples
 #' ssd_fit_dists(boron_data)
 #' data(fluazinam, package = "fitdistrplus")
 #' ssd_fit_dists(fluazinam, left = "left", right = "right")
 ssd_fit_dists <- function(
                           data, left = "Conc", right = left, weight = NULL,
-                          dists = c("burrIII2", "gamma", "lnorm"),
-                          computable = TRUE,
+                          dists = c("llogis", "gamma", "lnorm"),
+                          computable = FALSE,
                           silent = FALSE) {
   chk_s3_class(dists, "character")
   chk_unique(dists)
   chk_gt(length(dists))
   chk_flag(computable)
   chk_flag(silent)
+
+  if (sum(c("llog", "burrIII2", "llogis") %in% dists) > 1) {
+    err("Distributions 'llog', 'burrIII2' and 'llogis' are identical. Please just use 'llogis'.")
+  }
+
+  if ("llog" %in% dists) {
+    .Deprecated("'llogis'", msg = "Distribution 'llog' has been deprecated for 'llogis'. Please use 'llogis'.")
+  }
+  if ("burrIII2" %in% dists) {
+    .Deprecated("'burrIII2'", msg = "Distribution 'burrIII2' has been deprecated for 'llogis'. Please use 'llogis'.")
+  }
 
   safe_fit_dist <- safely(ssd_fit_dist)
   names(dists) <- dists

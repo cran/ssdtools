@@ -12,7 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-context("fit")
 
 test_that("fit_dist", {
   dist <- ssd_fit_dist(ssdtools::boron_data)
@@ -25,14 +24,14 @@ test_that("fit_dist tiny llogis", {
   fit <- ssdtools:::ssd_fit_dist(data, dist = "llogis")
   expect_equal(
     fit$estimate,
-    c(lscale = 0.965466010495141, lshape = -0.300741556664549)
+    c(lscale = 2.6261248978507, lshape = 0.740309228071107)
   )
 
   data$Conc <- data$Conc / 100
   fit <- ssdtools:::ssd_fit_dist(data, dist = "llogis")
   expect_equal(
     fit$estimate,
-    c(lscale = -19.3827405930646, lshape = 0.359228660334252)
+    c(lscale = -1.97890271677598, lshape = 0.740452665894763)
   )
 })
 
@@ -47,6 +46,12 @@ test_that("fit_dists", {
   expect_identical(names(dists), dist_names)
   coef <- coef(dists)
   expect_identical(names(coef), dist_names)
+})
+
+test_that("burrIII2", {
+  dists <- ssd_fit_dists(boron_data[1:6, ], dists = c("burrIII2", "gamma", "lnorm"))
+  expect_identical(names(dists), c("burrIII2", "gamma", "lnorm"))
+  expect_equal(coef(dists$burrIII2), c(lshape = 0.493452552733572, lscale = -1.37955270951911))
 })
 
 test_that("fit_dist", {
@@ -114,4 +119,9 @@ test_that("fit_dists computable", {
   expect_equal(fit$sd["scale"], c(scale = 673.801371511101), tolerance = 3e-01) # for noLD
   expect_equal(fit$sd["shape"], c(shape = 0.0454275860604086), tolerance = 3e-06) # for noLD
   expect_equal(fit$estimate, c(scale = 969.283015870555, shape = 0.16422716021172))
+})
+
+test_that("fit_dists fail to converge when identical data", {
+  data <- data.frame(Conc = rep(6, 6))
+  expect_error(expect_warning(fit <- ssd_fit_dists(data), "All distributions failed to fit."))
 })

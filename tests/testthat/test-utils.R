@@ -12,8 +12,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-context("utils")
-
 test_that("utils", {
   expect_true(is.fitdist(boron_lnorm))
   expect_true(is.fitdists(boron_dists))
@@ -29,10 +27,10 @@ test_that("utils", {
 
   expect_identical(npars(boron_lnorm), 2L)
   expect_identical(npars(boron_dists), c(
-    burrIII2 = 2L, gamma = 2L, lnorm = 2L
+    llogis = 2L, gamma = 2L, lnorm = 2L
   ))
   expect_identical(npars(fluazinam_lnorm), 2L)
-  expect_identical(npars(fluazinam_dists), c(burrIII2 = 2L, gamma = 2L, lnorm = 2L))
+  expect_identical(npars(fluazinam_dists), c(llogis = 2L, gamma = 2L, lnorm = 2L))
   expect_identical(
     comma_signif(c(0.0191, 1, NA, 1111)),
     c("0.02", "1", NA, "1,000")
