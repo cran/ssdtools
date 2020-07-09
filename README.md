@@ -7,8 +7,8 @@
 
 [![BCDevExchange
 Status](https://assets.bcdevexchange.org/images/badges/delivery.svg)](https://github.com/BCDevExchange/docs/blob/master/discussion/projectstates.md)
-[![Travis-CI Build
-Status](https://travis-ci.org/bcgov/ssdtools.svg?branch=master)](https://travis-ci.org/bcgov/ssdtools)
+[![R build
+status](https://github.com/bcgov/ssdtools/workflows/R-CMD-check/badge.svg)](https://github.com/bcgov/ssdtools/actions)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/bcgov/ssdtools/master.svg)](https://codecov.io/github/bcgov/ssdtools?branch=master)
 [![CRAN
@@ -41,8 +41,8 @@ install.packages("ssdtools")
 To install the latest development version:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("bcgov/ssdtools")
+install.packages("remotes")
+remotes::install_github("bcgov/ssdtools")
 ```
 
 ## Introduction
@@ -93,7 +93,7 @@ ssd_gof(boron_dists)
 #>   <chr>  <dbl>  <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
 #> 1 llogis 0.487 0.0993 0.0595  241.  241.  244.  3.38  0.11 
 #> 2 gamma  0.440 0.117  0.0554  238.  238.  240.  0     0.595
-#> 3 lnorm  0.507 0.107  0.0703  239.  240.  242.  1.40  0.296
+#> 3 lnorm  0.507 0.106  0.0703  239.  240.  242.  1.40  0.296
 ```
 
 and the model-averaged 5% hazard concentration estimated using `ssd_hc`
@@ -186,12 +186,15 @@ A BibTeX entry for LaTeX users is
 ## How to Contribute
 
 If you would like to contribute to the package, please see our
-[CONTRIBUTING](https://github.com/bcgov/ssdtools/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING](https://github.com/bcgov/ssdtools/blob/master/.github/CONTRIBUTING.md)
 guidelines.
 
-Please note that this project is released with a [Contributor Code of
-Conduct](https://github.com/bcgov/ssdtools/blob/master/CODE_OF_CONDUCT.md).
-By participating in this project you agree to abide by its terms.
+## Code of Conduct
+
+Please note that the ssdtools project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
 
 ## License
 

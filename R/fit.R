@@ -91,7 +91,7 @@ ssd_fit_dist <- function(
 #' distributions are fitted to the data.
 
 #' The ssd_fit_dists function has also been
-#' tested with the 'burrIII3', 'gompertz', 'lgumbel' and 'weibull' distributions.
+#' tested with the 'gompertz', 'lgumbel' and 'weibull' distributions.
 #'
 #' If weight specifies a column in the data frame with positive integers,
 #' weighted estimation occurs.
@@ -99,17 +99,17 @@ ssd_fit_dist <- function(
 #'
 #' If the `right` argument is different to the `left` argument then the data are considered to be censored.
 #'
-#' The fits are performed using \code{\link[fitdistrplus]{fitdist}}
-#' (and \code{\link[fitdistrplus]{fitdistcens}} in the case of censored data).
+#' The fits are performed using [fitdistrplus::fitdist()]
+#' (and [fitdistrplus::fitdistcens()] in the case of censored data).
 #' The method used is "mle" (maximum likelihood estimation)
 #' which means that numerical optimization is carried out in
-#' \code{\link[fitdistrplus]{mledist}} using \code{\link[stats]{optim}}
+#' [fitdistrplus::mledist()] using [stats::optim()]
 #' unless finite bounds are supplied in the (lower and upper) in which
-#' it is carried out using \code{\link[stats]{constrOptim}}.
+#' it is carried out using [stats::constrOptim()].
 #' In both cases the "Nelder-Mead" method is used.
 #'
 #' @inheritParams params
-#' @return An object of class fitdists (a list of \code{\link[fitdistrplus]{fitdist}} objects).
+#' @return An object of class fitdists (a list of [fitdistrplus::fitdist()] objects).
 #'
 #' @export
 #' @examples
@@ -132,10 +132,12 @@ ssd_fit_dists <- function(
   }
 
   if ("llog" %in% dists) {
-    .Deprecated("'llogis'", msg = "Distribution 'llog' has been deprecated for 'llogis'. Please use 'llogis'.")
+    deprecate_soft("0.1.0", "dllog()", "dllogis()", id = "xllog", 
+                   details = "The 'llog' distribution has been deprecated for the identical 'llogis' distribution.")
   }
   if ("burrIII2" %in% dists) {
-    .Deprecated("'burrIII2'", msg = "Distribution 'burrIII2' has been deprecated for 'llogis'. Please use 'llogis'.")
+    deprecate_soft("0.1.2", "xburrIII2()",
+                   details = "The 'burrIII2' distribution has been deprecated for the identical 'llogis' distribution.", id = "xburrIII2")
   }
 
   safe_fit_dist <- safely(ssd_fit_dist)

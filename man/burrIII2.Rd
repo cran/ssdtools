@@ -3,38 +3,35 @@
 \name{burrIII2}
 \alias{burrIII2}
 \alias{dburrIII2}
-\alias{qburrIII2}
 \alias{pburrIII2}
+\alias{qburrIII2}
 \alias{rburrIII2}
-\alias{sburrIII2}
 \title{Burr Type III Two-Parameter Distribution}
 \usage{
-dburrIII2(x, lshape = 0, lscale = 1, log = FALSE)
+dburrIII2(x, locationlog = 0, scalelog = 1, log = FALSE)
 
-qburrIII2(p, lshape = 0, lscale = 1, lower.tail = TRUE, log.p = FALSE)
+pburrIII2(q, locationlog = 0, scalelog = 1, lower.tail = TRUE, log.p = FALSE)
 
-pburrIII2(q, lshape = 0, lscale = 1, lower.tail = TRUE, log.p = FALSE)
+qburrIII2(p, locationlog = 0, scalelog = 1, lower.tail = TRUE, log.p = FALSE)
 
-rburrIII2(n, lshape = 0, lscale = 1)
-
-sburrIII2(x)
+rburrIII2(n, locationlog = 0, scalelog = 1)
 }
 \arguments{
 \item{x}{A numeric vector of values.}
 
-\item{lshape}{shape parameter on the log scale.}
+\item{locationlog}{location on log scale parameter.}
 
-\item{lscale}{scale parameter on the log scale.}
+\item{scalelog}{scale on log scale parameter.}
 
 \item{log}{logical; if TRUE, probabilities p are given as log(p).}
 
-\item{p}{vector of probabilities.}
+\item{q}{vector of quantiles.}
 
-\item{lower.tail}{logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].}
+\item{lower.tail}{logical; if TRUE (default), probabilities are \code{P[X <= x]},otherwise, \code{P[X > x]}.}
 
 \item{log.p}{logical; if TRUE, probabilities p are given as log(p).}
 
-\item{q}{vector of quantiles.}
+\item{p}{vector of probabilities.}
 
 \item{n}{number of observations.}
 }
@@ -42,23 +39,16 @@ sburrIII2(x)
 A numeric vector.
 }
 \description{
-Density, distribution function, quantile function, random generation
-and starting values for the
-Burr Type III two-parameter distribution
-with \code{lshape} and \code{lscale} parameters.
+Probability density, cumulative distribution,
+inverse cumulative distribution, random sample and starting values functions.
 }
 \details{
-The Burr 12 distribution from the actuar package is used as a base.
-The Burr III distribution is the distribution of 1/x where x has the Burr Type 12 distribution.
-refer to
-\url{https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/bu3pdf.htm } for details.
-The shape1, shape2, and scale parameters are on the log(scale) as these must be positive.
-The two shape parameters are set to be equal to produce a two-parameter model.
+The burrIII2 distribution has been deprecated for the identical llogis distribution.
 }
 \examples{
 x <- seq(0.01, 5, by = 0.01)
 plot(x, dburrIII2(x), type = "l")
 }
 \seealso{
-\code{\link[actuar]{dburr}} and \code{\link{burrIII3}}
+\code{\link[=llogis]{llogis()}}
 }

@@ -18,7 +18,7 @@
 #' @inheritParams base::signif
 #'
 #' @return A function that returns a character vector.
-#' @seealso \code{\link[scales]{comma}}
+#' @seealso [scales::comma()]
 #' @export
 #'
 #' @examples
@@ -42,3 +42,4 @@ comma_signif <- function(x, digits = 1, ...) {
 ssd_ecd <- function(x, ties.method = "first") {
   (rank(x, ties.method = ties.method) - 0.5) / length(x)
 }
+

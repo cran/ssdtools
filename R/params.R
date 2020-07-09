@@ -34,12 +34,16 @@
 #' @param p	vector of probabilities.
 #' @param n	number of observations.
 #' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
-#' @param lower.tail	logical; if TRUE (default), probabilities are P[X <= x],otherwise, P[X > x].
+#' @param lower.tail	logical; if TRUE (default), probabilities are `P[X <= x]`,otherwise, `P[X > x]`.
 #' @param location location parameter.
 #' @param llocation location parameter on the log scale.
 #' @param scale scale parameter.
 #' @param lscale scale parameter on the log scale.
 #' @param shape	shape parameter.
+#' @param meanlog mean on log scale parameter.
+#' @param locationlog location on log scale parameter.
+#' @param sdlog standard deviation on log scale parameter.
+#' @param scalelog scale on log scale parameter.
 #' @param lshape shape parameter on the log scale.
 #' @param lshape1 shape1 parameter on the log scale.
 #' @param lshape2 shape2 parameter on the log scale.
