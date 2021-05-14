@@ -4,7 +4,7 @@
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       https://www.apache.org/licenses/LICENSE-2.0
 #
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,7 @@ dlnorm <- function(x, meanlog = 0, sdlog = 1, log = FALSE) {
 #' @export
 plnorm <- function(q, meanlog = 0, sdlog = 1, lower.tail = TRUE, log.p = FALSE) {
   pdist("lnorm", q = q, meanlog = meanlog, sdlog = sdlog, 
-             lower.tail = lower.tail, log.p = log.p)
+        lower.tail = lower.tail, log.p = log.p)
 }
 
 #' @rdname lnorm

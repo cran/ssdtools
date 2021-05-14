@@ -1,5 +1,5 @@
 Package: ssdtools
-Version: 0.3.3
+Version: 0.3.4
 Title: Species Sensitivity Distributions
 Description: Species sensitivity distributions are 
   cumulative probability distributions which are fitted to 
@@ -45,7 +45,7 @@ VignetteBuilder: knitr, R.rsp
 Language: en-US
 LinkingTo: Rcpp
 NeedsCompilation: yes
-Packaged: 2021-02-18 17:14:44 UTC; joe
+Packaged: 2021-05-14 13:05:53 UTC; joe
 Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Carl Schwarz [aut, ctr],
   Angeline Tillmanns [ctb],
@@ -63,4 +63,4 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Province of British Columbia [cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2021-02-19 07:30:02 UTC
+Date/Publication: 2021-05-14 14:00:03 UTC

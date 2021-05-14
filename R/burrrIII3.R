@@ -4,7 +4,7 @@
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       https://www.apache.org/licenses/LICENSE-2.0
 #
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,14 +21,14 @@
 #' The Burr 12 distribution from the actuar package is used as a base.
 #' The Burr III distribution is the distribution of 1/x where x has the Burr Type 12 distribution.
 #' refer to https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/bu3pdf.htm for details.
-#' The shape1, shape2, and scale paramters are on the log(scale) as these must be positive.
+#' The shape1, shape2, and scale parameters are on the log(scale) as these must be positive.
 #'
 #' @inheritParams params
 #' @return
 #' dburrIII3 gives the density, pburrIII3 gives the distribution function,
 #' qburrIII3 gives the quantile function, and rburrIII3 generates random samples.
 #' @name burrIII3
-#' @seealso [actuar::dburr()]
+#' @seealso [actuar::dburr()] 
 #' @examples
 #' x <- rburrIII3(1000)
 #' hist(x, freq = FALSE, col = "gray", border = "white")
@@ -58,7 +58,7 @@ qburrIII3 <- function(p, lshape1 = 0, lshape2 = 0, lscale = 0, lower.tail = TRUE
   if(!length(q)) return(numeric(0))
   if(log.p) p <- exp(p)
   q <- suppressWarnings(actuar::qburr(1-p, shape1=exp(lshape1), shape2=exp(lshape2), scale=exp(lscale), 
-                     lower.tail=lower.tail))
+                                      lower.tail=lower.tail))
   1/q
 }
 

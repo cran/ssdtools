@@ -1,3 +1,7 @@
+# ssdtools 0.3.4
+
+- Update Apache Licence url to https.
+
 # ssdtools 0.3.3
 
 - Increased requirement that R >= 3.5 due to VGAM.

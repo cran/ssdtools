@@ -4,7 +4,7 @@
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       https://www.apache.org/licenses/LICENSE-2.0
 #
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 test_that("test_data", {
-  expect_null(chk::check_data(
+  expect_error(chk::check_data(
     test_data,
     values = list(
       Chemical = "",
@@ -22,7 +22,7 @@ test_that("test_data", {
     exclusive = TRUE,
     order = TRUE,
     nrow = 141L
-  ))
+  ), NA)
   expect_is(test_data, "tbl")
 })
 
