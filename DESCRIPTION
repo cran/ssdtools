@@ -1,5 +1,5 @@
 Package: ssdtools
-Version: 0.3.4
+Version: 0.3.5
 Title: Species Sensitivity Distributions
 Description: Species sensitivity distributions are 
   cumulative probability distributions which are fitted to 
@@ -33,7 +33,7 @@ Authors@R: c(
 URL: https://github.com/bcgov/ssdtools
 BugReports: https://github.com/bcgov/ssdtools/issues
 License: Apache License (== 2.0) | file LICENSE
-Depends: R (>= 3.5)
+Depends: R (>= 4.1)
 Imports: chk, fitdistrplus, abind, actuar, ggplot2, graphics, grid,
         lifecycle, tibble, scales, stats, VGAM, Rcpp
 Suggests: covr, knitr, rmarkdown, testthat, readr, rlang, purrr, tidyr,
@@ -45,7 +45,7 @@ VignetteBuilder: knitr, R.rsp
 Language: en-US
 LinkingTo: Rcpp
 NeedsCompilation: yes
-Packaged: 2021-05-14 13:05:53 UTC; joe
+Packaged: 2021-09-03 16:48:08 UTC; joe
 Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Carl Schwarz [aut, ctr],
   Angeline Tillmanns [ctb],
@@ -63,4 +63,4 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Province of British Columbia [cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2021-05-14 14:00:03 UTC
+Date/Publication: 2021-09-03 17:10:02 UTC
