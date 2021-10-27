@@ -1,5 +1,9 @@
 <!-- NEWS.md is maintained by https://cynkra.github.io/fledge, do not edit -->
 
+# ssdtools 0.3.7
+
+- fix unequal indentation of Rmd ```
+
 # ssdtools 0.3.6
 
 - Added `wt` (Akaike weight) column to `predict()`, `ssd_hc()` and `ssd_hp()`
