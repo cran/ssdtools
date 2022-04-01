@@ -8,17 +8,17 @@ knitr::opts_chunk$set(
 
 ## ---- message=FALSE-----------------------------------------------------------
 library(ssdtools)
-library(ggplot2)
+library(tidyverse)
+
+theme_set(theme_bw())
 
 set.seed(7)
-ssd_plot_cdf(ssd_match_moments(meanlog = 2, sdlog = 2))
+ssd_plot_cdf(ssd_match_moments(meanlog = 2, sdlog = 2)) + 
+  scale_color_ssd()
 
 ## ----fig.height=5-------------------------------------------------------------
 set.seed(7)
-ssd_plot_cdf(ssd_match_moments(dists = c(
-  "gamma",
-  "gompertz", "lgumbel", "llogis",
-  "lnorm", "weibull"
-), meanlog = 2, sdlog = 2)) +
-  theme(legend.position = "bottom")
+ssd_plot_cdf(ssd_match_moments(dists = ssd_dists_all(), meanlog = 2, sdlog = 2)) +
+  theme(legend.position = "bottom") + 
+  scale_color_ssd()
 

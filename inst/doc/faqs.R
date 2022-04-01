@@ -4,16 +4,23 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ---- message=FALSE-----------------------------------------------------------
+## ---- fig.width = 5, fig.height = 5-------------------------------------------
+library(ssddata)
 library(ssdtools)
-library(ggplot2)
+library(tidyverse)
+
+dist <- ssdtools::ssd_fit_dists(ssddata::ccme_boron)
+pred <- predict(dist, ci = FALSE)
+
+ssdtools::ssd_plot_cdf(dist) +
+  geom_line(data = pred, aes(x = est, y = percent/100))
 
 ## ---- message=FALSE-----------------------------------------------------------
-library(purrr)
-library(tidyr)
-library(dplyr)
+library(ssddata)
+library(ssdtools)
+library(tidyverse)
 
-boron_preds <- nest(ssdtools::boron_data, data = c(Chemical, Species, Conc, Units)) %>%
+boron_preds <- nest(ccme_boron, data = c(Chemical, Species, Conc, Units)) %>%
   mutate(
     Fit = map(data, ssd_fit_dists, dists = "lnorm"),
     Prediction = map(Fit, predict)
@@ -21,13 +28,6 @@ boron_preds <- nest(ssdtools::boron_data, data = c(Chemical, Species, Conc, Unit
   unnest(Prediction)
 
 ## ---- fig.width = 5, fig.height = 5-------------------------------------------
-ssd_plot(boron_data, boron_preds, xlab = "Concentration (mg/L)", ci = FALSE) +
+ssd_plot(ccme_boron, boron_preds, xlab = "Concentration (mg/L)", ci = FALSE) +
   facet_wrap(~Group)
-
-## ---- fig.width = 5, fig.height = 5-------------------------------------------
-set.seed(10)
-ssd_plot_cf(boron_data)
-
-## ---- fig.width=6, fig.height=6, fig.show='hold'------------------------------
-plot(boron_dists)
 
