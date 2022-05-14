@@ -1,55 +1,27 @@
 Package: ssdtools
 Title: Species Sensitivity Distributions
-Version: 1.0.1
-Authors@R: 
-    c(person(given = "Joe",
-             family = "Thorley",
-             role = c("aut", "cre", "ctr"),
-             email = "joe@poissonconsulting.ca",
-             comment = c(ORCID = "0000-0002-7683-4592")),
-      person(given = "Carl",
-             family = "Schwarz",
-             role = c("aut", "ctr")),
-      person(given = "Rebecca",
-             family = "Fisher",
-             role = "ctb"),
-      person(given = "David",
-             family = "Fox",
-             role = "ctb"),
-      person(given = "Angeline",
-             family = "Tillmanns",
-             role = "ctb"),
-      person(given = "Ali",
-             family = "Azizishirazi",
-             role = "ctb"),
-      person(given = "Kathleen",
-             family = "McTavish",
-             role = "ctb"),
-      person(given = "Heather",
-             family = "Thompson",
-             role = "ctb"),
-      person(given = "Andy",
-             family = "Teucher",
-             role = "ctb"),
-      person(given = "Emilie",
-             family = "Doussantousse",
-             role = "ctb"),
-      person(given = "Stephanie",
-             family = "Hazlitt",
-             role = "ctb"),
-      person(given = "Nadine",
-             family = "Hussein",
-             role = "ctb"),
-      person(given = "Nan-Hung",
-             family = "Hsieh",
-             role = "ctb"),
-      person(given = "Sergio",
-             family = "Ibarra Espinosa",
-             role = "ctb"),
-      person(given = "Province of British Columbia",
-             role = "cph"),
-      person(given = "Environment and Climate Change Canada",
-             role = "cph"))
+Version: 1.0.2
+Authors@R: c(
+    person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "cre", "ctr"),
+           comment = c(ORCID = "0000-0002-7683-4592")),
+    person("Carl", "Schwarz", role = c("aut", "ctr")),
+    person("Rebecca", "Fisher", role = "ctb"),
+    person("David", "Fox", role = "ctb"),
+    person("Angeline", "Tillmanns", role = "ctb"),
+    person("Ali", "Azizishirazi", role = "ctb"),
+    person("Kathleen", "McTavish", role = "ctb"),
+    person("Heather", "Thompson", role = "ctb"),
+    person("Andy", "Teucher", role = "ctb"),
+    person("Seb", "Dalgarno", , "seb@poissonconsulting.ca", role = "ctb",
+           comment = c(ORCID = "0000-0002-3658-4517")),
+    person("Emilie", "Doussantousse", role = "ctb"),
+    person("Stephanie", "Hazlitt", role = "ctb"),
+    person("Nadine", "Hussein", role = "ctb"),
+    person("Nan-Hung", "Hsieh", role = "ctb"),
+    person("Sergio", "Ibarra Espinosa", role = "ctb"),
+    person("Province of British Columbia", role = "cph"),
+    person("Environment and Climate Change Canada", role = "cph")
+  )
 Description: Species sensitivity distributions are cumulative probability
     distributions which are fitted to toxicity concentrations for
     different species as described by Posthuma et al.(2001)
@@ -76,9 +48,9 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 NeedsCompilation: yes
-Packaged: 2022-04-09 14:09:22 UTC; joe
+Packaged: 2022-05-14 20:45:51 UTC; joe
 Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Carl Schwarz [aut, ctr],
   Rebecca Fisher [ctb],
@@ -88,6 +60,7 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Kathleen McTavish [ctb],
   Heather Thompson [ctb],
   Andy Teucher [ctb],
+  Seb Dalgarno [ctb] (<https://orcid.org/0000-0002-3658-4517>),
   Emilie Doussantousse [ctb],
   Stephanie Hazlitt [ctb],
   Nadine Hussein [ctb],
@@ -97,4 +70,4 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Environment and Climate Change Canada [cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2022-04-10 21:40:02 UTC
+Date/Publication: 2022-05-14 23:50:02 UTC
