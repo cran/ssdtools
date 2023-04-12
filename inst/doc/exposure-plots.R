@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
 )
 
 ## ----echo=TRUE, warning=FALSE, message=FALSE----------------------------------
-library(tidyverse)
+library(ggplot2)
 library(ssdtools)
 
 fits <- ssd_fit_dists(ssddata::ccme_boron)
@@ -28,7 +28,7 @@ ex.cdf$ex.cdf <- plnorm(ex.cdf$Conc,
 
 ## -----------------------------------------------------------------------------
 gp + 
-  geom_line(data = ex.cdf, aes(x = Conc, y = ex.cdf), color = "red", size = 2) +
+  geom_line(data = ex.cdf, aes(x = Conc, y = ex.cdf), color = "red", linewidth = 2) +
   annotate("text",
     label = paste("Exposure distribution"),
     x = 1.08 * ex.cdf$Conc[which.max(ex.cdf$ex.cdf > 0.5)], y = 0.5, angle = 75
@@ -41,7 +41,7 @@ ex.risk
 
 ## ----echo=TRUE----------------------------------------------------------------
 gp + 
-  geom_line(dat = ex.cdf, aes(x = Conc, y = ex.cdf), color = "red", size = 2) +
+  geom_line(dat = ex.cdf, aes(x = Conc, y = ex.cdf), color = "red", linewidth = 2) +
   annotate("text",
     label = paste("Exposure distribution"),
     x = 1.08 * ex.cdf$Conc[which.max(ex.cdf$ex.cdf > 0.5)], y = 0.5, angle = 75

@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:Maturing](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
-[![R-CMD-check](https://github.com/bcgov/ssdtools/workflows/R-CMD-check/badge.svg)](https://github.com/bcgov/ssdtools/actions)
+[![R-CMD-check](https://github.com/bcgov/ssdtools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bcgov/ssdtools/actions/workflows/R-CMD-check.yaml)
 [![Coverage
 Status](https://img.shields.io/codecov/c/github/bcgov/ssdtools/master.svg)](https://codecov.io/github/bcgov/ssdtools?branch=master)
 [![CRAN
@@ -74,7 +74,7 @@ fits <- ssd_fit_dists(ssddata::ccme_boron)
 and can be quickly plotted using `autoplot`
 
 ``` r
-library(tidyverse)
+library(ggplot2)
 
 theme_set(theme_bw())
 
@@ -134,7 +134,6 @@ ssd_plot(ssddata::ccme_boron, boron_pred,
 ) + 
   expand_limits(x = 3000) +
   scale_colour_ssd()
-#> Warning: Ignoring unknown aesthetics: shape
 ```
 
 ![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->

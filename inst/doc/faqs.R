@@ -7,7 +7,7 @@ knitr::opts_chunk$set(
 ## ---- fig.width = 5, fig.height = 5-------------------------------------------
 library(ssddata)
 library(ssdtools)
-library(tidyverse)
+library(ggplot2)
 
 dist <- ssdtools::ssd_fit_dists(ssddata::ccme_boron)
 pred <- predict(dist, ci = FALSE)
@@ -18,7 +18,10 @@ ssdtools::ssd_plot_cdf(dist) +
 ## ---- message=FALSE-----------------------------------------------------------
 library(ssddata)
 library(ssdtools)
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(purrr)
 
 boron_preds <- nest(ccme_boron, data = c(Chemical, Species, Conc, Units)) %>%
   mutate(

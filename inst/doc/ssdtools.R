@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
 
 ## ---- message = FALSE---------------------------------------------------------
 library(ssdtools)
-library(tidyverse)
+library(ggplot2)
 
 ## ---- eval = FALSE------------------------------------------------------------
 #  data <- read_csv(file = "path/to/file.csv")
@@ -64,27 +64,27 @@ print(boron_hc5)
 
 ## -----------------------------------------------------------------------------
 ggplot(ccme_boron) +
-  geom_ssdpoint(aes_string(x = "Conc"))
+  geom_ssdpoint(aes(x = Conc))
 
 ## -----------------------------------------------------------------------------
 ggplot(ccme_boron) +
-  geom_ssdsegment(aes_string(x = "Conc", xend = "Conc * 2"))
+  geom_ssdsegment(aes(x = Conc, xend = Conc * 2))
 
 ## -----------------------------------------------------------------------------
 ggplot(boron_pred) +
-  geom_xribbon(aes_string(xmin = "lcl", xmax = "ucl", y = "percent/100"))
+  geom_xribbon(aes(xmin = lcl, xmax = ucl, y = percent/100))
 
 ## -----------------------------------------------------------------------------
 ggplot() +
   geom_hcintersect(xintercept = c(1, 2, 3), yintercept = c(5, 10, 20) / 100)
 
 ## -----------------------------------------------------------------------------
-gp <- ggplot(boron_pred, aes_string(x = "est")) +
-  geom_xribbon(aes_string(xmin = "lcl", xmax = "ucl", y = "percent/100"), alpha = 0.2) +
-  geom_line(aes_string(y = "percent/100")) +
-  geom_ssdsegment(data = ccme_boron, aes_string(x = "Conc / 2", xend = "Conc * 2")) +
-  geom_ssdpoint(data = ccme_boron, aes_string(x = "Conc / 2")) +
-  geom_ssdpoint(data = ccme_boron, aes_string(x = "Conc * 2")) +
+gp <- ggplot(boron_pred, aes(x = est)) +
+  geom_xribbon(aes(xmin = lcl, xmax = ucl, y = percent/100), alpha = 0.2) +
+  geom_line(aes(y = percent/100)) +
+  geom_ssdsegment(data = ccme_boron, aes(x = Conc / 2, xend = Conc * 2)) +
+  geom_ssdpoint(data = ccme_boron, aes(x = Conc / 2)) +
+  geom_ssdpoint(data = ccme_boron, aes(x = Conc * 2)) +
   scale_y_continuous("Species Affected (%)", labels = scales::percent) +
   expand_limits(y = c(0, 1)) +
   xlab("Concentration (mg/L)")

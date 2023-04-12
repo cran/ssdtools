@@ -49,7 +49,7 @@ in the sense of returning a likelihood.}
 A tibble of corresponding hazard percents.
 }
 \description{
-Gets percent of species protected at specified concentration(s).
+Gets percent of species affected at specified concentration(s).
 }
 \details{
 If \code{ci = TRUE} uses parameteric bootstrapping to get confidence intervals on the
@@ -57,9 +57,9 @@ hazard percent(s).
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{fitdists}: Hazard Percents for fitdists Object
-}}
+\item \code{ssd_hp(fitdists)}: Hazard Percents for fitdists Object
 
+}}
 \examples{
 fits <- ssd_fit_dists(ssddata::ccme_boron)
 ssd_hp(fits, conc = 1)
