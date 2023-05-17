@@ -36,16 +36,29 @@ save_csv <- function(x) {
 }
 
 expect_snapshot_plot <- function(x, name) {
-  testthat::skip_on_ci()
   testthat::skip_on_os("windows")
+  testthat::skip_on_os("linux")
+  testthat::skip_on_os("solaris")
   path <- save_png(x)
   testthat::expect_snapshot_file(path, paste0(name, ".png"))
 }
 
-expect_snapshot_data <- function(x, name) {
-  testthat::skip_on_ci()
+expect_snapshot_boot_data <- function(x, name, digits = 6, min_pboot = 0.9, max_pboot = 1) {
+  if(!is.na(min_pboot) & min_pboot > 0) {
+    testthat::expect_true(all(x$pboot >= min_pboot))
+  }
+  if(!is.na(min_pboot) & max_pboot < 1) {
+    testthat::expect_true(all(x$pboot <= max_pboot))
+  }
+  x$pboot <- NULL
+  expect_snapshot_data(x, name, digits = digits)
+}
+
+expect_snapshot_data <- function(x, name, digits = 6) {
   testthat::skip_on_os("windows")
-  fun <- function(x) signif(x, digits = 12)
+  testthat::skip_on_os("solaris")
+  
+  fun <- function(x) signif(x, digits = digits)
   x <- dplyr::mutate(x, dplyr::across(where(is.numeric), fun))
   path <- save_csv(x)
   testthat::expect_snapshot_file(path, paste0(name, ".csv"))

@@ -74,8 +74,7 @@ test_that("qlgumbel extremes", {
                    c(qlgumbel(NA), qlgumbel(NaN), qlgumbel(0), qlgumbel(Inf), qlgumbel(-Inf)))
   expect_equal(qlgumbel(1:2, locationlog = 1:2, scalelog = 3:4), 
                c(qlgumbel(1, 1, 3), qlgumbel(2, 2, 4)))
-  expect_equal(qlgumbel(1:2, locationlog = c(1, NA), scalelog = 3:4), 
-               c(qlgumbel(1, 1, 3), NA))
+  expect_equal(qlgumbel(1:2, locationlog = c(1, NA), scalelog = 3:4), c(Inf, NaN))
   expect_equal(qlgumbel(plgumbel(c(0, 0.1, 0.5, 0.9, 1))), c(0, 0.1, 0.5, 0.9, 1))
 })
 

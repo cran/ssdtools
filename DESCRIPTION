@@ -1,6 +1,6 @@
 Package: ssdtools
 Title: Species Sensitivity Distributions
-Version: 1.0.3
+Version: 1.0.4
 Authors@R: c(
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "cre", "ctr"),
            comment = c(ORCID = "0000-0002-7683-4592")),
@@ -10,6 +10,10 @@ Authors@R: c(
     person("Angeline", "Tillmanns", role = "ctb"),
     person("Ali", "Azizishirazi", role = "ctb"),
     person("Kathleen", "McTavish", role = "ctb"),
+    person("Heather", "Thompson", role = "ctb"),
+    person("Doug", "Spry", role = "ctb"),
+    person("Rick", "van Dam", role = "ctb"),
+    person("Graham", "Batley", role = "ctb"),
     person("Heather", "Thompson", role = "ctb"),
     person("Andy", "Teucher", role = "ctb"),
     person("Seb", "Dalgarno", , "seb@poissonconsulting.ca", role = "ctb",
@@ -50,7 +54,7 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2023-04-10 12:33:59 UTC; joe
+Packaged: 2023-05-17 03:29:04 UTC; joe
 Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Carl Schwarz [aut, ctr],
   Rebecca Fisher [ctb],
@@ -58,6 +62,10 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Angeline Tillmanns [ctb],
   Ali Azizishirazi [ctb],
   Kathleen McTavish [ctb],
+  Heather Thompson [ctb],
+  Doug Spry [ctb],
+  Rick van Dam [ctb],
+  Graham Batley [ctb],
   Heather Thompson [ctb],
   Andy Teucher [ctb],
   Seb Dalgarno [ctb] (<https://orcid.org/0000-0002-3658-4517>),
@@ -70,4 +78,4 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Environment and Climate Change Canada [cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2023-04-12 09:20:02 UTC
+Date/Publication: 2023-05-17 04:40:02 UTC

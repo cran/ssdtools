@@ -71,8 +71,7 @@ test_that("qgompertz extremes", {
                    c(qgompertz(NA), qgompertz(NaN), qgompertz(0), qgompertz(Inf), qgompertz(-Inf)))
   expect_equal(qgompertz(1:2, llocation = 1:2, lshape = 3:4), 
                c(qgompertz(1, 1, 3), qgompertz(2, 2, 4)))
-  expect_equal(qgompertz(1:2, llocation = c(1, NA), lshape = 3:4), 
-               c(qgompertz(1, 1, 3), NA))
+  expect_equal(qgompertz(1:2, llocation = c(1, NA), lshape = 3:4), c(Inf, NaN))
   expect_equal(qgompertz(pgompertz(c(0, 0.1, 0.5, 0.9, 1))), c(0, 0.1, 0.5, 0.9, 1))
 })
 
