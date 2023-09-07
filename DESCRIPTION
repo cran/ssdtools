@@ -1,6 +1,6 @@
 Package: ssdtools
 Title: Species Sensitivity Distributions
-Version: 1.0.5
+Version: 1.0.6
 Authors@R: c(
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "cre", "ctr"),
            comment = c(ORCID = "0000-0002-7683-4592")),
@@ -54,7 +54,7 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.2.3
 NeedsCompilation: yes
-Packaged: 2023-08-29 14:18:51 UTC; joe
+Packaged: 2023-09-07 07:57:31 UTC; joe
 Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Carl Schwarz [aut, ctr],
   Rebecca Fisher [ctb],
@@ -78,4 +78,4 @@ Author: Joe Thorley [aut, cre, ctr] (<https://orcid.org/0000-0002-7683-4592>),
   Environment and Climate Change Canada [cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2023-08-29 14:40:02 UTC
+Date/Publication: 2023-09-07 14:10:02 UTC
