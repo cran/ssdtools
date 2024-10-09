@@ -9,31 +9,38 @@
 \usage{
 ssd_hc(x, ...)
 
-\method{ssd_hc}{list}(x, percent = 5, hc = 5, ...)
+\method{ssd_hc}{list}(x, percent, proportion = 0.05, ...)
 
 \method{ssd_hc}{fitdists}(
   x,
-  percent = 5,
-  hc = 5,
+  percent,
+  proportion = 0.05,
+  average = TRUE,
   ci = FALSE,
   level = 0.95,
   nboot = 1000,
-  average = TRUE,
-  delta = 7,
-  min_pboot = 0.99,
+  min_pboot = 0.95,
+  multi_est = TRUE,
+  ci_method = "weighted_samples",
   parametric = TRUE,
+  delta = 9.21,
+  samples = FALSE,
+  save_to = NULL,
   control = NULL,
   ...
 )
 
 \method{ssd_hc}{fitburrlioz}(
   x,
-  percent = 5,
+  percent,
+  proportion = 0.05,
   ci = FALSE,
   level = 0.95,
   nboot = 1000,
-  min_pboot = 0.99,
+  min_pboot = 0.95,
   parametric = FALSE,
+  samples = FALSE,
+  save_to = NULL,
   ...
 )
 }
@@ -42,24 +49,35 @@ ssd_hc(x, ...)
 
 \item{...}{Unused.}
 
-\item{percent}{A numeric vector of percentages.}
+\item{percent}{A numeric vector of percent values to estimate hazard concentrations for. Soft-deprecated for \code{proportion = 0.05}.}
 
-\item{hc}{A whole numeric vector between 1 and 99 indicating the percent hazard concentrations (deprecated for percent).}
+\item{proportion}{A numeric vector of proportion values to estimate hazard concentrations for.}
 
-\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+\item{average}{A flag specifying whether to provide model averaged values as opposed to a value for each distribution.}
 
-\item{level}{A number between 0 and 1 of the confidence level.}
+\item{ci}{A flag specifying whether to estimate confidence intervals (by bootstrapping).}
 
-\item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits. A value of 10000 is recommended for official guidelines.}
+\item{level}{A number between 0 and 1 of the confidence level of the interval.}
 
-\item{average}{A flag specifying whether to model average the estimates.}
+\item{nboot}{A count of the number of bootstrap samples to use to estimate the confidence limits. A value of 10,000 is recommended for official guidelines.}
 
-\item{delta}{A non-negative number specifying the maximum absolute Akaike Information-theoretic Criterion difference cutoff. Distributions with an absolute difference from the best model greater than the cutoff are excluded.}
+\item{min_pboot}{A number between 0 and 1 of the minimum
+proportion of bootstrap samples that must successfully fit (return a likelihood)
+to report the confidence intervals.}
 
-\item{min_pboot}{A number of the minimum proportion of bootstrap samples that must successfully fit
-in the sense of returning a likelihood.}
+\item{multi_est}{A flag specifying whether to treat the distributions as constituting a single distribution (as opposed to taking the mean) when calculating model averaged estimates.}
 
-\item{parametric}{A flag specifying whether to perform parametric as opposed to non-parametric bootstrapping.}
+\item{ci_method}{A string specifying which method to use for estimating the bootstrap values.
+Possible values are "multi_free" and "multi_fixed" which treat the distributions as constituting a single distribution but differ in whether the model weights are fixed and "weighted_samples" and "weighted_arithmetic" take bootstrap samples from each distribution proportional to its weight versus calculating the weighted arithmetic means of the lower and upper confidence limits.}
+
+\item{parametric}{A flag specifying whether to perform parametric bootstrapping as opposed to non-parametrically resampling the original data with replacement.}
+
+\item{delta}{A non-negative number specifying the maximum absolute AIC difference cutoff.
+Distributions with an absolute AIC difference greater than delta are excluded from the calculations.}
+
+\item{samples}{A flag specfying whether to include a numeric vector of the bootstrap samples as a list column in the output.}
+
+\item{save_to}{NULL or a string specifying a directory to save where the bootstrap datasets and parameter estimates (when successfully converged) to.}
 
 \item{control}{A list of control parameters passed to \code{\link[stats:optim]{stats::optim()}}.}
 }
@@ -67,11 +85,34 @@ in the sense of returning a likelihood.}
 A tibble of corresponding hazard concentrations.
 }
 \description{
-Gets concentration(s) that protect specified percentage(s) of species.
+Calculates concentration(s) with bootstrap confidence intervals
+that protect specified proportion(s) of species for
+individual or model-averaged distributions
+using parametric or non-parametric bootstrapping.
 }
 \details{
-If \code{ci = TRUE} uses parameteric bootstrapping to get confidence intervals on the
-hazard concentrations(s).
+Model-averaged estimates and/or confidence intervals (including standard error)
+can be calculated  by treating the distributions as
+constituting a single mixture distribution
+versus 'taking the mean'.
+When calculating the model averaged estimates treating the
+distributions as constituting a single mixture distribution
+ensures that \code{ssd_hc()} is the inverse of \code{ssd_hp()}.
+
+If treating the distributions as constituting a single mixture distribution
+when calculating model average confidence intervals then
+\code{weighted} specifies whether to use the original model weights versus
+re-estimating for each bootstrap sample unless 'taking the mean' in which case
+\code{weighted} specifies
+whether to take bootstrap samples from each distribution proportional to
+its weight (so that they sum to \code{nboot}) versus
+calculating the weighted arithmetic means of the lower
+and upper confidence limits based on \code{nboot} samples for each distribution.
+
+Distributions with an absolute AIC difference greater
+than a delta of by default 7 have considerably less support (weight < 0.01)
+and are excluded
+prior to calculation of the hazard concentrations to reduce the run time.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -80,17 +121,20 @@ hazard concentrations(s).
 \item \code{ssd_hc(fitdists)}: Hazard Concentrations for fitdists Object
 
 \item \code{ssd_hc(fitburrlioz)}: Hazard Concentrations for fitburrlioz Object
-'
 
 }}
 \examples{
+
+ssd_hc(ssd_match_moments())
+
 fits <- ssd_fit_dists(ssddata::ccme_boron)
 ssd_hc(fits)
-ssd_hc(estimates(fits))
-ssd_hc(ssd_match_moments())
+
 fit <- ssd_fit_burrlioz(ssddata::ccme_boron)
 ssd_hc(fit)
-
+}
+\references{
+Burnham, K.P., and Anderson, D.R. 2002. Model Selection and Multimodel Inference. Springer New York, New York, NY. doi:10.1007/b97636.
 }
 \seealso{
 \code{\link[=predict.fitdists]{predict.fitdists()}} and \code{\link[=ssd_hp]{ssd_hp()}}.

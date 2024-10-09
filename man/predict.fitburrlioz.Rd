@@ -6,11 +6,12 @@
 \usage{
 \method{predict}{fitburrlioz}(
   object,
-  percent = 1:99,
+  percent,
+  proportion = 1:99/100,
   ci = FALSE,
   level = 0.95,
   nboot = 1000,
-  min_pboot = 0.99,
+  min_pboot = 0.95,
   parametric = TRUE,
   ...
 )
@@ -18,18 +19,21 @@
 \arguments{
 \item{object}{The object.}
 
-\item{percent}{A numeric vector of percentages.}
+\item{percent}{A numeric vector of percent values to estimate hazard concentrations for. Soft-deprecated for \code{proportion = 0.05}.}
 
-\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+\item{proportion}{A numeric vector of proportion values to estimate hazard concentrations for.}
 
-\item{level}{A number between 0 and 1 of the confidence level.}
+\item{ci}{A flag specifying whether to estimate confidence intervals (by bootstrapping).}
 
-\item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits. A value of 10000 is recommended for official guidelines.}
+\item{level}{A number between 0 and 1 of the confidence level of the interval.}
 
-\item{min_pboot}{A number of the minimum proportion of bootstrap samples that must successfully fit
-in the sense of returning a likelihood.}
+\item{nboot}{A count of the number of bootstrap samples to use to estimate the confidence limits. A value of 10,000 is recommended for official guidelines.}
 
-\item{parametric}{A flag specifying whether to perform parametric as opposed to non-parametric bootstrapping.}
+\item{min_pboot}{A number between 0 and 1 of the minimum
+proportion of bootstrap samples that must successfully fit (return a likelihood)
+to report the confidence intervals.}
+
+\item{parametric}{A flag specifying whether to perform parametric bootstrapping as opposed to non-parametrically resampling the original data with replacement.}
 
 \item{...}{Unused.}
 }

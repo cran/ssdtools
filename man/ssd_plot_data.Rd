@@ -8,6 +8,7 @@ ssd_plot_data(
   data,
   left = "Conc",
   right = left,
+  ...,
   label = NULL,
   shape = NULL,
   color = NULL,
@@ -15,7 +16,11 @@ ssd_plot_data(
   xlab = "Concentration",
   ylab = "Species Affected",
   shift_x = 3,
+  add_x = 0,
+  big.mark = ",",
+  suffix = "\%",
   bounds = c(left = 1, right = 1),
+  trans = "log10",
   xbreaks = waiver()
 )
 }
@@ -25,6 +30,8 @@ ssd_plot_data(
 \item{left}{A string of the column in data with the concentrations.}
 
 \item{right}{A string of the column in data with the right concentration values.}
+
+\item{...}{Unused.}
 
 \item{label}{A string of the column in data with the labels.}
 
@@ -38,11 +45,19 @@ ssd_plot_data(
 
 \item{ylab}{A string of the x-axis label.}
 
-\item{shift_x}{The value to multiply the label x values by.}
+\item{shift_x}{The value to multiply the label x values by (after adding \code{add_x}).}
+
+\item{add_x}{The value to add to the label x values (before multiplying by \code{shift_x}).}
+
+\item{big.mark}{A string specifying used between every 3 digits to separate thousands on the x-axis.}
+
+\item{suffix}{Additional text to display after the number on the y-axis.}
 
 \item{bounds}{A named non-negative numeric vector of the left and right bounds for
 uncensored missing (0 and Inf) data in terms of the orders of magnitude
 relative to the extremes for non-missing values.}
+
+\item{trans}{A string which transformation to use by default \code{"log10"}.}
 
 \item{xbreaks}{The x-axis breaks as one of:
 \itemize{

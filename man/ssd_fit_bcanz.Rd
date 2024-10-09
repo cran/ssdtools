@@ -4,12 +4,14 @@
 \alias{ssd_fit_bcanz}
 \title{Fit BCANZ Distributions}
 \usage{
-ssd_fit_bcanz(data, left = "Conc")
+ssd_fit_bcanz(data, left = "Conc", dists = ssd_dists_bcanz())
 }
 \arguments{
 \item{data}{A data frame.}
 
 \item{left}{A string of the column in data with the concentrations.}
+
+\item{dists}{A character vector of the distribution names.}
 }
 \value{
 An object of class fitdists.
@@ -25,6 +27,7 @@ ssd_fit_bcanz(ssddata::ccme_boron)
 \code{\link[=ssd_fit_dists]{ssd_fit_dists()}}
 
 Other BCANZ: 
-\code{\link{ssd_hc_bcanz}()}
+\code{\link{ssd_hc_bcanz}()},
+\code{\link{ssd_hp_bcanz}()}
 }
 \concept{BCANZ}

@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -113,8 +116,10 @@
 
 .attrs_fitdists <- function(fits) {
   attrs <- attributes(fits)
-  attrs[c("censoring", "cols", "control", "data", "org_data", "min_pmix", "range_shape1",
-          "range_shape2", "rescale", "weighted", "unequal")]
+  attrs[c(
+    "censoring", "cols", "control", "data", "org_data", "min_pmix", "range_shape1",
+    "range_shape2", "rescale", "weighted", "unequal"
+  )]
 }
 
 `.attrs_fitdists<-` <- function(fits, value) {

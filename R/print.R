@@ -1,10 +1,13 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
 #
-#       http://www.apache.org/licenses/LICENSE-2.0
+#       https://www.apache.org/licenses/LICENSE-2.0
 #
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,6 +23,7 @@
 
 #' @export
 print.summary_tmbfit <- function(x, ...) {
+  chk_unused(...)
   txt <- paste0("Distribution '", x$dist, "'")
   cat(txt)
   mapply(.print_parameter, x$estimates, names(x$estimates))
@@ -29,21 +33,25 @@ print.summary_tmbfit <- function(x, ...) {
 
 #' @export
 print.summary_fitdists <- function(x, ...) {
+  chk_unused(...)
   lapply(x$fits, print)
   censoring <- censoring_text(x$censoring)
-  if(x$unequal) {
+  if (x$unequal) {
     weighted <- "unequally weighted"
   } else if (x$weighted != 1) {
     weighted <- "weighted"
-  } else
+  } else {
     weighted <- NULL
-  rescaled <- if(x$rescaled != 1) {
-    paste0("rescaled (", signif(x$rescaled, 4) ,")")
-  } else NULL
+  }
+  rescaled <- if (x$rescaled != 1) {
+    paste0("rescaled (", signif(x$rescaled, 4), ")")
+  } else {
+    NULL
+  }
   properties <- c(censoring, weighted, rescaled)
   properties <- cc(properties, conj = " and ", brac = "")
-  if(length(properties)) properties <- paste0(" ", properties)
-  
+  if (length(properties)) properties <- paste0(" ", properties)
+
   txt <- paste0("Parameters estimated from ", x$nrow, " rows of", properties, " data.")
   cat(txt)
   invisible(x)
@@ -51,10 +59,12 @@ print.summary_fitdists <- function(x, ...) {
 
 #' @export
 print.tmbfit <- function(x, ...) {
+  chk_unused(...)
   print(summary(x))
 }
 
 #' @export
 print.fitdists <- function(x, ...) {
+  chk_unused(...)
   print(summary(x))
 }

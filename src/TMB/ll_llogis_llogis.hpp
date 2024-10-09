@@ -1,11 +1,14 @@
-//    Copyright 2021 Environment and Climate Change Canada
-
+// Copyright 2015-2023 Province of British Columbia
+// Copyright 2021 Environment and Climate Change Canada
+// Copyright 2023-2024 Australian Government Department of Climate Change, 
+// Energy, the Environment and Water
+//
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
 //    You may obtain a copy of the License at
-
+//
 //       https://www.apache.org/licenses/LICENSE-2.0
-
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +41,7 @@
 //    log_scalelog1 - log(scale)    on the log(Concentration) scale
 //    locationlog2  - location on the log(Concentration) scale for second component
 //    log_scalelog2 - log(scale)    on the log(Concentration) scale
-//    logit_pmix    - logit(proportion) of mixture in the first components
+//    pmix    - proportion of mixture in the first components
 
 // Refer to http://kaskr.github.io/adcomp/matrix_arrays_8cpp-example.html for help in coding the log-likelihood function
 
@@ -64,12 +67,11 @@ Type ll_llogis_llogis(objective_function<Type>* obj) // normal with parameters m
   PARAMETER( log_scalelog1    );
   PARAMETER( locationlog2 ); // second distribution
   PARAMETER( log_scalelog2    );
-  PARAMETER( logit_pmix         );  // mixing proportion
+  PARAMETER( pmix         );  // mixing proportion
 
   Type scalelog1 = exp(log_scalelog1);    // Convert to the [0,Inf] range
   Type scalelog2 = exp(log_scalelog2);
-  Type pmix      = 1/(1+exp(-logit_pmix));// Convert to the [0,1] range
-  
+
   
   Type nll = 0;  // negative log-likelihood
   int n_data    = left.size(); // number of data values
@@ -102,8 +104,6 @@ Type ll_llogis_llogis(objective_function<Type>* obj) // normal with parameters m
   REPORT  (scalelog1);
   ADREPORT(scalelog2);
   REPORT  (scalelog2);
-  ADREPORT(pmix);
-  REPORT  (pmix);
   
   
   //REPORT( mynll);  //for debugging

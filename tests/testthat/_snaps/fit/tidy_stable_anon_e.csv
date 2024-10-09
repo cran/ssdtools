@@ -7,10 +7,10 @@ llogis,locationlog,6.53111,0.964136
 llogis,scalelog,2.18789,0.423632
 lnorm,meanlog,6.23661,0.858094
 lnorm,sdlog,3.53801,0.606764
-lnorm_lnorm,meanlog1,2.22876,0.541802
-lnorm_lnorm,meanlog2,9.04834,0.266608
-lnorm_lnorm,pmix,0.412302,0.119536
-lnorm_lnorm,sdlog1,1.4215,0.397647
-lnorm_lnorm,sdlog2,0.840721,0.188741
+lnorm_lnorm,meanlog1,2.22872,0.541792
+lnorm_lnorm,meanlog2,9.04834,0.26661
+lnorm_lnorm,pmix,0.412297,0.119535
+lnorm_lnorm,sdlog1,1.42148,0.397631
+lnorm_lnorm,sdlog2,0.840727,0.188743
 weibull,scale,2701.04,1846.65
 weibull,shape,0.372736,0.0768177

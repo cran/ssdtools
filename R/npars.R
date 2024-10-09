@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,10 +19,14 @@
 universals::npars
 
 #' @export
-npars.tmbfit <- function(x, ...) length(.pars_tmbfit(x))
+npars.tmbfit <- function(x, ...) {
+  chk_unused(...)
+  length(.pars_tmbfit(x))
+}
 
 #' @export
 npars.fitdists <- function(x, ...) {
+  chk_unused(...)
   x <- vapply(x, npars, 1L)
   x
 }

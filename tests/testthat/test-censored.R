@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -21,8 +24,10 @@ test_that("ssd_is_censored TRUE interval ssd_is_censored data", {
 })
 
 test_that("ssd_is_censored missing value if no rows", {
-  expect_identical(ssd_is_censored(data.frame(Conc = numeric(0), right = numeric(0)), right = "right"),
-                   NA)
+  expect_identical(
+    ssd_is_censored(data.frame(Conc = numeric(0), right = numeric(0)), right = "right"),
+    NA
+  )
 })
 
 test_that("ssd_is_censored TRUE left ssd_is_censored data 0", {
@@ -36,7 +41,7 @@ test_that("ssd_is_censored TRUE left ssd_is_censored data NA", {
 test_that("ssd_is_censored errors negative left ssd_is_censored data", {
   expect_error(ssd_is_censored(data.frame(Conc = -1, right = 2), right = "right"))
 })
-  
+
 test_that("ssd_is_censored TRUE right ssd_is_censored data Inf", {
   expect_true(ssd_is_censored(data.frame(Conc = 1, right = Inf), right = "right"))
 })
@@ -65,4 +70,19 @@ test_that("ssd_is_censored TRUE fitdists censored", {
   data$Conc <- 0
   fits <- ssd_fit_dists(data, right = "Right", dists = c("gamma", "llogis", "lnorm"))
   expect_true(ssd_is_censored(fits))
+})
+
+test_that("ssd_is_censored TRUE fitdists multiple", {
+  data <- ssddata::ccme_boron
+  data$right <- data$Conc
+  data$Conc[c(3, 6, 8)] <- NA
+
+  fits <- ssd_fit_dists(data, dists = "lnorm", right = "right")
+  expect_true(ssd_is_censored(fits))
+})
+
+
+test_that("censor", {
+  fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm")
+  expect_defunct(is_censored(fits))
 })

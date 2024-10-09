@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,56 +19,107 @@
 stats::predict
 
 #' Predict Hazard Concentrations of fitdists Object
-#' 
-#' A wrapper on [`ssd_hc()`] that by default calculates 
+#'
+#' A wrapper on [`ssd_hc()`] that by default calculates
 #' all hazard concentrations from 1 to 99%.
-#' 
+#'
 #' It is useful for plotting purposes.
-#' 
+#'
 #' @inheritParams params
 #' @export
 #' @seealso [`ssd_hc()`] and [`ssd_plot()`]
-#' @examples 
+#' @examples
 #' fits <- ssd_fit_dists(ssddata::ccme_boron)
 #' predict(fits)
-predict.fitdists <- function(object, percent = 1:99, ci = FALSE,
-                             level = 0.95, nboot = 1000, 
-                             average = TRUE, delta = 7,
-                             min_pboot = 0.99,
-                             parametric = TRUE,
-                             control = NULL,
-                             ...) {
+predict.fitdists <- function(
+    object,
+    percent,
+    proportion = 1:99 / 100,
+    average = TRUE,
+    ci = FALSE,
+    level = 0.95,
+    nboot = 1000,
+    min_pboot = 0.95,
+    multi_est = TRUE,
+    ci_method = "weighted_samples",
+    parametric = TRUE,
+    delta = 9.21,
+    control = NULL,
+    ...) {
   chk_unused(...)
-  ssd_hc(object,
-         percent = percent, ci = ci, level = level,
-         nboot = nboot, min_pboot = min_pboot,
-         average = average, delta = delta, 
-         control = control, parametric = parametric
+
+
+  if (lifecycle::is_present(percent)) {
+    lifecycle::deprecate_soft("2.0.0", "ssd_hc(percent)", "ssd_hc(proportion)", id = "hc")
+    chk_vector(percent)
+    chk_numeric(percent)
+    chk_range(percent, c(0, 100))
+    proportion <- percent / 100
+  }
+
+  chk_vector(proportion)
+  chk_numeric(proportion)
+  chk_range(proportion)
+
+  ssd_hc(
+    object,
+    proportion = proportion,
+    ci = ci,
+    level = level,
+    nboot = nboot,
+    min_pboot = min_pboot,
+    multi_est = multi_est,
+    average = average,
+    delta = delta,
+    parametric = parametric,
+    ci_method = ci_method,
+    control = control
   )
 }
 
 #' Predict Hazard Concentrations of fitburrlioz Object
-#' 
-#' A wrapper on [`ssd_hc()`] that by default calculates 
+#'
+#' A wrapper on [`ssd_hc()`] that by default calculates
 #' all hazard concentrations from 1 to 99%.
-#' 
+#'
 #' It is useful for plotting purposes.
-#' 
+#'
 #' @inheritParams params
 #' @export
 #' @seealso [`ssd_hc()`] and [`ssd_plot()`]
-#' @examples 
+#' @examples
 #' fits <- ssd_fit_burrlioz(ssddata::ccme_boron)
 #' predict(fits)
-predict.fitburrlioz <- function(object, percent = 1:99, ci = FALSE,
-                             level = 0.95, nboot = 1000, 
-                             min_pboot = 0.99,
-                             parametric = TRUE,
-                             ...) {
+predict.fitburrlioz <- function(
+    object,
+    percent,
+    proportion = 1:99 / 100,
+    ci = FALSE,
+    level = 0.95,
+    nboot = 1000,
+    min_pboot = 0.95,
+    parametric = TRUE,
+    ...) {
   chk_unused(...)
+
+  if (lifecycle::is_present(percent)) {
+    lifecycle::deprecate_soft("2.0.0", "ssd_hc(percent)", "ssd_hc(proportion)", id = "hc")
+    chk_vector(percent)
+    chk_numeric(percent)
+    chk_range(percent, c(0, 100))
+    proportion <- percent / 100
+  }
+
+  chk_vector(proportion)
+  chk_numeric(proportion)
+  chk_range(proportion)
+
   ssd_hc(object,
-         percent = percent, ci = ci, level = level,
-         nboot = nboot, min_pboot = min_pboot,
-         parametric = parametric
+    proportion = proportion,
+    ci = ci,
+    level = level,
+    nboot = nboot,
+    min_pboot = min_pboot,
+    parametric = parametric
   )
 }

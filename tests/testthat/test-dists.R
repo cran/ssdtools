@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -13,9 +16,13 @@
 #    limitations under the License.
 
 test_that("dists all", {
-  expect_identical(ssd_dists_all(),
-                   c("burrIII3", "gamma", "gompertz", "invpareto", "lgumbel", "llogis", 
-                     "llogis_llogis", "lnorm", "lnorm_lnorm", "weibull"))
+  expect_identical(
+    ssd_dists_all(),
+    c(
+      "burrIII3", "gamma", "gompertz", "invpareto", "lgumbel", "llogis",
+      "llogis_llogis", "lnorm", "lnorm_lnorm", "weibull"
+    )
+  )
 })
 
 test_that("dists all", {
@@ -32,4 +39,9 @@ test_that("dists without tails", {
 
 test_that("dists 5 pars", {
   expect_identical(ssd_dists(npars = 5L), c("llogis_llogis", "lnorm_lnorm"))
+})
+
+test_that("dists bcanz", {
+  expect_identical(ssd_dists_bcanz(), ssd_dists(bcanz = TRUE))
+  expect_identical(ssd_dists_bcanz(npars = 2L), c("gamma", "lgumbel", "llogis", "lnorm", "weibull"))
 })

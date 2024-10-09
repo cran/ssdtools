@@ -1,14 +1,15 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ssdtools <img src="man/figures/logo.png" align="right" />
+# ssdtools <img src="man/figures/logo.png" align="right" alt="ssdtools logo of cumulative species sensitivity distribution with outlines of commonly used species as data" />
 
 <!-- badges: start -->
 
-[![Lifecycle:Maturing](https://img.shields.io/badge/Lifecycle-Maturing-007EC6)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/bcgov/ssdtools/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bcgov/ssdtools/actions/workflows/R-CMD-check.yaml)
-[![Coverage
-Status](https://img.shields.io/codecov/c/github/bcgov/ssdtools/master.svg)](https://app.codecov.io/github/bcgov/ssdtools?branch=main)
+[![Codecov test
+coverage](https://codecov.io/gh/bcgov/ssdtools/graph/badge.svg?token=gVKHQQD1Jp)](https://app.codecov.io/gh/bcgov/ssdtools)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ssdtools)](https://cran.r-project.org/package=ssdtools)
 ![CRAN downloads](https://cranlogs.r-pkg.org/badges/ssdtools)
@@ -20,31 +21,39 @@ Distributions (SSD).
 SSDs are cumulative probability distributions which are fitted to
 toxicity concentrations for different species as described by Posthuma
 et al. (2001). The ssdtools package uses Maximum Likelihood to fit
-distributions such as the gamma, log-Gumbel (identical to inverse
-Weibull), log-logistic, log-normal and Weibull to censored and/or
-weighted data. Multiple distributions can be averaged using Akaike
-Information Criteria. Confidence intervals on hazard concentrations and
-proportions are produced by parametric bootstrapping.
+distributions such as the log-normal, log-logistic, log-Gumbel (also
+known as the inverse Weibull), gamma, Weibull and log-normal log-normal
+mixture. Multiple distributions can be averaged using Akaike Information
+Criteria. Confidence intervals on hazard concentrations and proportions
+are produced by bootstrapping.
 
 ## Installation
 
-To install the latest version from
-[CRAN](https://CRAN.R-project.org/package=ssdtools)
+To install the latest release version from
+[CRAN](https://CRAN.R-project.org/package=ssdtools).
 
 ``` r
 install.packages("ssdtools")
 ```
 
-To install the latest development version:
+To install the latest development version from
+[r-universe](https://bcgov.r-universe.dev/ssdtools).
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("bcgov/ssdtools")
+install.packages("ssdtools", repos = c("https://bcgov.r-universe.dev", "https://cloud.r-project.org"))
+```
+
+or from [GitHub](https://github.com/bcgov/ssdtools)
+
+``` r
+# install.packages("pak", repos = sprintf("https://r-lib.github.io/p/pak/stable/%s/%s/%s", .Platform$pkgType, R.Version()$os, R.Version()$arch))
+pak::pak("bcgov/ssdtools")
 ```
 
 ## Introduction
 
-`ssdtools` provides a data set for several chemicals including Boron.
+The dependency [`ssddata`](https://github.com/open-AIMS/ssddata)
+provides example data sets for several chemicals including Boron.
 
 ``` r
 library(ssdtools)
@@ -65,7 +74,7 @@ ssddata::ccme_boron
 #> # ℹ 18 more rows
 ```
 
-Distributions are fit using `ssd_fit_dists()`
+The six default distributions are fit using `ssd_fit_dists()`
 
 ``` r
 fits <- ssd_fit_dists(ssddata::ccme_boron)
@@ -74,15 +83,10 @@ fits <- ssd_fit_dists(ssddata::ccme_boron)
 and can be quickly plotted using `autoplot`
 
 ``` r
-library(ggplot2)
-
-theme_set(theme_bw())
-
-autoplot(fits) + 
-  scale_colour_ssd()
+autoplot(fits)
 ```
 
-![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="A plot of the data and fitted distributions" width="100%" />
 
 The goodness of fit can be assessed using `ssd_gof`
 
@@ -99,71 +103,44 @@ ssd_gof(fits)
 #> 6 weibull     0.434 0.117  0.0542  238.  238.  240. 0      0.357
 ```
 
-and the model-averaged 5% hazard concentration estimated by parametric
-bootstrapping using `ssd_hc`
+and the model-averaged 5% hazard concentration estimated (with
+bootstrapping to get confidence intervals) using `ssd_hc`.
 
 ``` r
 set.seed(99)
-hc5 <- ssd_hc(fits, ci = TRUE, nboot = 100) # 100 bootstrap samples for speed
+hc5 <- ssd_hc(fits, ci = TRUE)
 print(hc5)
-#> # A tibble: 1 × 10
-#>   dist    percent   est    se   lcl   ucl    wt method     nboot pboot
-#>   <chr>     <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>      <dbl> <dbl>
-#> 1 average       5  1.24 0.741 0.510  3.35     1 parametric   100     1
+#> # A tibble: 1 × 11
+#>   dist    proportion   est    se   lcl   ucl    wt method    nboot pboot samples
+#>   <chr>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>     <dbl> <dbl> <I<lis>
+#> 1 average       0.05  1.26 0.782 0.407  3.29     1 parametr…  1000     1 <dbl>
 ```
 
 Model-averaged predictions complete with confidence intervals can also
 be estimated by parametric bootstrapping using the `stats` generic
-`predict`. To perform bootstrapping for each distribution in parallel
-register the future backend and then select the evaluation strategy.
+`predict`.
 
 ``` r
-doFuture::registerDoFuture()
-future::plan(future::multisession)
-
-set.seed(99)
 boron_pred <- predict(fits, ci = TRUE)
 ```
 
-and plotted together with the original data using `ssd_plot`.
+The predictions can be plotted together with the original data using
+`ssd_plot`.
 
 ``` r
+library(ggplot2)
+
+theme_set(theme_bw())
+
 ssd_plot(ssddata::ccme_boron, boron_pred,
   shape = "Group", color = "Group", label = "Species",
   xlab = "Concentration (mg/L)", ribbon = TRUE
-) + 
+) +
   expand_limits(x = 3000) +
   scale_colour_ssd()
 ```
 
-![](man/figures/README-unnamed-chunk-9-1.png)<!-- -->
-
-## References
-
-Posthuma, L., Suter II, G.W., and Traas, T.P. 2001. Species Sensitivity
-Distributions in Ecotoxicology. CRC Press.
-
-## Citation
-
-    To cite package 'ssdtools' in publications use:
-
-      Thorley J, Schwarz C (2018). "ssdtools: An R package to fit Species
-      Sensitivity Distributions." _Journal of Open Source Software_,
-      *3*(31), 1082. doi:10.21105/joss.01082
-      <https://doi.org/10.21105/joss.01082>.
-
-    A BibTeX entry for LaTeX users is
-
-      @Article{,
-        title = {ssdtools: {An} {R} package to fit {Species} {Sensitivity} {Distributions}},
-        author = {Joe Thorley and Carl Schwarz},
-        journal = {Journal of Open Source Software},
-        year = {2018},
-        volume = {3},
-        number = {31},
-        pages = {1082},
-        doi = {10.21105/joss.01082},
-      }
+<img src="man/figures/README-unnamed-chunk-8-1.png" alt="A plot of the data and model-averaged prediction with confidence intervals" width="100%" />
 
 ## Information
 
@@ -173,17 +150,8 @@ Get started with ssdtools at
 A shiny app to allow non-R users to interface with ssdtools is available
 at <https://github.com/bcgov/shinyssdtools>.
 
-The citation for the shiny app:
-
-*Dalgarno, S. 2021. shinyssdtools: A web application for fitting Species
-Sensitivity Distributions (SSDs). JOSS 6(57): 2848.
-<https://joss.theoj.org/papers/10.21105/joss.02848>.*
-
-The ssdtools package was developed as a result of earlier drafts of:
-
-*Schwarz, C., and Tillmanns, A. 2019. Improving Statistical Methods for
-Modeling Species Sensitivity Distributions. Province of British
-Columbia, Victoria, BC.*
+For the latest changes to the development version see the
+[NEWS](https://bcgov.github.io/ssdtools/news/) file.
 
 For recent developments in SSD modeling including a review of existing
 software see:
@@ -192,57 +160,42 @@ software see:
 Distribution Modeling. Environ Toxicol Chem 40(2): 293–308.
 <https://doi.org/10.1002/etc.4925>.*
 
-The CCME `data.csv` data file is derived from a factsheet prepared by
-the [Canadian Council of Ministers of the
-Environment](http://ceqg-rcqe.ccme.ca/en/index.html). See the
-[`data-raw`](https://github.com/bcgov/ssdtools/tree/master/data-raw)
-folder for more information.
-
-## Getting Help or Reporting an Issue
+### Getting Help or Reporting an Issue
 
 To report bugs/issues/feature requests, please file an
 [issue](https://github.com/bcgov/ssdtools/issues/).
 
-## How to Contribute
+### Contribution
 
 If you would like to contribute to the package, please see our
 [CONTRIBUTING](https://github.com/bcgov/ssdtools/blob/master/.github/CONTRIBUTING.md)
 guidelines.
 
-## Code of Conduct
+### Code of Conduct
 
 Please note that the ssdtools project is released with a [Contributor
 Code of
-Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+Conduct](https://contributor-covenant.org/version/2/1/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
 
-## License
+## References
 
-The code is released under the Apache License 2.0
+Posthuma, L., Suter II, G.W., and Traas, T.P. 2001. Species Sensitivity
+Distributions in Ecotoxicology. CRC Press.
 
-Copyright 2021 Province of British Columbia and Environment and Climate
-Change Canada
+<div id="refs">
 
-Licensed under the Apache License, Version 2.0 (the “License”); you may
-not use this file except in compliance with the License. You may obtain
-a copy of the License at
+</div>
 
-<https://www.apache.org/licenses/LICENSE-2.0>
+## Licensing
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an “AS IS” BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Copyright 2018-2024 Province of British Columbia  
+Copyright 2021 Environment and Climate Change Canada  
+Copyright 2023-2024 Australian Government Department of Climate Change,
+Energy, the Environment and Water
 
-------------------------------------------------------------------------
+The documentation is released under the [CC BY 4.0
+License](https://creativecommons.org/licenses/by/4.0/)
 
-<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons Licence"
-style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/80x15.png" /></a><br /><span
-xmlns:dct="http://purl.org/dc/terms/"
-property="dct:title">ssdtools</span> by <span
-xmlns:cc="http://creativecommons.org/ns#"
-property="cc:attributionName">the Province of British Columbia and
-Environment and Climate Change Canada </span> is licensed under a
-<a rel="license" href="https://creativecommons.org/licenses/by/4.0/">
-Creative Commons Attribution 4.0 International License</a>.
+The code is released under the [Apache License
+2.0](https://www.apache.org/licenses/LICENSE-2.0)

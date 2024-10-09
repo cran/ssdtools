@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -24,10 +27,7 @@ test_that("burrIII3 gives cis with ccme_chloride", {
   fit <- ssd_fit_dists(ssddata::ccme_chloride, dists = "burrIII3")
   expect_s3_class(fit, "fitdists")
   set.seed(99)
-  hc <- ssd_hc(fit, nboot = 10, ci = TRUE)
-  testthat::skip_on_os("windows")
-  testthat::skip_on_os("linux")
-  testthat::skip_on_os("solaris")  
+  hc <- ssd_hc(fit, nboot = 10, ci = TRUE, ci_method = "weighted_arithmetic", multi_est = FALSE, samples = TRUE)
   expect_snapshot_data(hc, "hc_chloride")
 })
 
@@ -35,20 +35,16 @@ test_that("burrIII3 gives cis with ccme_uranium", {
   fit <- ssd_fit_dists(ssddata::ccme_uranium, dists = "burrIII3")
   expect_s3_class(fit, "fitdists")
   set.seed(99)
-  hc <- ssd_hc(fit, nboot = 10, ci = TRUE)
-  testthat::skip_on_os("windows")
-  testthat::skip_on_os("linux")
-  testthat::skip_on_os("solaris")  
+  hc <- ssd_hc(fit, nboot = 10, ci = TRUE, ci_method = "weighted_arithmetic", multi_est = FALSE, samples = TRUE)
   expect_snapshot_data(hc, "hc_uranium")
 })
 
 test_that("burrIII3 fits anon_e but only at boundary ok", {
   fit <- ssd_fit_dists(ssddata::anon_e, dists = "burrIII3", at_boundary_ok = TRUE)
   tidy <- tidy(fit)
-  testthat::skip_on_os("windows")
-  testthat::skip_on_os("linux")
-  testthat::skip_on_os("solaris")
   expect_snapshot_data(tidy, "tidy_anon_e")
-  expect_error(expect_warning(ssd_fit_dists(ssddata::anon_e, dists = "burrIII3"),
-               "at boundary"))
+  expect_error(expect_warning(
+    ssd_fit_dists(ssddata::anon_e, dists = "burrIII3"),
+    "at boundary"
+  ))
 })

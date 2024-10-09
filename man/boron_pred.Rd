@@ -5,7 +5,7 @@
 \alias{boron_pred}
 \title{Model Averaged Predictions for CCME Boron Data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 99 rows and 8 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 99 rows and 11 columns.
 }
 \usage{
 boron_pred
@@ -15,7 +15,7 @@ A data frame of the predictions based on 1,000 bootstrap iterations.
 }
 \details{
 \describe{
-\item{percent}{The percent of species affected (int).}
+\item{proportion}{The proportion of species affected (int).}
 \item{est}{The estimated concentration (dbl).}
 \item{se}{The standard error of the estimate (dbl).}
 \item{lcl}{The lower confidence limit (dbl).}
@@ -24,11 +24,12 @@ A data frame of the predictions based on 1,000 bootstrap iterations.
 }
 }
 \examples{
-head(boron_pred)
+\dontrun{
+ fits <- ssd_fit_dists(ssddata::ccme_boron)
+ set.seed(99)
+ boron_pred <- predict(fits, ci = TRUE)
 }
-\seealso{
-Other boron: 
-\code{\link{boron_data}}
+head(boron_pred)
 }
 \concept{boron}
 \keyword{datasets}

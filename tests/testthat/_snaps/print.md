@@ -1,14 +1,14 @@
 # print tmbfit
 
     Distribution 'lnorm'
-      meanlog 2.56164
+      meanlog 2.56165
       sdlog 1.24154
     
 
 # print fitdists
 
     Distribution 'lnorm'
-      meanlog 2.56164
+      meanlog 2.56165
       sdlog 1.24154
     
     Parameters estimated from 28 rows of data.
@@ -16,15 +16,15 @@
 # summary fitdists with left censored, rescaled, weighted data
 
     Distribution 'lnorm'
-      meanlog -1.50532
+      meanlog 0.6239
       sdlog 1.31089
     
-    Parameters estimated from 28 rows of left (2.4) censored, unequally weighted and rescaled (70.7) data.
+    Parameters estimated from 28 rows of inconsistently censored, unequally weighted and rescaled (8.408) data.
 
 # summary fitdists with inconsistently censored data
 
     Distribution 'lnorm'
-      meanlog 2.54949
+      meanlog 2.54946
       sdlog 1.26141
     
     Parameters estimated from 28 rows of inconsistently censored data.
@@ -44,15 +44,15 @@
       scalelog 0.740426
     
     Distribution 'lnorm'
-      meanlog 2.56164
+      meanlog 2.56165
       sdlog 1.24154
     
     Distribution 'lnorm_lnorm'
-      meanlog1 0.949539
-      meanlog2 3.20109
-      pmix 0.283985
-      sdlog1 0.554545
-      sdlog2 0.768816
+      meanlog1 0.949483
+      meanlog2 3.20102
+      pmix 0.283968
+      sdlog1 0.554465
+      sdlog2 0.768862
     
     Distribution 'weibull'
       scale 23.514

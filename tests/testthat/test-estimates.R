@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -14,10 +17,16 @@
 
 test_that("estimates", {
   fits <- ssd_fit_dists(ssddata::ccme_boron)
-  
+
   estimates <- estimates(fits)
   expect_type(estimates, "list")
   expect_snapshot_output(print(estimates))
-  tidy <- tidy(fits)
-  expect_identical(unlist(estimates), setNames(tidy$est, paste(tidy$dist, tidy$term, sep = ".")))
+})
+
+test_that("estimates all_estimates = TRUE", {
+  fits <- ssd_fit_dists(ssddata::ccme_boron)
+
+  estimates <- estimates(fits, all_estimates = TRUE)
+  expect_type(estimates, "list")
+  expect_snapshot_output(print(estimates))
 })

@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,27 +19,47 @@
 universals::estimates
 
 #' @export
-estimates.tmbfit <- function(x,...) {
+estimates.tmbfit <- function(x, ...) {
   as.list(.ests_tmbfit(x))
 }
 
 #' Estimates for fitdists Object
-#' 
-#' Gets a named list of the estimated values by distribution and term.
-#' 
+#'
+#' Gets a named list of the estimated weights and parameters.
+#'
 #' @inheritParams params
 #' @return A named list of the estimates.
 #' @seealso [`tidy.fitdists()`], [`ssd_match_moments()`], [`ssd_hc()`] and [`ssd_plot_cdf()`]
 #' @export
-#' @examples 
+#' @examples
 #' fits <- ssd_fit_dists(ssddata::ccme_boron)
-#' estimates <- estimates(fits)
-#' print(estimates)
-#' ssd_hc(estimates)
-#' ssd_plot_cdf(estimates)
-estimates.fitdists <- function(x, ...) {
-  y <- lapply(x, estimates)
-  names(y) <- names(x)
-  y
+#' estimates(fits)
+estimates.fitdists <- function(x, all_estimates = FALSE, ...) {
+  chk_flag(all_estimates)
+  chk_unused(...)
+  estimates <- .list_estimates(x, all_estimates = all_estimates)
+  as.list(unlist(estimates))
 }
 
+.list_estimates <- function(x, all_estimates = TRUE) {
+  y <- lapply(x, estimates)
+  wt <- glance(x)$weight
+  y <- purrr::map2(y, wt, function(a, b) c(list(weight = b), a))
+  names(y) <- names(x)
+  if (!all_estimates) {
+    return(y)
+  }
+  all <- emulti_ssd()
+  wall <- purrr::map(all, function(x) {
+    x$weight <- 0
+    x
+  })
+  args <- y
+  args$.x <- wall
+  do.call("list_assign", args)
+}
+
+.relist_estimates <- function(x) {
+  list <- relist(x, skeleton = emulti_ssd())
+  purrr::map(list, function(x) as.list(unlist(x)))
+}

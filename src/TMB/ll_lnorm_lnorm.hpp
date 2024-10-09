@@ -1,11 +1,14 @@
-//    Copyright 2021 Environment and Climate Change Canada
-
+// Copyright 2015-2023 Province of British Columbia
+// Copyright 2021 Environment and Climate Change Canada
+// Copyright 2023-2024 Australian Government Department of Climate Change, 
+// Energy, the Environment and Water
+//
 //    Licensed under the Apache License, Version 2.0 (the "License");
 //    you may not use this file except in compliance with the License.
 //    You may obtain a copy of the License at
-
+//
 //       https://www.apache.org/licenses/LICENSE-2.0
-
+//
 //    Unless required by applicable law or agreed to in writing, software
 //    distributed under the License is distributed on an "AS IS" BASIS,
 //    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,12 +34,10 @@ Type ll_lnorm_lnorm(objective_function<Type>* obj) // normal with parameters mu 
   PARAMETER( log_sdlog1    );
   PARAMETER( meanlog2 ); // second distribution
   PARAMETER( log_sdlog2    );
-  PARAMETER( logit_pmix         );  // mixing proportion
+  PARAMETER( pmix         );  // mixing proportion
 
   Type sdlog1 = exp(log_sdlog1);    // Convert to the [0,Inf] range
   Type sdlog2 = exp(log_sdlog2);
-  Type pmix      = 1/(1+exp(-logit_pmix));// Convert to the [0,1] range
-  
   
   Type nll = 0;  // negative log-likelihood
   int n_data    = left.size(); // number of data values
@@ -68,8 +69,6 @@ Type ll_lnorm_lnorm(objective_function<Type>* obj) // normal with parameters mu 
   REPORT  (sdlog1);
   ADREPORT(sdlog2);
   REPORT  (sdlog2);
-  ADREPORT(pmix);
-  REPORT  (pmix);
   
   return nll;
 }

@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -14,6 +17,7 @@
 
 #' @export
 summary.tmbfit <- function(object, ...) {
+  chk_unused(...)
   x <- list()
   x$dist <- .dist_tmbfit(object)
   x$estimates <- estimates(object)
@@ -23,6 +27,7 @@ summary.tmbfit <- function(object, ...) {
 
 #' @export
 summary.fitdists <- function(object, ...) {
+  chk_unused(...)
   x <- list()
   x$fits <- lapply(object, summary)
   x$censoring <- .censoring_fitdists(object)

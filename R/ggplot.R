@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -13,43 +16,49 @@
 #    limitations under the License.
 
 #' Color-blind Palette for SSD Plots
-#' 
+#'
 #' @return A character vector of a color blind palette with 8 colors.
 #' @family ggplot
 #' @export
-#' @examples 
+#' @examples
 #' ssd_pal()
 ssd_pal <- function() {
-  values <- c("#999999", "#E69F00", "#56B4E9", "#009E73", 
-               "#0072B2", "#D55E00", "#CC79A7", "#F0E442")
+  values <- c(
+    "#999999", "#E69F00", "#56B4E9", "#009E73",
+    "#0072B2", "#D55E00", "#CC79A7", "#F0E442"
+  )
   f <- manual_pal(values)
   attr(f, "max_n") <- length(values)
   f
 }
 
 #' Discrete color-blind scale for SSD Plots
-#' 
+#'
 #' @param ... Arguments passed to [ggplot2::discrete_scale()].
 #' @family ggplot
 #' @export
-#' @examples 
+#' @examples
 #' ssd_plot(ssddata::ccme_boron, boron_pred, shape = "Group") +
 #'   scale_colour_ssd()
-scale_colour_ssd <- function (...) {
-  discrete_scale("colour", "ssd", ssd_pal(), ...)
+scale_colour_ssd <- function(...) {
+  discrete_scale("colour", palette = ssd_pal(), ...)
 }
 
 #' @describeIn scale_colour_ssd Discrete color-blind scale for SSD Plots
 #' @export
-scale_color_ssd <- function (...) {
-  discrete_scale("colour", "ssd", ssd_pal(), ...)
+scale_color_ssd <- function(...) {
+  discrete_scale("colour", palette = ssd_pal(), ...)
+}
+
+#' @describeIn scale_colour_ssd Discrete color-blind scale for SSD Plots
+#' @export
+scale_fill_ssd <- function(...) {
+  discrete_scale("fill", palette = ssd_pal(), ...)
 }
 
 #' Species Sensitivity Data Points
 #'
 #' Uses the empirical cumulative distribution to create scatterplot of points `x`.
-#' 
-#' `geom_ssd()` has been deprecated for `geom_ssdpoint()`.
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
@@ -59,16 +68,16 @@ scale_color_ssd <- function (...) {
 #' @examples
 #' ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
 #'   geom_ssdpoint()
-geom_ssdpoint <- function(mapping = NULL, 
-                          data = NULL, 
+geom_ssdpoint <- function(mapping = NULL,
+                          data = NULL,
                           stat = "ssdpoint",
-                          position = "identity", 
+                          position = "identity",
                           ...,
-                          na.rm = FALSE, 
+                          na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE) {
   layer(
-    data = data, mapping = mapping, stat = stat, geom = GeomSsdpoint, 
+    data = data, mapping = mapping, stat = stat, geom = GeomSsdpoint,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
@@ -86,23 +95,25 @@ geom_ssdpoint <- function(mapping = NULL,
 #' @examples
 #' ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc, xend = Conc * 2)) +
 #'   geom_ssdsegment()
-geom_ssdsegment <- function(mapping = NULL, 
-                            data = NULL, 
+geom_ssdsegment <- function(mapping = NULL,
+                            data = NULL,
                             stat = "ssdsegment",
-                            position = "identity", 
+                            position = "identity",
                             ...,
                             arrow = NULL,
                             arrow.fill = NULL,
                             lineend = "butt",
                             linejoin = "round",
-                            na.rm = FALSE, 
+                            na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
   layer(
-    data = data, mapping = mapping, stat = stat, geom = GeomSsdsegment, 
+    data = data, mapping = mapping, stat = stat, geom = GeomSsdsegment,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
-    params = list(arrow = arrow, arrow.fill = arrow.fill, 
-                  lineend = lineend, linejoin = linejoin, na.rm = na.rm, ...)
+    params = list(
+      arrow = arrow, arrow.fill = arrow.fill,
+      lineend = lineend, linejoin = linejoin, na.rm = na.rm, ...
+    )
   )
 }
 
@@ -120,20 +131,19 @@ geom_ssdsegment <- function(mapping = NULL,
 #' ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
 #'   geom_ssdpoint() +
 #'   geom_hcintersect(xintercept = 1.5, yintercept = 0.05)
-geom_hcintersect <- function(mapping = NULL, 
-                             data = NULL, 
+geom_hcintersect <- function(mapping = NULL,
+                             data = NULL,
                              ...,
-                             xintercept, 
+                             xintercept,
                              yintercept,
-                             na.rm = FALSE, 
+                             na.rm = FALSE,
                              show.legend = NA) {
-  
   if (!missing(xintercept)) {
     data <- data.frame(xintercept = xintercept)
     mapping <- aes(xintercept = xintercept)
     show.legend <- FALSE
   }
-  
+
   if (!missing(yintercept)) {
     if (!missing(xintercept)) {
       data$yintercept <- yintercept
@@ -144,9 +154,9 @@ geom_hcintersect <- function(mapping = NULL,
     }
     show.legend <- FALSE
   }
-  
+
   layer(
-    data = data, mapping = mapping, stat = StatIdentity, geom = GeomHcintersect, 
+    data = data, mapping = mapping, stat = StatIdentity, geom = GeomHcintersect,
     position = PositionIdentity, show.legend = show.legend, inherit.aes = FALSE,
     params = list(na.rm = na.rm, ...)
   )
@@ -163,53 +173,56 @@ geom_hcintersect <- function(mapping = NULL,
 #' @export
 #' @examples
 #' gp <- ggplot2::ggplot(boron_pred) +
-#'   geom_xribbon(ggplot2::aes(xmin = lcl, xmax = ucl, y = percent))
-geom_xribbon <- function(mapping = NULL, 
-                         data = NULL, 
+#'   geom_xribbon(ggplot2::aes(xmin = lcl, xmax = ucl, y = proportion))
+geom_xribbon <- function(mapping = NULL,
+                         data = NULL,
                          stat = "identity",
-                         position = "identity", 
+                         position = "identity",
                          ...,
-                         na.rm = FALSE, 
+                         na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE) {
   layer(
-    data = data, mapping = mapping, stat = stat, geom = GeomXribbon, 
+    data = data, mapping = mapping, stat = stat, geom = GeomXribbon,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
   )
 }
 
-#' @describeIn geom_ssdpoint Species Sensitivity Data Points 
-#' 
-#' Uses the empirical cumulative distribution to create scatterplot of points `x`.
+#' Species Sensitivity Data Points
 #' `r lifecycle::badge('deprecated')`
+#'
+#' `geom_ssd()` has been deprecated for `geom_ssdpoint()`.
+#'
+#' @inheritParams ggplot2::layer
+#' @inheritParams ggplot2::geom_point
 #' @export
 #' @examples
-#'
 #' \dontrun{
 #' ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
 #'   geom_ssd()
-#'  }
-geom_ssd <- function(mapping = NULL, 
-                     data = NULL, 
+#' }
+geom_ssd <- function(mapping = NULL,
+                     data = NULL,
                      stat = "ssdpoint",
-                     position = "identity", 
+                     position = "identity",
                      ...,
-                     na.rm = FALSE, 
+                     na.rm = FALSE,
                      show.legend = NA,
                      inherit.aes = TRUE) {
-  
-  lifecycle::deprecate_soft("0.3.5", "geom_ssd()", "geom_ssdpoint()")
-  
-  geom_ssdpoint(mapping = mapping, data = data, stat = stat,
-                position = position, na.rm = na.rm, show.legend = show.legend,
-                inherit.aes = inherit.aes, ...)
+  lifecycle::deprecate_stop("0.3.5", "geom_ssd()", "geom_ssdpoint()")
+
+  geom_ssdpoint(
+    mapping = mapping, data = data, stat = stat,
+    position = position, na.rm = na.rm, show.legend = show.legend,
+    inherit.aes = inherit.aes, ...
+  )
 }
 
 #' Plot Species Sensitivity Data
+#' `r lifecycle::badge('deprecated')`
 #'
 #' Uses the empirical cumulative density/distribution to visualize species sensitivity data.
-#' `r lifecycle::badge('deprecated')`
 #'
 #' @inheritParams ggplot2::layer
 #' @inheritParams ggplot2::geom_point
@@ -220,18 +233,17 @@ geom_ssd <- function(mapping = NULL,
 #' \dontrun{
 #' ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
 #'   stat_ssd()
-#'  }
-stat_ssd <- function(mapping = NULL, 
-                     data = NULL, 
+#' }
+stat_ssd <- function(mapping = NULL,
+                     data = NULL,
                      geom = "point",
-                     position = "identity", 
+                     position = "identity",
                      ...,
-                     na.rm = FALSE, 
+                     na.rm = FALSE,
                      show.legend = NA,
                      inherit.aes = TRUE) {
-  
-  lifecycle::deprecate_soft("0.3.5", "stat_ssd()")
-  
+  lifecycle::deprecate_stop("0.3.5", "stat_ssd()")
+
   layer(
     stat = StatSsdpoint, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend, inherit.aes = inherit.aes,

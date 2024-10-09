@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -16,14 +19,14 @@
 ggplot2::autoplot
 
 #' Plot a fitdists Object
-#' 
+#'
 #' A wrapper on [`ssd_plot_cdf()`].
-#' 
+#'
 #' @inheritParams params
 #' @return A ggplot object.
 #' @seealso [`ssd_plot_cdf()`]
 #' @export
-#' @examples 
+#' @examples
 #' fits <- ssd_fit_dists(ssddata::ccme_boron)
 #' autoplot(fits)
 autoplot.fitdists <- function(object, ...) {

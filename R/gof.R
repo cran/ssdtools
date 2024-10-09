@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -52,11 +55,11 @@ ssd_gof <- function(x, ...) {
 .tests_tmbfit <- function(x, data, pvalue) {
   dist <- .dist_tmbfit(x)
   pars <- estimates(x)
-  
+
   ad <- tdist(dist, data, pars, pvalue, "ad", y = "null")
   ks <- tdist(dist, data, pars, pvalue)
   cvm <- tdist(dist, data, pars, pvalue, "cvm", y = "null")
-  
+
   tibble(ad = ad, ks = ks, cvm = cvm)
 }
 
@@ -67,11 +70,11 @@ ssd_gof <- function(x, ...) {
 ssd_gof.fitdists <- function(x, pvalue = FALSE, ...) {
   chk_flag(pvalue)
   chk_unused(...)
-  
+
   glance <- glance(x)
-  glance$bic <- - 2 * glance$log_lik + log(glance$nobs) * glance$npars
-  
-  if(glance$nobs[1] < 8) {
+  glance$bic <- -2 * glance$log_lik + log(glance$nobs) * glance$npars
+
+  if (is.na(glance$nobs[1] || glance$nobs[1] < 8)) {
     glance$ad <- NA_real_
     glance$ks <- NA_real_
     glance$cvm <- NA_real_

@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -18,15 +21,15 @@ test_that("schwarz-tillmans", {
     "gompertz", "weibull", "gamma", "lnorm", "llogis", "lgumbel"
   )
   fits <- ssd_fit_dists(ssddata::ccme_boron, dists = dists)
-  
-  hc <- ssd_hc(fits, average = FALSE)
+
+  hc <- ssd_hc(fits, average = FALSE, ci_method = "weighted_samples", multi_est = FALSE)
   expect_s3_class(hc, "tbl")
   expect_snapshot_data(hc, "hc")
-  
-  hc_avg <- ssd_hc(fits, average = TRUE)
+
+  hc_avg <- ssd_hc(fits, average = TRUE, ci_method = "weighted_samples", multi_est = FALSE)
   expect_s3_class(hc_avg, "tbl")
   expect_snapshot_data(hc_avg, "hc_avg")
-  
+
   gof <- ssd_gof(fits, pvalue = FALSE)
   expect_s3_class(gof, "tbl_df")
   expect_snapshot_data(gof, "gof")

@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -11,6 +14,10 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+
+identical_parameters <- function(x) {
+  length(unique(npars(x))) < 2
+}
 
 probs <- function(level) {
   probs <- (1 - level) / 2
@@ -28,3 +35,11 @@ safely <- function(.f) {
 }
 
 pow <- function(x, y) x^y
+
+root <- function(p, f) {
+  q <- rep(NA_real_, length(p))
+  for (i in seq_along(p)) {
+    q[i] <- stats::uniroot(f, p = p[i], lower = 0, upper = 1, extendInt = "upX", tol = .Machine$double.eps)$root
+  }
+  q
+}

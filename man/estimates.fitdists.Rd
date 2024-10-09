@@ -4,10 +4,12 @@
 \alias{estimates.fitdists}
 \title{Estimates for fitdists Object}
 \usage{
-\method{estimates}{fitdists}(x, ...)
+\method{estimates}{fitdists}(x, all_estimates = FALSE, ...)
 }
 \arguments{
 \item{x}{The object.}
+
+\item{all_estimates}{A flag specifying whether to calculate estimates for all implemented distributions.}
 
 \item{...}{Unused.}
 }
@@ -15,14 +17,11 @@
 A named list of the estimates.
 }
 \description{
-Gets a named list of the estimated values by distribution and term.
+Gets a named list of the estimated weights and parameters.
 }
 \examples{
 fits <- ssd_fit_dists(ssddata::ccme_boron)
-estimates <- estimates(fits)
-print(estimates)
-ssd_hc(estimates)
-ssd_plot_cdf(estimates)
+estimates(fits)
 }
 \seealso{
 \code{\link[=tidy.fitdists]{tidy.fitdists()}}, \code{\link[=ssd_match_moments]{ssd_match_moments()}}, \code{\link[=ssd_hc]{ssd_hc()}} and \code{\link[=ssd_plot_cdf]{ssd_plot_cdf()}}

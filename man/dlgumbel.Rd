@@ -2,14 +2,15 @@
 % Please edit documentation in R/lgumbel.R
 \name{dlgumbel}
 \alias{dlgumbel}
-\title{Log-Gumbel (Inverse Weibull) Probability Density}
+\title{Log-Gumbel (Inverse Weibull) Probability Density
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 dlgumbel(x, locationlog = 0, scalelog = 1, log = FALSE)
 }
 \arguments{
 \item{x}{A numeric vector of values.}
 
-\item{locationlog}{location on log scale parameter.}
+\item{locationlog}{location on the log scale parameter.}
 
 \item{scalelog}{scale on log scale parameter.}
 
@@ -19,5 +20,6 @@ dlgumbel(x, locationlog = 0, scalelog = 1, log = FALSE)
 A numeric vector.
 }
 \description{
+Log-Gumbel (Inverse Weibull) Probability Density
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
 }

@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -13,7 +16,7 @@
 #    limitations under the License.
 
 warn_min_pboot <- function(x, min_pboot) {
-  if(any(!is.na(x$pboot) & is.na(x$se) & x$nboot >= 2)) {
+  if (any(!is.na(x$pboot) & is.na(x$se) & x$nboot >= 2)) {
     wrn("One or more pboot values less than ", min_pboot, " (decrease min_pboot with caution).")
   }
   x
@@ -25,7 +28,7 @@ replace_min_pboot_na <- function(x, min_pboot) {
 }
 
 sample_nonparametric <- function(data) {
-  data[sample(nrow(data), replace = TRUE),]
+  data[sample(nrow(data), replace = TRUE), ]
 }
 
 sample_parametric <- function(dist, args = args, weighted = weighted, censoring = censoring) {
@@ -38,39 +41,96 @@ sample_parametric <- function(dist, args = args, weighted = weighted, censoring 
 }
 
 generate_data <- function(dist, data, args, weighted, censoring, parametric) {
-  if(!parametric)
+  if (!parametric) {
     return(sample_nonparametric(data))
+  }
   sample_parametric(dist, args = args, weighted = weighted, censoring = censoring)
 }
 
-sample_parameters <- function(i, dist, fun, data, args, pars, weighted, censoring, min_pmix, range_shape1, range_shape2, parametric, control) {
-  new_data <- generate_data(dist, data = data, args = args, weighted = weighted, censoring = censoring,
-                            parametric = parametric)
-  
-  if(dist == "lnorm_lnorm") {
-    pars <- slnorm_lnorm(new_data)
-  }
-  
-  fit <- fun(dist, new_data, min_pmix = min_pmix, range_shape1 = range_shape1,
-             range_shape2 = range_shape2, control = control, pars = pars, hessian = FALSE)$result
-  
-  if(is.null(fit)) return(NULL)
-  estimates(fit)
+boot_filename <- function(i, dist, prefix, ext = NULL, sep = "_") {
+  paste0(prefix, sep, stringr::str_pad(i, width = 9, pad = "0"), sep, dist, ext)
 }
 
-boot_estimates <- function(x, fun, nboot, data, weighted, censoring, range_shape1, range_shape2, min_pmix, parametric, control) {
-  dist <- .dist_tmbfit(x)
+boot_filepath <- function(i, dist, save_to, prefix = "data", ext = ".csv") {
+  file.path(save_to, boot_filename(i, dist, prefix = prefix, ext = ext))
+}
+
+sample_parameters <- function(i, dist, fun, data, args, pars, weighted, censoring, min_pmix, range_shape1, range_shape2, parametric, control, save_to, wts = NULL) {
+  new_data <- generate_data(dist,
+    data = data, args = args, weighted = weighted, censoring = censoring,
+    parametric = parametric
+  )
+
+  if (!is.null(save_to)) {
+    readr::write_csv(new_data, boot_filepath(i, dist, save_to))
+  }
+
+  if (dist == "lnorm_lnorm") {
+    pars <- slnorm_lnorm(new_data)
+  }
+  if (dist == "multi") {
+    dist2 <- names(pars)
+  } else {
+    dist2 <- dist
+  }
+
+  fit <- fun(new_data, dist2,
+    min_pmix = min_pmix, range_shape1 = range_shape1,
+    range_shape2 = range_shape2, control = control, pars = pars, hessian = FALSE,
+    censoring = censoring, weighted = weighted
+  )$result
+
+  if (is.null(fit)) {
+    return(NULL)
+  }
+  est <- estimates(fit, all_estimates = TRUE)
+
+  if (!is.null(save_to)) {
+    saveRDS(est, boot_filepath(i, dist, save_to, prefix = "estimates", ext = ".rds"))
+  }
+
+  if (!is.null(wts)) {
+    est[names(wts)] <- unname(wts)
+  }
+  est
+}
+
+boot_estimates <- function(fun, dist, estimates, pars, nboot, data, weighted, censoring, range_shape1, range_shape2, min_pmix, parametric, control, save_to, fix_weights) {
+  sfun <- safely(fun)
+
   args <- list(n = nrow(data))
-  args <- c(args, estimates(x))
-  pars <- .pars_tmbfit(x)
-  
+  args <- c(args, estimates)
+
   data <- data[c("left", "right", "weight")]
-  
-  estimates <- lapply(1:nboot, sample_parameters, dist = dist, fun = fun, 
-                      data = data, args = args, pars = pars, 
-                      weighted = weighted, censoring = censoring, min_pmix = min_pmix, 
-                      range_shape1 = range_shape1, range_shape2 = range_shape2, 
-                      parametric = parametric, control = control)
-  
+
+  seeds <- seed_streams(nboot)
+
+  if (fix_weights) {
+    wts <- estimates[stringr::str_detect(names(estimates), "\\.weight$")]
+  } else {
+    wts <- NULL
+  }
+
+  if (!is.null(save_to)) {
+    if (!requireNamespace("readr", quietly = TRUE)) {
+      err("Package 'readr' must be installed.")
+    }
+    readr::write_csv(data, boot_filepath(0, dist, save_to))
+    saveRDS(estimates, boot_filepath(0, dist, save_to, prefix = "estimates", ext = ".rds"))
+  }
+
+  estimates <- future_map(1:nboot, sample_parameters,
+    dist = dist, fun = sfun,
+    data = data, args = args, pars = pars,
+    weighted = weighted, censoring = censoring, min_pmix = min_pmix,
+    range_shape1 = range_shape1, range_shape2 = range_shape2,
+    parametric = parametric, control = control, save_to = save_to,
+    wts = wts,
+    .options = furrr::furrr_options(seed = seeds)
+  )
+  names(estimates) <- boot_filename(seq_along(estimates),
+    prefix = "", sep = "",
+    dist = paste0("_", dist)
+  )
   estimates[!vapply(estimates, is.null, TRUE)]
 }

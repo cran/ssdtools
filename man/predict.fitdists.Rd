@@ -6,14 +6,17 @@
 \usage{
 \method{predict}{fitdists}(
   object,
-  percent = 1:99,
+  percent,
+  proportion = 1:99/100,
+  average = TRUE,
   ci = FALSE,
   level = 0.95,
   nboot = 1000,
-  average = TRUE,
-  delta = 7,
-  min_pboot = 0.99,
+  min_pboot = 0.95,
+  multi_est = TRUE,
+  ci_method = "weighted_samples",
   parametric = TRUE,
+  delta = 9.21,
   control = NULL,
   ...
 )
@@ -21,22 +24,31 @@
 \arguments{
 \item{object}{The object.}
 
-\item{percent}{A numeric vector of percentages.}
+\item{percent}{A numeric vector of percent values to estimate hazard concentrations for. Soft-deprecated for \code{proportion = 0.05}.}
 
-\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+\item{proportion}{A numeric vector of proportion values to estimate hazard concentrations for.}
 
-\item{level}{A number between 0 and 1 of the confidence level.}
+\item{average}{A flag specifying whether to provide model averaged values as opposed to a value for each distribution.}
 
-\item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits. A value of 10000 is recommended for official guidelines.}
+\item{ci}{A flag specifying whether to estimate confidence intervals (by bootstrapping).}
 
-\item{average}{A flag specifying whether to model average the estimates.}
+\item{level}{A number between 0 and 1 of the confidence level of the interval.}
 
-\item{delta}{A non-negative number specifying the maximum absolute Akaike Information-theoretic Criterion difference cutoff. Distributions with an absolute difference from the best model greater than the cutoff are excluded.}
+\item{nboot}{A count of the number of bootstrap samples to use to estimate the confidence limits. A value of 10,000 is recommended for official guidelines.}
 
-\item{min_pboot}{A number of the minimum proportion of bootstrap samples that must successfully fit
-in the sense of returning a likelihood.}
+\item{min_pboot}{A number between 0 and 1 of the minimum
+proportion of bootstrap samples that must successfully fit (return a likelihood)
+to report the confidence intervals.}
 
-\item{parametric}{A flag specifying whether to perform parametric as opposed to non-parametric bootstrapping.}
+\item{multi_est}{A flag specifying whether to treat the distributions as constituting a single distribution (as opposed to taking the mean) when calculating model averaged estimates.}
+
+\item{ci_method}{A string specifying which method to use for estimating the bootstrap values.
+Possible values are "multi_free" and "multi_fixed" which treat the distributions as constituting a single distribution but differ in whether the model weights are fixed and "weighted_samples" and "weighted_arithmetic" take bootstrap samples from each distribution proportional to its weight versus calculating the weighted arithmetic means of the lower and upper confidence limits.}
+
+\item{parametric}{A flag specifying whether to perform parametric bootstrapping as opposed to non-parametrically resampling the original data with replacement.}
+
+\item{delta}{A non-negative number specifying the maximum absolute AIC difference cutoff.
+Distributions with an absolute AIC difference greater than delta are excluded from the calculations.}
 
 \item{control}{A list of control parameters passed to \code{\link[stats:optim]{stats::optim()}}.}
 

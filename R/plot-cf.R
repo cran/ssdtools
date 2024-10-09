@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -13,25 +16,23 @@
 #    limitations under the License.
 
 #' Cullen and Frey Plot
+#' `r lifecycle::badge('deprecated')`
 #'
 #' Plots a Cullen and Frey graph of the skewness and kurtosis
 #' for non-censored data.
-#' 
+#'
 #' Soft deprecated for direct call to [fitdistrplus::descdist()].
 #'
 #' @inheritParams ssd_fit_dists
 #' @export
-#'
-#' @examples
-#' ssd_plot_cf(ssddata::ccme_boron)
 ssd_plot_cf <- function(data, left = "Conc") {
-  
-  if(!requireNamespace("fitdistrplus", quietly = TRUE)) {
+  if (!requireNamespace("fitdistrplus", quietly = TRUE)) {
     err("Package 'fitdistrplus' is required to produce Cullen and Frey plots.")
   }
 
-  deprecate_soft("0.3.5", "ssd_plot_cf()", "fitdistrplus::descdist()",
-                 details = "Please use fitdistrplus::descdist(data$Conc, boot = 100L).")
+  lifecycle::deprecate_stop("0.3.5", "ssd_plot_cf()", "fitdistrplus::descdist()",
+    details = "Please use fitdistrplus::descdist(data$Conc, boot = 100L)."
+  )
 
   chk_s3_class(data, "data.frame")
   chk_string(left)
@@ -39,11 +40,4 @@ ssd_plot_cf <- function(data, left = "Conc") {
 
   fitdistrplus::descdist(data[[left]], boot = 100L)
   invisible()
-}
-
-#' @describeIn ssd_plot_cf Defunct Cullen and Frey Plot
-#' @export
-ssd_cfplot <- function(data, left = "Conc") {
-  deprecate_stop("0.1.0", "ssd_cfplot()", "ssd_plot_cf()")
-  ssd_plot_cf(data, left)
 }

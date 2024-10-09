@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -12,28 +15,42 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+test_that("ssd_pal is function", {
+  expect_true(chk::vld_function(ssd_pal()))
+})
+
+test_that("scale_colour_ssd is ggproto", {
+  expect_true(ggplot2::is.ggproto(scale_colour_ssd()))
+})
+
+test_that("scale_color_ssd is ggproto", {
+  color <- scale_color_ssd()
+  colour <- scale_colour_ssd()
+  expect_output(expect_identical(str(color), str(colour)))
+})
+
+test_that("scale_fill_ssd is ggproto", {
+  expect_true(ggplot2::is.ggproto(scale_fill_ssd()))
+})
+
 test_that("stat_ssd deprecated", {
-  lifecycle::expect_deprecated(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
-                                 stat_ssd())
+  lifecycle::expect_defunct(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
+    stat_ssd())
 })
 
 test_that("plot stat_ssd", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-  gp <- ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
-    stat_ssd()
-  expect_snapshot_plot(gp, "stat_ssd")
+  expect_defunct(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
+    stat_ssd())
 })
 
 test_that("geom_ssd deprecated", {
-  lifecycle::expect_deprecated(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
-                                 geom_ssd())
+  expect_defunct(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
+    geom_ssd())
 })
 
 test_that("plot geom_ssd", {
-  withr::local_options(lifecycle_verbosity = "quiet")
-  gp <- ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
-    geom_ssd()
-  expect_snapshot_plot(gp, "geom_ssd")
+  expect_defunct(ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
+    geom_ssd())
 })
 
 test_that("plot geom_ssdpoint", {
@@ -44,7 +61,7 @@ test_that("plot geom_ssdpoint", {
 
 test_that("plot geom_ssdpoint identity stat", {
   data <- ssddata::ccme_boron
-  data$New <- (1:nrow(data) - 0.5) / nrow(data)
+  data$New <- (seq_len(nrow(data)) - 0.5) / nrow(data)
   gp <- ggplot2::ggplot(data, ggplot2::aes(x = Conc, y = New)) +
     geom_ssdpoint(stat = "identity")
   expect_snapshot_plot(gp, "geom_ssdpoint_identity")
@@ -58,21 +75,23 @@ test_that("plot geom_ssdsegment", {
 
 test_that("plot geom_ssdsegment identity", {
   data <- ssddata::ccme_boron
-  data$New <- (1:nrow(data) - 0.5) / nrow(data)
-  gp <- ggplot2::ggplot(data, ggplot2::aes(x = Conc, xend = Conc * 2,
-                                                 y = New, yend = New)) +
+  data$New <- (seq_len(nrow(data)) - 0.5) / nrow(data)
+  gp <- ggplot2::ggplot(data, ggplot2::aes(
+    x = Conc, xend = Conc * 2,
+    y = New, yend = New
+  )) +
     geom_ssdsegment(stat = "identity")
   expect_snapshot_plot(gp, "geom_ssdsegment_identity")
 })
 
 test_that("plot geom_ssdsegment arrow", {
   gp <- ggplot2::ggplot(ssddata::ccme_boron, ggplot2::aes(x = Conc, xend = Conc * 2)) +
-                   geom_ssdsegment(arrow = grid::arrow())
+    geom_ssdsegment(arrow = grid::arrow())
   expect_snapshot_plot(gp, "geom_ssdsegment_arrow")
 })
 
 test_that("plot geom_ssdsegment no data", {
-  gp <- ggplot2::ggplot(ssddata::ccme_boron[FALSE,], ggplot2::aes(x = Conc, xend = Conc * 2)) +
+  gp <- ggplot2::ggplot(ssddata::ccme_boron[FALSE, ], ggplot2::aes(x = Conc, xend = Conc * 2)) +
     geom_ssdsegment()
   expect_snapshot_plot(gp, "geom_ssdsegment_nodata")
 })
@@ -94,21 +113,7 @@ test_that("plot geom_hcintersect aes", {
 test_that("plot geom_xribbon", {
   gp <- ggplot2::ggplot(boron_pred) +
     geom_xribbon(
-      ggplot2::aes(xmin = lcl, xmax = ucl, y = percent)
+      ggplot2::aes(xmin = lcl, xmax = ucl, y = proportion)
     )
   expect_snapshot_plot(gp, "geom_xribbon")
-})
-
-test_that("plot geoms", {
-  gp <- ggplot2::ggplot(boron_pred) +
-    geom_ssdpoint(data = ssddata::ccme_boron, ggplot2::aes(x = Conc)) +
-    geom_ssdsegment(data = ssddata::ccme_boron, ggplot2::aes(x = Conc, xend = Conc * 2)) +
-    geom_hcintersect(xintercept = 100, yintercept = 0.5) +
-    geom_xribbon(
-      ggplot2::aes(xmin = lcl, xmax = ucl, y = percent/100),
-      alpha = 1/3
-    )
-  testthat::skip_on_ci()
-  testthat::skip_on_cran()
-  expect_snapshot_plot(gp, "geoms_all")
 })

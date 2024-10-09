@@ -1,4 +1,7 @@
-#    Copyright 2015 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -18,26 +21,31 @@ any_missing <- function(...) {
 }
 
 .ddist <- function(dist, x, ..., log) {
-  inf <- !is.na(x) & is.infinite(x) 
+  inf <- !is.na(x) & is.infinite(x)
   x[inf] <- NA_real_
   fun <- paste0("d", dist, "_ssd")
   d <- mapply(fun, x, ...)
   d[mapply(any_missing, x, ...)] <- NA_real_
   d[inf] <- -Inf
-  if(!log) d <- exp(d)
+  if (!log) d <- exp(d)
   d
 }
 
 ddist <- function(dist, x, ..., log = FALSE, .lgt = FALSE) {
-  if(!length(x)) return(numeric(0))
-  
-  if(!.lgt)
+  if (!length(x)) {
+    return(numeric(0))
+  }
+
+  if (!.lgt) {
     return(.ddist(dist, x = x, ..., log = log))
-  
+  }
+
   lte <- !is.na(x) & x <= 0
   x[lte] <- NA_real_
-  d <- .ddist(dist, x = log(x),  ..., log = FALSE) / x
+  d <- .ddist(dist, x = log(x), ..., log = FALSE) / x
   d[lte] <- 0
-  if (log) return(log(d))
+  if (log) {
+    return(log(d))
+  }
   d
 }

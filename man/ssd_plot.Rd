@@ -9,6 +9,7 @@ ssd_plot(
   pred,
   left = "Conc",
   right = left,
+  ...,
   label = NULL,
   shape = NULL,
   color = NULL,
@@ -18,10 +19,14 @@ ssd_plot(
   xlab = "Concentration",
   ylab = "Species Affected",
   ci = TRUE,
-  ribbon = FALSE,
-  hc = 5L,
+  ribbon = TRUE,
+  hc = 0.05,
   shift_x = 3,
+  add_x = 0,
   bounds = c(left = 1, right = 1),
+  big.mark = ",",
+  suffix = "\%",
+  trans = "log10",
   xbreaks = waiver()
 )
 }
@@ -33,6 +38,8 @@ ssd_plot(
 \item{left}{A string of the column in data with the concentrations.}
 
 \item{right}{A string of the column in data with the right concentration values.}
+
+\item{...}{Unused.}
 
 \item{label}{A string of the column in data with the labels.}
 
@@ -50,17 +57,25 @@ ssd_plot(
 
 \item{ylab}{A string of the x-axis label.}
 
-\item{ci}{A flag specifying whether to estimate confidence intervals (by parametric bootstrapping).}
+\item{ci}{A flag specifying whether to estimate confidence intervals (by bootstrapping).}
 
 \item{ribbon}{A flag indicating whether to plot the confidence interval as a grey ribbon as opposed to green solid lines.}
 
-\item{hc}{A count between 1 and 99 indicating the percent hazard concentration (or NULL).}
+\item{hc}{A value between 0 and 1 indicating the proportion hazard concentration (or NULL).}
 
-\item{shift_x}{The value to multiply the label x values by.}
+\item{shift_x}{The value to multiply the label x values by (after adding \code{add_x}).}
+
+\item{add_x}{The value to add to the label x values (before multiplying by \code{shift_x}).}
 
 \item{bounds}{A named non-negative numeric vector of the left and right bounds for
 uncensored missing (0 and Inf) data in terms of the orders of magnitude
 relative to the extremes for non-missing values.}
+
+\item{big.mark}{A string specifying used between every 3 digits to separate thousands on the x-axis.}
+
+\item{suffix}{Additional text to display after the number on the y-axis.}
+
+\item{trans}{A string which transformation to use by default \code{"log10"}.}
 
 \item{xbreaks}{The x-axis breaks as one of:
 \itemize{

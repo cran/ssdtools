@@ -1,4 +1,7 @@
-#    Copyright 2021 Environment and Climate Change Canada
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -25,14 +28,14 @@ test_that("llogis_llogis custom checks", {
 
 test_that("ssd_qllogis_llogis allows reversed distributions", {
   expect_equal(
-    ssd_qllogis_llogis(0.05, locationlog1 = 0, locationlog2 = 1, pmix = 0.1), 
+    ssd_qllogis_llogis(0.05, locationlog1 = 0, locationlog2 = 1, pmix = 0.1),
     ssd_qllogis_llogis(0.05, locationlog1 = 1, locationlog2 = 0, pmix = 0.9)
   )
 })
 
 test_that("ssd_pllogis_llogis allows reversed distributions", {
   expect_equal(
-    ssd_pllogis_llogis(1, locationlog1 = 0, locationlog2 = 1, pmix = 0.1), 
+    ssd_pllogis_llogis(1, locationlog1 = 0, locationlog2 = 1, pmix = 0.1),
     ssd_pllogis_llogis(1, locationlog1 = 1, locationlog2 = 0, pmix = 0.9)
   )
 })

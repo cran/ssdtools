@@ -23,12 +23,12 @@ A data frame of information on the implemented distributions.
 }
 }
 \examples{
-dist
+dist_data
 }
 \seealso{
 Other dists: 
-\code{\link{ssd_dists_all}()},
-\code{\link{ssd_dists}()}
+\code{\link{ssd_dists}()},
+\code{\link{ssd_dists_all}()}
 }
 \concept{dists}
 \keyword{datasets}

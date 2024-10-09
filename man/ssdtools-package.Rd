@@ -8,45 +8,49 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Species sensitivity distributions are cumulative probability distributions which are fitted to toxicity concentrations for different species as described by Posthuma et al.(2001) <isbn:9781566705783>. The ssdtools package uses Maximum Likelihood to fit distributions such as the gamma, log-logistic, log-normal and Weibull to censored and/or weighted data. Multiple distributions can be averaged using Akaike Information Criteria. Confidence intervals on hazard concentrations and proportions are produced by parametric bootstrapping.
+Species sensitivity distributions are cumulative probability distributions which are fitted to toxicity concentrations for different species as described by Posthuma et al.(2001) <isbn:9781566705783>. The ssdtools package uses Maximum Likelihood to fit distributions such as the gamma, log-logistic, log-normal and log-normal log-normal mixture. Multiple distributions can be averaged using Akaike Information Criteria. Confidence intervals on hazard concentrations and proportions are produced by parametric bootstrapping.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/bcgov/ssdtools}
+  \item \url{https://bcgov.github.io/ssdtools/}
   \item Report bugs at \url{https://github.com/bcgov/ssdtools/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Joe Thorley \email{joe@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-7683-4592}{ORCID}) [contractor]
+\strong{Maintainer}: Joe Thorley \email{joe@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-7683-4592}{ORCID})
 
 Authors:
 \itemize{
-  \item Carl Schwarz [contractor]
+  \item Rebecca Fisher \email{R.Fisher@aims.gov.au}
+  \item David Fox \email{david.fox@environmetrics.net.au}
+  \item Carl Schwarz
 }
 
 Other contributors:
 \itemize{
-  \item Rebecca Fisher [contributor]
-  \item David Fox [contributor]
   \item Angeline Tillmanns [contributor]
-  \item Ali Azizishirazi [contributor]
+  \item Seb Dalgarno \email{seb@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID}) [contributor]
   \item Kathleen McTavish [contributor]
   \item Heather Thompson [contributor]
   \item Doug Spry [contributor]
   \item Rick van Dam [contributor]
   \item Graham Batley [contributor]
-  \item Heather Thompson [contributor]
-  \item Andy Teucher [contributor]
-  \item Seb Dalgarno \email{seb@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-3658-4517}{ORCID}) [contributor]
-  \item Emilie Doussantousse [contributor]
+  \item Tony Bigwood [contributor]
+  \item Ali Azizishirazi [contributor]
+  \item Nadine Hussein \email{nadine@poissonconsulting.ca} (\href{https://orcid.org/0000-0003-4470-8361}{ORCID}) [contributor]
+  \item Sarah Lyons \email{sarah@poissonconsulting.ca} (\href{https://orcid.org/0000-0002-6745-6796}{ORCID}) [contributor]
   \item Stephanie Hazlitt [contributor]
-  \item Nadine Hussein [contributor]
-  \item Nan-Hung Hsieh [contributor]
+  \item Hadley Wickham [contributor]
   \item Sergio Ibarra Espinosa [contributor]
-  \item Province of British Columbia [copyright holder]
-  \item Environment and Climate Change Canada [copyright holder]
+  \item Andy Teucher [contributor]
+  \item Emilie Doussantousse [contributor]
+  \item Nan-Hung Hsieh [contributor]
+  \item Province of British Columbia [funder, copyright holder]
+  \item Environment and Climate Change Canada [funder, copyright holder]
+  \item Australian Government Department of Climate Change, Energy, the Environment and Water [funder, copyright holder]
 }
 
 }

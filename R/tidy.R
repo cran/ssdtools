@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -17,51 +20,55 @@ generics::tidy
 
 # optimized function for tmbfit
 .tidy_tmbfit_estimates <- function(x) {
-  dist <- x$dist
   suppressWarnings(capture.output(x <- sdreport(x$model)))
   x <- suppressWarnings(summary(x))
-  est <- unname(x[,1])
+  est <- unname(x[, 1])
   names(est) <- rownames(x)
   est <- est[!grepl("^log(it){0,1}_", names(est))]
-  est[str_order(names(est))]
+  est[stringr::str_order(names(est))]
 }
 
 #' @export
 tidy.tmbfit <- function(x, all = FALSE, ...) {
   chk_flag(all)
-  
+  chk_unused(...)
+
   dist <- x$dist
   suppressWarnings(capture.output(x <- sdreport(x$model)))
   x <- suppressWarnings(summary(x))
   term <- rownames(x)
-  est <- unname(x[,1])
-  se <- unname(x[,2])
-  x <- tibble(dist = dist, term = term, est = est, se = se, 
-              .name_repair = "minimal")
-  
-  if(!all)
-    x <- x[!grepl("^log(it){0,1}_", x$term),]
-  x <- x[str_order(x$term),]
+  est <- unname(x[, 1])
+  se <- unname(x[, 2])
+  x <- tibble(
+    dist = dist, term = term, est = est, se = se,
+    .name_repair = "minimal"
+  )
+
+  if (!all) {
+    x <- x[!grepl("^log(it){0,1}_", x$term), ]
+  }
+  x <- x[stringr::str_order(x$term), ]
   x
 }
 
 #' Turn a fitdists Object into a Tibble
 #'
 #' Turns a fitdists object into a tidy tibble of the
-#' estimates (est) and standard errors (se) by the 
+#' estimates (est) and standard errors (se) by the
 #' terms (term) and distributions (dist).
-#' 
+#'
 #' @inheritParams params
 #' @return A tidy tibble of the estimates and standard errors.
 #' @family generics
 #' @seealso [`coef.fitdists()`]
 #' @export
-#' @examples 
+#' @examples
 #' fits <- ssd_fit_dists(ssddata::ccme_boron)
 #' tidy(fits)
 #' tidy(fits, all = TRUE)
 tidy.fitdists <- function(x, all = FALSE, ...) {
- x <- lapply(x, tidy, all = all)
- x <- bind_rows(x)
- x
+  chk_unused(...)
+  x <- lapply(x, tidy, all = all)
+  x <- bind_rows(x)
+  x
 }

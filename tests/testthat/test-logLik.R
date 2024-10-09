@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -14,7 +17,8 @@
 
 test_that("logLik", {
   fits <- ssd_fit_dists(ssddata::ccme_boron)
-  expect_equal(logLik(fits), c(gamma = -116.81515869884, lgumbel = -120.092975580318, llogis = -118.507435324864, 
-                               lnorm = -117.514216489547, lnorm_lnorm = -115.179384580908, weibull = -116.81264387617
+  expect_equal(logLik(fits), c(
+    gamma = -116.81515869884, lgumbel = -120.092975580318, llogis = -118.507435324864,
+    lnorm = -117.514216489547, lnorm_lnorm = -115.179384580908, weibull = -116.81264387617
   ))
 })

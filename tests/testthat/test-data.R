@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -14,34 +17,12 @@
 
 test_that("boron stable", {
   fits <- ssd_fit_dists(ssddata::ccme_boron, dists = ssd_dists(bcanz = TRUE))
-  
+
   tidy <- tidy(fits)
   expect_s3_class(tidy, "tbl_df")
   expect_snapshot_data(tidy, "boron_stable")
 })
 
-test_that("boron unstable", {
-  dists <- ssd_dists(bcanz = FALSE)
-  set.seed(50)
-  expect_warning(fits <- ssd_fit_dists(ssddata::ccme_boron, dists = dists),
-                                "Distribution 'burrIII3' failed to fit")
-  
-  tidy <- tidy(fits)
-  expect_s3_class(tidy, "tbl_df")
-  expect_snapshot_data(tidy, "boron_unstable")
-})
-
-test_that("ccme_data", {
-  expect_snapshot_data(ssdtools::ccme_data, "ccme_data")
-  expect_identical(ssdtools::ccme_data, ssddata::ccme_data)
-})
-
-test_that("ccme_boron", {
-  expect_snapshot_data(ssdtools::boron_data, "boron_data")
-  expect_identical(ssdtools::boron_data, ssddata::ccme_boron)
-})
-
 test_that("dist_data", {
   expect_snapshot_data(ssdtools::dist_data, "dist_data")
 })
-

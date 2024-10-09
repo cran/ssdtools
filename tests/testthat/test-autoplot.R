@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -23,7 +26,19 @@ test_that("autoplot", {
 })
 
 test_that("autoplot", {
-  fits <- ssd_fit_dists(ssddata::ccme_boron, rescale = TRUE,
-                        dists = c("gamma", "llogis", "lnorm"))
+  fits <- ssd_fit_dists(ssddata::ccme_boron,
+    rescale = TRUE,
+    dists = c("gamma", "llogis", "lnorm")
+  )
   expect_snapshot_plot(autoplot(fits, xlab = "New"), "autoplot_rescale")
+})
+
+test_that("autoplot language", {
+  data <- ssddata::ccme_boron
+  data$Conc <- data$Conc * 100
+  fits <- ssd_fit_dists(data,
+    dists = c("lnorm")
+  )
+  expect_snapshot_plot(autoplot(fits, big.mark = "!!"), "suffix")
+  expect_snapshot_plot(autoplot(fits, big.mark = ":"), "autoplot_bigmark")
 })

@@ -13,9 +13,10 @@ ssd_fit_dists(
   nrow = 6L,
   rescale = FALSE,
   reweight = FALSE,
-  computable = TRUE,
-  at_boundary_ok = FALSE,
-  min_pmix = 0,
+  computable = FALSE,
+  at_boundary_ok = TRUE,
+  all_dists = FALSE,
+  min_pmix = ssd_min_pmix(nrow(data)),
   range_shape1 = c(0.05, 20),
   range_shape2 = range_shape1,
   control = list(),
@@ -35,7 +36,7 @@ ssd_fit_dists(
 
 \item{nrow}{A positive whole number of the minimum number of non-missing rows.}
 
-\item{rescale}{A flag specifying whether to rescale concentration values by dividing by the largest finite value.}
+\item{rescale}{A flag specifying whether to rescale concentration values by dividing by the geometric mean of the minimum and maximum positive finite values.}
 
 \item{reweight}{A flag specifying whether to reweight weights by dividing by the largest weight.}
 
@@ -43,6 +44,8 @@ ssd_fit_dists(
 
 \item{at_boundary_ok}{A flag specifying whether a model with one or more
 parameters at the boundary should be considered to have converged (default = FALSE).}
+
+\item{all_dists}{A flag specifying whether all the named distributions must fit successfully.}
 
 \item{min_pmix}{A number between 0 and 0.5 specifying the minimum proportion in mixture models.}
 
@@ -61,15 +64,17 @@ An object of class fitdists.
 Fits one or more distributions to species sensitivity data.
 }
 \details{
-By default the 'llogis', 'gamma' and 'lnorm'
-distributions are fitted to the data.
-For a complete list of the implemented distributions see \code{\link[=ssd_dists_all]{ssd_dists_all()}}.
+By default the 'gamma', 'lgumbel', 'llogis', 'lnorm', 'lnorm_lnorm' and
+'weibull' distributions are fitted to the data.
+For a complete list of the distributions that are currently implemented in
+\code{ssdtools} see \code{\link[=ssd_dists_all]{ssd_dists_all()}}.
 
 If weight specifies a column in the data frame with positive numbers,
 weighted estimation occurs.
 However, currently only the resultant parameter estimates are available.
 
-If the \code{right} argument is different to the \code{left} argument then the data are considered to be censored.
+If the \code{right} argument is different to the \code{left} argument
+then the data are considered to be censored.
 }
 \examples{
 fits <- ssd_fit_dists(ssddata::ccme_boron)

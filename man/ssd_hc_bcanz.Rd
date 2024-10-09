@@ -4,17 +4,16 @@
 \alias{ssd_hc_bcanz}
 \title{BCANZ Hazard Concentrations}
 \usage{
-ssd_hc_bcanz(x, nboot = 10000, delta = 10, min_pboot = 0.9)
+ssd_hc_bcanz(x, nboot = 10000, min_pboot = 0.95)
 }
 \arguments{
 \item{x}{The object.}
 
-\item{nboot}{A count of the number of bootstrap samples to use to estimate the se and confidence limits. A value of 10000 is recommended for official guidelines.}
+\item{nboot}{A count of the number of bootstrap samples to use to estimate the confidence limits. A value of 10,000 is recommended for official guidelines.}
 
-\item{delta}{A non-negative number specifying the maximum absolute Akaike Information-theoretic Criterion difference cutoff. Distributions with an absolute difference from the best model greater than the cutoff are excluded.}
-
-\item{min_pboot}{A number of the minimum proportion of bootstrap samples that must successfully fit
-in the sense of returning a likelihood.}
+\item{min_pboot}{A number between 0 and 1 of the minimum
+proportion of bootstrap samples that must successfully fit (return a likelihood)
+to report the confidence intervals.}
 }
 \value{
 A tibble of corresponding hazard concentrations.
@@ -23,7 +22,7 @@ A tibble of corresponding hazard concentrations.
 Gets hazard concentrations with confidence intervals that protect
 1, 5, 10 and 20\% of species using settings adopted by
 BC, Canada, Australia and New Zealand for official guidelines.
-This function can take several minutes to run with required 10,000 iterations.
+This function can take several minutes to run with recommended 10,000 iterations.
 }
 \examples{
 fits <- ssd_fit_bcanz(ssddata::ccme_boron)
@@ -33,6 +32,7 @@ ssd_hc_bcanz(fits, nboot = 100)
 \code{\link[=ssd_hc]{ssd_hc()}}.
 
 Other BCANZ: 
-\code{\link{ssd_fit_bcanz}()}
+\code{\link{ssd_fit_bcanz}()},
+\code{\link{ssd_hp_bcanz}()}
 }
 \concept{BCANZ}

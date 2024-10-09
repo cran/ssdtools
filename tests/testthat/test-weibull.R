@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -17,7 +20,6 @@ test_that("weibull", {
   expect_equal(ssd_qweibull(0.75), 1.38629436111989)
   set.seed(42)
   expect_equal(ssd_rweibull(2), c(0.0890432104972705, 0.0649915162066272))
-  skip_on_cran()
   test_dist("weibull")
 })
 
@@ -36,9 +38,16 @@ test_that("weibull works anona", {
   expect_snapshot_data(tidy, "tidy_anona")
 })
 
+test_that("weibull works anon_e", {
+  set.seed(99)
+  fit <- ssd_fit_dists(ssddata::anon_e, dists = c("weibull", "lgumbel"))
+  tidy <- tidy(fit)
+  expect_snapshot_data(tidy, "tidy_anon_e")
+})
+
 test_that("weibull bootstraps anona", {
   set.seed(99)
   fit <- ssd_fit_dists(ssddata::anon_a, dists = "weibull")
-  hc <- ssd_hc(fit, nboot = 1000, ci = TRUE)
+  hc <- ssd_hc(fit, nboot = 1000, ci = TRUE, ci_method = "weighted_samples", samples = TRUE)
   expect_snapshot_data(hc, "hc_anona")
 })

@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -35,8 +38,8 @@ min_discrepancy <- function(dist, meanlog, sdlog, nsim) {
 }
 
 #' Match Moments
-#' 
-#' Gets a named list of the values that produce 
+#'
+#' Gets a named list of the values that produce
 #' the moment values (meanlog and sdlog) by distribution and term.
 #'
 #' @inheritParams params

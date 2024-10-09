@@ -1,4 +1,7 @@
-#    Copyright 2021 Province of British Columbia
+# Copyright 2015-2023 Province of British Columbia
+# Copyright 2021 Environment and Climate Change Canada
+# Copyright 2023-2024 Australian Government Department of Climate Change, 
+# Energy, the Environment and Water
 #
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
@@ -14,41 +17,40 @@
 
 test_that("exposure fitdist", {
   fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm")
-  
-  set.seed(1)
-  expect_equal(ssd_exposure(fits), 0.0554388690057964)
+
+  withr::with_seed(1, {
+    expect_equal(ssd_exposure(fits), 0.0554388713536206, tolerance = 1e-6)
+  })
 })
 
 test_that("exposure different mean", {
   fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm")
-  
-  set.seed(1)
-  expect_equal(ssd_exposure(fits, 1), 0.165064610334353)
+
+  withr::with_seed(1, {
+    expect_equal(ssd_exposure(fits, 1, nboot = 100), 0.170901838844338, tolerance = 1e-6)
+  })
 })
 
 test_that("exposure different mean and log", {
   fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm")
-  
-  set.seed(1)
-  expect_equal(ssd_exposure(fits, 1, sdlog = 10), 0.433888512432359)
+
+  withr::with_seed(1, {
+    expect_equal(ssd_exposure(fits, 1, sdlog = 10, nboot = 100), 0.490815139369754, tolerance = 1e-6)
+  })
 })
 
 test_that("exposure multiple distributions", {
   fits <- ssd_fit_dists(ssddata::ccme_boron)
   
-  set.seed(1)
-  expect_equal(ssd_exposure(fits), 0.0663586716105648)
+  withr::with_seed(1, {
+  expect_equal(ssd_exposure(fits, nboot = 100), 0.0663472624824284, tolerance = 1e-6)
+  })
 })
 
-test_that("exposure not sensitive to rescaling", {
-  fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm")
+test_that("exposure fitdist rescale", {
+  fits <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm", rescale = TRUE)
   
-  set.seed(10)
-  exposure <- ssd_exposure(fits)
-  
-  fits_rescale <- ssd_fit_dists(ssddata::ccme_boron, dists = "lnorm", rescale = TRUE)
-  set.seed(10)
-  exposure_rescale <- ssd_exposure(fits_rescale)
-  
-  expect_equal(exposure_rescale, exposure)
+  withr::with_seed(1, {
+    expect_equal(ssd_exposure(fits), 0.0554388582680626, tolerance = 1e-6)
+  })
 })
