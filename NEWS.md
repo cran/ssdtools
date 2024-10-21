@@ -1,5 +1,11 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# ssdtools 2.1.0
+
+- Added `ssd_xxmulti_fitdists()` functions to accept object of class `fitdists`.
+- Set `ssd_xxmulti(..., lnorm.weight = 0)` (instead of 1) to avoid incorrect values with `do.call("ssd_xxmulti", c(..., estimates(fits))` if `fits` does not include the log-normal distribution.
+
+
 # ssdtools 2.0.0
 
 `ssdtools` v2.0.0, which now includes David Fox and Rebecca Fisher as co-authors, is the second major release of `ssdtools`.
