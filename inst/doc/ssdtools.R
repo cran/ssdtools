@@ -7,14 +7,14 @@ knitr::opts_chunk$set(
 )
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  install.packages(c("ssdtools", "tidyverse"))
+# install.packages(c("ssdtools", "tidyverse"))
 
 ## ----message = FALSE----------------------------------------------------------
 library(ssdtools)
 library(ggplot2)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  data <- read_csv(file = "path/to/file.csv")
+# data <- read_csv(file = "path/to/file.csv")
 
 ## -----------------------------------------------------------------------------
 ssddata::ccme_boron
@@ -39,8 +39,8 @@ autoplot(fits) +
 ssd_gof(fits)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  set.seed(99)
-#  boron_pred <- predict(fits, ci = TRUE)
+# set.seed(99)
+# boron_pred <- predict(fits, ci = TRUE)
 
 ## -----------------------------------------------------------------------------
 boron_pred
