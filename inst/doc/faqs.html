@@ -12,7 +12,7 @@
 
 <meta name="author" content="ssdtools Team" />
 
-<meta name="date" content="2025-01-14" />
+<meta name="date" content="2025-02-20" />
 
 <title>Frequently Asked Questions</title>
 
@@ -363,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Frequently Asked Questions</h1>
 <h4 class="author">ssdtools Team</h4>
-<h4 class="date">2025-01-14</h4>
+<h4 class="date">2025-02-20</h4>
 
 
 
@@ -397,6 +397,43 @@ Energy, the Environment and Water</p>
 License</a></p>
 <p>The code is released under the <a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License
 2.0</a></p>
+</div>
+<div id="censoring" class="section level2">
+<h2>Censoring</h2>
+<div id="what-is-censored-data" class="section level3">
+<h3>What is censored data?</h3>
+<p>Data is censored when the exact value is uncertain. There are three
+primary types of censoring. Right censoring when only the lower bound is
+known (&gt;), left censoring when only the upper bound is known (&lt;)
+and interval censored when both the lower and upper bound are known
+(&gt;&lt;). Uncensored data can be thought of as interval censored data
+in which the upper and lower bound are identical (=). Likewise, missing
+data can be considered to be censored data in which both the upper and
+lower bound are unknown (?).</p>
+</div>
+<div id="how-is-censored-data-coded-in-ssdtools" class="section level3">
+<h3>How is censored data coded in ssdtools?</h3>
+<p>Censored data is coded by specifying the lower bound values in one
+column (&gt;) and the upper bound values in a second column (&lt;).
+Unknown lower bounds are coded using NA or 0 while unknown upper bounds
+are coded using NA or Inf. The name of the columns with the lower and
+upper bound values are then passed to the <code>left</code> (&gt;) and
+<code>right</code> (&lt;) arguments in the <code>ssd_fit_dists()</code>
+function, respectively.</p>
+</div>
+<div id="what-are-the-current-limitations-on-analyzing-censored-data" class="section level3">
+<h3>What are the current limitations on analyzing censored data?</h3>
+<p>Currently <code>ssdtools</code> has the following limitations on the
+analysis of censored data:</p>
+<ul>
+<li>distribution fitting to left (&lt;) or interval (&gt;&lt;) censored
+data only, i.e., when the upper bound is known;</li>
+<li>model averaging when the distributions have the same number of
+parameters only; and</li>
+<li>estimation of confidence interval using non-parametric bootstrapping
+only.</li>
+</ul>
+</div>
 </div>
 
 

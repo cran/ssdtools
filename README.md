@@ -12,7 +12,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 coverage](https://codecov.io/gh/bcgov/ssdtools/graph/badge.svg)](https://app.codecov.io/gh/bcgov/ssdtools)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ssdtools)](https://cran.r-project.org/package=ssdtools)
-![CRAN downloads](https://cranlogs.r-pkg.org/badges/ssdtools)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07492/status.svg)](https://doi.org/10.21105/joss.07492)
 <!-- badges: end -->
 
 `ssdtools` is an R package to fit and plot Species Sensitivity
@@ -138,6 +138,28 @@ software see:
 *Fox, D.R., et al. 2021. Recent Developments in Species Sensitivity
 Distribution Modeling. Environ Toxicol Chem 40(2): 293–308.
 <https://doi.org/10.1002/etc.4925>.*
+
+## Citation
+
+    To cite package 'ssdtools' in publications use:
+
+      Thorley J, Fisher R, Fox D, Schwarz C (2025). "ssdtools v2: An R
+      package to fit Species Sensitivity Distributions." _Journal of Open
+      Source Software_, *10*(105), 7492. doi:10.21105/joss.07492
+      <https://doi.org/10.21105/joss.07492>.
+
+    A BibTeX entry for LaTeX users is
+
+      @Article{,
+        title = {ssdtools v2: An R package to fit Species Sensitivity Distributions},
+        author = {Joe Thorley and Rebecca Fisher and David Fox and Carl Schwarz},
+        year = {2025},
+        journal = {Journal of Open Source Software},
+        volume = {10},
+        number = {105},
+        pages = {7492},
+        doi = {10.21105/joss.07492},
+      }
 
 ## Installation
 

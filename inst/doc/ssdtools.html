@@ -12,7 +12,7 @@
 
 <meta name="author" content="ssdtools Team" />
 
-<meta name="date" content="2025-01-14" />
+<meta name="date" content="2025-02-20" />
 
 <title>Getting Started with ssdtools</title>
 
@@ -364,7 +364,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Getting Started with ssdtools</h1>
 <h4 class="author">ssdtools Team</h4>
-<h4 class="date">2025-01-14</h4>
+<h4 class="date">2025-02-20</h4>
 
 
 
@@ -455,14 +455,14 @@ package.</p>
 <h2>Fitting Distributions</h2>
 <p>The function <code>ssd_fit_dists()</code> inputs a data frame and
 fits one or more distributions. The user can specify a subset of the
-following 10 distributions. Please see the <a href="https://bcgov.github.io/ssdtools/articles/B_distributions.html">distributions</a>
+following 9 distributions. Please see the <a href="https://bcgov.github.io/ssdtools/articles/B_distributions.html">distributions</a>
 and <a href="https://bcgov.github.io/ssdtools/articles/A_model_averaging.html">model
 averaging</a> vignettes for more information regarding appropriate use
 of distributions and the use of model-averaged SSDs.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">ssd_dists_all</span>()</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt;  [1] &quot;burrIII3&quot;      &quot;gamma&quot;         &quot;gompertz&quot;      &quot;invpareto&quot;    </span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt;  [5] &quot;lgumbel&quot;       &quot;llogis&quot;        &quot;llogis_llogis&quot; &quot;lnorm&quot;        </span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt;  [9] &quot;lnorm_lnorm&quot;   &quot;weibull&quot;</span></span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1] &quot;burrIII3&quot;      &quot;gamma&quot;         &quot;gompertz&quot;      &quot;lgumbel&quot;      </span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [5] &quot;llogis&quot;        &quot;llogis_llogis&quot; &quot;lnorm&quot;         &quot;lnorm_lnorm&quot;  </span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; [9] &quot;weibull&quot;</span></span></code></pre></div>
 <p>using the <code>dists</code> argument.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>fits <span class="ot">&lt;-</span> <span class="fu">ssd_fit_dists</span>(ssddata<span class="sc">::</span>ccme_boron, <span class="at">dists =</span> <span class="fu">c</span>(<span class="st">&quot;llogis&quot;</span>, <span class="st">&quot;lnorm&quot;</span>, <span class="st">&quot;gamma&quot;</span>))</span></code></pre></div>
 </div>
