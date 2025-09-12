@@ -39,8 +39,9 @@ autoplot(fits) +
 ssd_gof(fits)
 
 ## ----eval = FALSE-------------------------------------------------------------
-# set.seed(99)
-# boron_pred <- predict(fits, ci = TRUE)
+# withr::with_seed(99, {
+#   boron_pred <- predict(fits, ci = TRUE)
+# })
 
 ## -----------------------------------------------------------------------------
 boron_pred
@@ -55,11 +56,12 @@ ssd_plot(ssddata::ccme_boron, boron_pred,
   scale_colour_ssd()
 
 ## -----------------------------------------------------------------------------
-set.seed(99)
-boron_hc5 <- ssd_hc(fits, proportion = 0.05, ci = TRUE)
-print(boron_hc5)
-boron_pc <- ssd_hp(fits, conc = boron_hc5$est, ci = TRUE)
-print(boron_pc)
+withr::with_seed(99, {
+  boron_hc5 <- ssd_hc(fits, proportion = 0.05, ci = TRUE)
+  print(boron_hc5)
+  boron_pc <- ssd_hp(fits, conc = boron_hc5$est, ci = TRUE)
+  print(boron_pc)
+})
 
 ## -----------------------------------------------------------------------------
 boron_censored <- ssddata::ccme_boron |>
@@ -81,8 +83,9 @@ ssd_hc(dists, average = FALSE)
 ssd_hc(dists)
 
 ## ----fig.alt="A plot of the left censored CCME boron dataset with the model average species sensitivity distribution and arrows indicating the censoring."----
-set.seed(99)
-pred <- predict(dists, ci = TRUE, parametric = FALSE)
+withr::with_seed(99, {
+  pred <- predict(dists, ci = TRUE, parametric = FALSE)
+})
 
 ssd_plot(boron_censored, pred,
   left = "left", right = "right",

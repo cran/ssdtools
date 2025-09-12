@@ -29,6 +29,9 @@ SSDs are cumulative probability distributions that are used to estimate the perc
 The concentration that affects 5% of the species is referred to as the 5% Hazard Concentration (*HC~5~*). This is equivalent to a 95% protection value (*PC~95~*).
 For more information on SSDs the reader is referred to @posthuma_species_2001.
 
+`ssdtools` can handle left, right and interval censored data with two limitations.
+It is currently only possible to model average when the distributions have the same number of parameters and confidence intervals can only be estimated using non-parametric (as opposed to parametric) bootstrapping.
+
 In order to use `ssdtools` you need to install R (see below) or use the Shiny [app](https://bcgov-env.shinyapps.io/ssdtools/).
 The shiny app includes a user guide. 
 This vignette is a user manual for the R package.
@@ -163,8 +166,9 @@ Model averaging is based on `AICc` unless the data censored is which case `AICc`
 In this situation model averaging is only possible if the distributions have the same number of parameters (so that `AIC` can be used to compare the models).
 
 ```{r, eval = FALSE}
-set.seed(99)
-boron_pred <- predict(fits, ci = TRUE)
+withr::with_seed(99, {
+  boron_pred <- predict(fits, ci = TRUE)
+})
 ```
 
 The resultant object is a data frame of the estimated concentration (`est`) with standard error (`se`) and lower (`lcl`) and upper (`ucl`) 95% confidence limits (CLs) by percent of species affected (`percent`).
@@ -197,19 +201,18 @@ The 5% hazard concentration (*HC5*) is the concentration that affects 5% of the 
 The hazard/protection concentrations can be obtained using the `ssd_hc()` function, which can be used to obtain any desired percentage value. The fitted SSD can also be used to determine the percentage of species protected at a given concentration using `ssd_hp()`.
 
 ```{r}
-set.seed(99)
-boron_hc5 <- ssd_hc(fits, proportion = 0.05, ci = TRUE)
-print(boron_hc5)
-boron_pc <- ssd_hp(fits, conc = boron_hc5$est, ci = TRUE)
-print(boron_pc)
+withr::with_seed(99, {
+  boron_hc5 <- ssd_hc(fits, proportion = 0.05, ci = TRUE)
+  print(boron_hc5)
+  boron_pc <- ssd_hp(fits, conc = boron_hc5$est, ci = TRUE)
+  print(boron_pc)
+})
 ```
 
 ### Censored Data
 
 Censored data is that for which only a lower and/or upper limit is known for a particular species.
 If the `right` argument in `ssd_fit_dists()` is different to the `left` argument then the data are considered to be censored.
-
-It is important to note that `ssdtools` doesn't currently support right censored data.
 
 Let's produce some left censored data.
 
@@ -249,8 +252,9 @@ The confidence intervals can currently only be generated for censored data using
 The horizontal lines in the plot indicate the censoring (range of possible values).
 
 ```{r, fig.alt="A plot of the left censored CCME boron dataset with the model average species sensitivity distribution and arrows indicating the censoring."}
-set.seed(99)
-pred <- predict(dists, ci = TRUE, parametric = FALSE)
+withr::with_seed(99, {
+  pred <- predict(dists, ci = TRUE, parametric = FALSE)
+})
 
 ssd_plot(boron_censored, pred,
   left = "left", right = "right",

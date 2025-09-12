@@ -12,7 +12,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 coverage](https://codecov.io/gh/bcgov/ssdtools/graph/badge.svg)](https://app.codecov.io/gh/bcgov/ssdtools)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/ssdtools)](https://cran.r-project.org/package=ssdtools)
-[![DOI](https://joss.theoj.org/papers/10.21105/joss.07492/status.svg)](https://doi.org/10.21105/joss.07492)
+![CRAN downloads](https://cranlogs.r-pkg.org/badges/ssdtools)
 <!-- badges: end -->
 
 `ssdtools` is an R package to fit and plot Species Sensitivity
@@ -26,6 +26,11 @@ known as the inverse Weibull), gamma, Weibull and log-normal log-normal
 mixture. Multiple distributions can be averaged using Akaike Information
 Criteria. Confidence intervals on hazard concentrations and proportions
 are produced by bootstrapping.
+
+`ssdtools` can handle censored data with two limitations. It is
+currently only possible to model average when the distributions have the
+same number of parameters and confidence intervals can only be estimated
+using non-parametric (as opposed to parametric) bootstrapping.
 
 ## Introduction
 
@@ -70,29 +75,33 @@ autoplot(fits)
 The goodness of fit can be assessed using `ssd_gof`
 
 ``` r
-ssd_gof(fits)
-#> # A tibble: 6 × 9
-#>   dist           ad     ks    cvm   aic  aicc   bic delta weight
-#>   <chr>       <dbl>  <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
-#> 1 gamma       0.440 0.117  0.0554  238.  238.  240. 0.005  0.357
-#> 2 lgumbel     0.829 0.158  0.134   244.  245.  247. 6.56   0.013
-#> 3 llogis      0.487 0.0994 0.0595  241.  241.  244. 3.39   0.066
-#> 4 lnorm       0.507 0.107  0.0703  239.  240.  242. 1.40   0.177
-#> 5 lnorm_lnorm 0.320 0.116  0.0414  240.  243.  247. 4.98   0.03 
-#> 6 weibull     0.434 0.117  0.0542  238.  238.  240. 0      0.357
+ssd_gof(fits, wt = TRUE)
+#> # A tibble: 6 × 14
+#>   dist     npars  nobs log_lik   aic  aicc delta    wt   bic    ad     ks    cvm
+#>   <chr>    <int> <int>   <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>  <dbl>
+#> 1 gamma        2    28   -117.  238.  238. 0.005 0.357  240. 0.440 0.117  0.0554
+#> 2 lgumbel      2    28   -120.  244.  245. 6.56  0.013  247. 0.829 0.158  0.134 
+#> 3 llogis       2    28   -119.  241.  241. 3.39  0.066  244. 0.487 0.0994 0.0595
+#> 4 lnorm        2    28   -118.  239.  240. 1.40  0.177  242. 0.507 0.107  0.0703
+#> 5 lnorm_l…     5    28   -115.  240.  243. 4.98  0.03   247. 0.320 0.116  0.0414
+#> 6 weibull      2    28   -117.  238.  238. 0     0.357  240. 0.434 0.117  0.0542
+#> # ℹ 2 more variables: at_bound <lgl>, computable <lgl>
 ```
 
 and the model-averaged 5% hazard concentration estimated (with
 bootstrapping to get confidence intervals) using `ssd_hc`.
 
 ``` r
-set.seed(99)
-hc5 <- ssd_hc(fits, ci = TRUE)
+withr::with_seed(99, {
+  hc5 <- ssd_hc(fits, ci = TRUE)
+})
 print(hc5)
-#> # A tibble: 1 × 11
-#>   dist    proportion   est    se   lcl   ucl    wt method    nboot pboot samples
-#>   <chr>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>     <dbl> <dbl> <I<lis>
-#> 1 average       0.05  1.26 0.782 0.407  3.29     1 parametr…  1000     1 <dbl>
+#> # A tibble: 1 × 15
+#>   dist    proportion   est    se   lcl   ucl    wt level est_method ci_method   
+#>   <chr>        <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <chr>      <chr>       
+#> 1 average       0.05  1.26 0.782 0.407  3.29     1  0.95 multi      weighted_sa…
+#> # ℹ 5 more variables: boot_method <chr>, nboot <dbl>, pboot <dbl>,
+#> #   dists <list>, samples <list>
 ```
 
 Model-averaged predictions complete with confidence intervals can also
@@ -225,7 +234,7 @@ Distributions in Ecotoxicology. CRC Press.
 
 Copyright 2015-2023 Province of British Columbia  
 Copyright 2021 Environment and Climate Change Canada  
-Copyright 2023-2024 Australian Government Department of Climate Change,
+Copyright 2023-2025 Australian Government Department of Climate Change,
 Energy, the Environment and Water
 
 The documentation is released under the [CC BY 4.0

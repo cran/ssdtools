@@ -29,11 +29,12 @@
 #' ssd_dists(bcanz = TRUE)
 #' ssd_dists(tails = FALSE)
 #' ssd_dists(npars = 5)
-ssd_dists <- function(bcanz = NULL, tails = NULL, npars = 2:5, valid = TRUE) {
+ssd_dists <- function(bcanz = NULL, ..., tails = NULL, npars = 2:5, valid = TRUE) {
+  chk_unused(...)
   chk_null_or(bcanz, vld = vld_flag)
   chk_null_or(tails, vld = vld_flag)
   chk_null_or(valid, vld = vld_flag)
-  
+
   chk_whole_numeric(npars)
   chk_not_any_na(npars)
   chk_range(npars, c(2L, 5L))
@@ -55,7 +56,7 @@ ssd_dists <- function(bcanz = NULL, tails = NULL, npars = 2:5, valid = TRUE) {
 #' All Species Sensitivity Distributions
 #'
 #' Gets a character vector of the names of all the available distributions.
-#' 
+#'
 #' @inheritParams params
 #' @return A unique, sorted character vector of the distributions.
 #' @family dists
@@ -79,5 +80,10 @@ ssd_dists_all <- function(valid = TRUE) {
 #' @examples
 #' ssd_dists_shiny()
 ssd_dists_shiny <- function() {
+  lifecycle::deprecate_soft(
+    "2.3.0",
+    "ssd_dists_shiny()",
+    details = "Use `ssd_dists(tails = TRUE)` instead."
+  )
   ssd_dists(bcanz = NULL, tails = TRUE, npars = 2:5, valid = TRUE)
 }
