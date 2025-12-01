@@ -1,6 +1,6 @@
 Package: ssdtools
 Title: Species Sensitivity Distributions
-Version: 2.4.0
+Version: 2.5.0
 Authors@R: c(
     person("Joe", "Thorley", , "joe@poissonconsulting.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7683-4592")),
@@ -11,7 +11,7 @@ Authors@R: c(
     person("Seb", "Dalgarno", , "seb@poissonconsulting.ca", role = "ctb",
            comment = c(ORCID = "0000-0002-3658-4517")),
     person("Kathleen", "McTavish", role = "ctb"),
-    person("Heather", "Thompson", role = "ctb"), 
+    person("Heather", "Thompson", role = "ctb"),
     person("Doug", "Spry", role = "ctb"),
     person("Rick", "van Dam", role = "ctb"),
     person("Graham", "Batley", role = "ctb"),
@@ -29,7 +29,8 @@ Authors@R: c(
     person("Emilie", "Doussantousse", role = "ctb"),
     person("Nan-Hung", "Hsieh", role = "ctb"),
     person("Florencia", "D'Andrea", role = "ctb"),
-    person("Eduard", "Szöcs", role = "ctb", comment = c(ORCID = "0000-0001-5376-1194")),
+    person("Eduard", "Szöcs", role = "ctb",
+           comment = c(ORCID = "0000-0001-5376-1194")),
     person("Province of British Columbia", role = c("fnd", "cph")),
     person("Environment and Climate Change Canada", role = c("fnd", "cph")),
     person("Australian Government Department of Climate Change, Energy, the Environment and Water", role = c("fnd", "cph"))
@@ -48,12 +49,13 @@ URL: https://github.com/bcgov/ssdtools,
 BugReports: https://github.com/bcgov/ssdtools/issues
 Depends: R (>= 4.1)
 Imports: abind, chk, furrr, generics, ggplot2, ggtext, glue, goftest,
-        graphics, grid, lifecycle, parallel, plyr, purrr, Rcpp, rlang,
-        scales, ssddata, stats, stringr, tibble, TMB, universals, utils
+        graphics, grid, lifecycle, parallel, plyr, purrr, Rcpp, readr,
+        rlang, scales, ssddata, stats, stringr, tibble, TMB,
+        universals, utils
 Suggests: actuar, covr, dplyr, EnvStats, extraDistr, fitdistrplus,
         grDevices, knitr, latex2exp, magrittr, mle.tools, patchwork,
-        readr, reshape2, rmarkdown, testthat (>= 3.0.0), tidyr,
-        tidyselect, tinytex, VGAM, withr
+        reshape2, rmarkdown, testthat (>= 3.0.0), tidyr, tidyselect,
+        tinytex, VGAM, withr
 LinkingTo: Rcpp, RcppEigen, TMB
 VignetteBuilder: knitr
 Config/testthat/edition: 3
@@ -62,7 +64,7 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.3.3.9000
 NeedsCompilation: yes
-Packaged: 2025-09-12 03:02:53 UTC; joe
+Packaged: 2025-11-30 18:24:14 UTC; joe
 Author: Joe Thorley [aut, cre] (ORCID: <https://orcid.org/0000-0002-7683-4592>),
   Rebecca Fisher [aut],
   David Fox [aut],
@@ -92,4 +94,4 @@ Author: Joe Thorley [aut, cre] (ORCID: <https://orcid.org/0000-0002-7683-4592>),
     Environment and Water [fnd, cph]
 Maintainer: Joe Thorley <joe@poissonconsulting.ca>
 Repository: CRAN
-Date/Publication: 2025-09-12 05:30:02 UTC
+Date/Publication: 2025-12-01 06:10:17 UTC

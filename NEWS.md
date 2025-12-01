@@ -1,5 +1,16 @@
 <!-- NEWS.md is maintained by https://fledge.cynkra.com, contributors should not edit this file -->
 
+# ssdtools 2.5.0
+
+- Added the following confidence interval methods to `ssd_hc()`, `ssd_hp()` and `predict()`:
+  - `"GMACL"`: weighted geometric mean of the confidence limits.
+  - `"arithmetic_samples"`: takes weighted arithmetic mean of the values for each bootstrap iteration across all the distributions and then calculates the confidence limits from the single set of samples.
+  - `"geometric_samples"`: takes weighted geometric mean of the values for each bootstrap iteration across all the distributions and then calculates the confidence limits from the single set of samples.
+ The new confidence interval methods were added for research or completeness and the default recommended method is still `ci_method = "weighted_samples"`.
+- Added `decimal.mark = getOption("OutDec", ".")` argument to plotting functions. (#135).
+- Allowed `ssd_plot()` to use concentration as labels for shinyssdtools.
+- Fixed documentation to indicate that default value of `at_boundary_ok = TRUE`.
+
 # ssdtools 2.4.0
 
 ## Features

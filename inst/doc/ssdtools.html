@@ -12,7 +12,7 @@
 
 <meta name="author" content="ssdtools Team" />
 
-<meta name="date" content="2025-09-12" />
+<meta name="date" content="2025-11-30" />
 
 <title>Getting Started with ssdtools</title>
 
@@ -151,7 +151,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
-margin-bottom: 0em;
 }
 .hanging div.csl-entry {
 margin-left:2em;
@@ -364,7 +363,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Getting Started with ssdtools</h1>
 <h4 class="author">ssdtools Team</h4>
-<h4 class="date">2025-09-12</h4>
+<h4 class="date">2025-11-30</h4>
 
 
 
@@ -378,8 +377,7 @@ given concentration of a chemical. The concentration that affects 5% of
 the species is referred to as the 5% Hazard Concentration
 (<em>HC<sub>5</sub></em>). This is equivalent to a 95% protection value
 (<em>PC<sub>95</sub></em>). For more information on SSDs the reader is
-referred to <span class="citation">Posthuma, Suter II, and Traas
-(2001)</span>.</p>
+referred to <span class="citation">Posthuma et al. (2001)</span>.</p>
 <p><code>ssdtools</code> can handle left, right and interval censored
 data with two limitations. It is currently only possible to model
 average when the distributions have the same number of parameters and
@@ -394,7 +392,7 @@ package.</p>
 <h2>Philosophy</h2>
 <p><code>ssdtools</code> provides the key functionality required to fit
 SSDs using Maximum Likelihood and <a href="https://bcgov.github.io/ssdtools/articles/A_model_averaging.html">model
-averaging</a> in R. It is intended to be used in conjunction with <a href="https://www.tidyverse.org">tidyverse</a> packages such as
+averaging</a> in R. It is intended to be used in conjunction with <a href="https://tidyverse.org">tidyverse</a> packages such as
 <code>readr</code> to input data, <code>tidyr</code> and
 <code>dplyr</code> to group and manipulate data and <code>ggplot2</code>
 <span class="citation">(Wickham 2016)</span> to plot data. As such it
@@ -587,20 +585,22 @@ includes the number of bootstraps (<code>nboot</code>) data sets
 generated as well as the proportion of the data sets that successfully
 fitted (<code>pboot</code>).</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>boron_pred</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 99 × 11</span></span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;    dist    proportion   est    se    lcl   ucl    wt method  nboot pboot samples</span></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;I&lt;lis&gt;</span></span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;  1 average       0.01 0.267 0.402 0.0419  1.53     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;  2 average       0.02 0.531 0.518 0.110   2.03     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;  3 average       0.03 0.783 0.615 0.198   2.50     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt;  4 average       0.04 1.02  0.701 0.300   2.89     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;  5 average       0.05 1.26  0.782 0.407   3.29     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;  6 average       0.06 1.48  0.859 0.520   3.72     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;  7 average       0.07 1.71  0.934 0.645   4.16     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;  8 average       0.08 1.93  1.01  0.769   4.58     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt;  9 average       0.09 2.16  1.08  0.896   4.95     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 10 average       0.1  2.38  1.15  1.03    5.33     1 parame…  1000     1 &lt;dbl&gt;  </span></span>
-<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; # ℹ 89 more rows</span></span></code></pre></div>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; # A tibble: 99 × 15</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt;    dist    proportion   est    se    lcl   ucl    wt level est_method ci_method </span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;     </span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;  1 average       0.01 0.267 0.402 0.0419  1.53     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;  2 average       0.02 0.531 0.518 0.110   2.03     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt;  3 average       0.03 0.783 0.615 0.198   2.50     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt;  4 average       0.04 1.02  0.701 0.300   2.89     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt;  5 average       0.05 1.26  0.782 0.407   3.29     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt;  6 average       0.06 1.48  0.859 0.520   3.72     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;  7 average       0.07 1.71  0.934 0.645   4.16     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;  8 average       0.08 1.93  1.01  0.769   4.58     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt;  9 average       0.09 2.16  1.08  0.896   4.95     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt; 10 average       0.1  2.38  1.15  1.03    5.33     1  0.95 multi      weighted_…</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; # ℹ 89 more rows</span></span>
+<span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a><span class="co">#&gt; # ℹ 5 more variables: boot_method &lt;chr&gt;, nboot &lt;dbl&gt;, pboot &lt;dbl&gt;,</span></span>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a><span class="co">#&gt; #   dists &lt;list&gt;, samples &lt;list&gt;</span></span></code></pre></div>
 <p>The data frame of the estimates can then be plotted together with the
 original data using the <code>ssd_plot()</code> function to summarize an
 analysis. Once again the returned object is a <code>ggplot</code> object
@@ -730,15 +730,14 @@ plot indicate the censoring (range of possible values).</p>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-burnham_model_2002" class="csl-entry">
 Burnham, Kenneth P., and David R. Anderson, eds. 2002. <em>Model
 <span>Selection</span> and <span>Multimodel</span>
-<span>Inference</span></em>. New York, NY: Springer New York. <a href="https://doi.org/10.1007/b97636">https://doi.org/10.1007/b97636</a>.
+<span>Inference</span></em>. Springer New York. <a href="https://doi.org/10.1007/b97636">https://doi.org/10.1007/b97636</a>.
 </div>
 <div id="ref-fox_recent_2021" class="csl-entry">
-Fox, D. R., R. A. Dam, R. Fisher, G. E. Batley, A. R. Tillmanns, J.
-Thorley, C. J. Schwarz, D. J. Spry, and K. McTavish. 2021. <span>“Recent
+Fox, D. R., R. A. Dam, R. Fisher, et al. 2021. <span>“Recent
 <span>Developments</span> in <span>Species</span>
 <span>Sensitivity</span> <span>Distribution</span>
 <span>Modeling</span>.”</span> <em>Environmental Toxicology and
@@ -750,8 +749,7 @@ Sensitivity Distributions in Ecotoxicology</em>. CRC press. <a href="https://www
 </div>
 <div id="ref-r" class="csl-entry">
 R Core Team. 2024. <em>R: A Language and Environment for Statistical
-Computing</em>. Vienna, Austria: R Foundation for Statistical Computing.
-<a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+Computing</em>. R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
 <div id="ref-ggplot2" class="csl-entry">
 Wickham, Hadley. 2016. <em><span class="nocase">ggplot2</span>: Elegant
@@ -760,7 +758,7 @@ Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggpl
 <div id="ref-wickham_r_2016" class="csl-entry">
 Wickham, Hadley, and Garrett Grolemund. 2016. <em>R for Data Science:
 Import, Tidy, Transform, Visualize, and Model Data</em>. First edition.
-Sebastopol, CA: O’Reilly. <a href="https://r4ds.had.co.nz">https://r4ds.had.co.nz</a>.
+O’Reilly. <a href="https://r4ds.had.co.nz">https://r4ds.had.co.nz</a>.
 </div>
 </div>
 </div>
