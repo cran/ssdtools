@@ -15,32 +15,41 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-test_that("subset", {
-  x <- list()
-  class(x) <- c("fitdists")
-  expect_identical(subset(x), x)
+test_that("ssd_label_comma formats with significant digits and big mark", {
+  expect_identical(
+    ssd_label_comma()(c(0.123456, 1234.5678)),
+    c("0.123", "1,230")
+  )
+  expect_identical(
+    ssd_label_comma(digits = 2, big.mark = " ", decimal.mark = ",")(
+      c(0.123456, 1234.5678)
+    ),
+    c("0,12", "1 200")
+  )
+})
 
-  fits <- ssd_fit_dists(ssddata::ccme_boron)
+test_that("ssd_label_comma_hc puts the hc label on its own line", {
+  expect_identical(
+    ssd_label_comma_hc(1.26)(c(1, 1.26, 10)),
+    c("1", "\n1.26", "10")
+  )
+})
 
-  expect_identical(subset(fits), fits)
-  expect_error(names(subset(fits, c("lnorm", "fubar"))))
+test_that("ssd_label_comma_hc leaves non-hc labels as ssd_label_comma", {
+  x <- c(1, 10, NA)
   expect_identical(
-    names(subset(fits, c("lnorm", "fubar"), strict = FALSE)),
-    "lnorm"
+    ssd_label_comma_hc(1.26)(x),
+    ssd_label_comma()(x)
+  )
+})
+
+test_that("ssd_label_comma_hc marks hc with big.mark and decimal.mark", {
+  expect_identical(
+    ssd_label_comma_hc(1260)(c(1, 1260))[2],
+    "\n1,260"
   )
   expect_identical(
-    names(subset(fits, c("fubar"), strict = FALSE)),
-    character(0)
-  )
-  expect_identical(
-    names(subset(fits, c("lnorm", "gamma"))),
-    c("gamma", "lnorm")
-  )
-  expect_identical(subset(fits, delta = 10), fits)
-  expect_identical(names(subset(fits, delta = 0)), "weibull")
-  expect_identical(names(subset(fits, delta = 0.01)), c("gamma", "weibull"))
-  expect_identical(
-    names(subset(fits, c("gamma", "lnorm"), delta = 1.5)),
-    c("gamma", "lnorm")
+    ssd_label_comma_hc(1.26, decimal.mark = "-")(c(1, 1.26))[2],
+    "\n1-26"
   )
 })

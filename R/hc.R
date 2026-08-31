@@ -54,11 +54,36 @@ ssd_hc <- function(x, ...) {
   est <- do.call(fun, args)
   tibble(
     dist = dist,
-    proportion = proportion, est = est,
-    se = NA_real_, lcl = NA_real_, ucl = NA_real_,
+    proportion = proportion,
+    est = est,
+    se = NA_real_,
+    lcl = NA_real_,
+    ucl = NA_real_,
     wt = 1,
-    nboot = 0L, pboot = NA_real_
+    nboot = 0L,
+    pboot = NA_real_
   )
+}
+
+# Resolve the deprecated `percent` argument into a `proportion` and
+# validate it. Shared by the ssd_hc() and predict() methods.
+.hc_proportion <- function(percent, proportion) {
+  if (lifecycle::is_present(percent)) {
+    lifecycle::deprecate_soft(
+      "2.0.0",
+      "ssd_hc(percent)",
+      "ssd_hc(proportion)",
+      id = "hc"
+    )
+    chk_vector(percent)
+    chk_numeric(percent)
+    chk_range(percent, c(0, 100))
+    proportion <- percent / 100
+  }
+  chk_vector(proportion)
+  chk_numeric(proportion)
+  chk_range(proportion)
+  proportion
 }
 
 #' @describeIn ssd_hc Hazard Concentrations for Distributional Estimates
@@ -67,33 +92,27 @@ ssd_hc <- function(x, ...) {
 #'
 #' ssd_hc(ssd_match_moments())
 ssd_hc.list <- function(
-    x,
-    percent,
-    proportion = 0.05,
-    ...) {
+  x,
+  percent,
+  proportion = 0.05,
+  ...
+) {
   chk_list(x)
   chk_named(x)
   chk_unique(names(x))
   chk_unused(...)
 
-  if (lifecycle::is_present(percent)) {
-    lifecycle::deprecate_soft("2.0.0", "ssd_hc(percent)", with = "ssd_hc(proportion)", id = "hc")
-    chk_vector(percent)
-    chk_numeric(percent)
-    chk_range(percent, c(0, 100))
-    proportion <- percent / 100
-  }
-
-  chk_vector(proportion)
-  chk_numeric(proportion)
-  chk_range(proportion)
+  proportion <- .hc_proportion(percent, proportion)
 
   if (!length(x)) {
     hc <- no_hcp()
     hc <- dplyr::rename(hc, proportion = "value")
     return(hc)
   }
-  hc <- mapply(.ssd_hc_dist, x, names(x),
+  hc <- mapply(
+    .ssd_hc_dist,
+    x,
+    names(x),
     MoreArgs = list(proportion = proportion),
     SIMPLIFY = FALSE
   )
@@ -107,39 +126,34 @@ ssd_hc.list <- function(
 #' fits <- ssd_fit_dists(ssddata::ccme_boron)
 #' ssd_hc(fits)
 ssd_hc.fitdists <- function(
-    x,
-    percent = deprecated(),
-    proportion = 0.05,
-    ...,
-    average = TRUE,
-    ci = FALSE,
-    level = 0.95,
-    nboot = 1000,
-    min_pboot = 0.8,
-    multi_est = deprecated(),
-    est_method = "multi",
-    ci_method = "weighted_samples",
-    parametric = TRUE,
-    delta = 9.21,
-    samples = FALSE,
-    save_to = NULL,
-    control = NULL) {
+  x,
+  percent = deprecated(),
+  proportion = 0.05,
+  ...,
+  average = TRUE,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  min_pboot = 0.8,
+  multi_est = deprecated(),
+  est_method = "multi",
+  ci_method = "weighted_samples",
+  parametric = TRUE,
+  delta = 9.21,
+  samples = FALSE,
+  save_to = NULL,
+  control = NULL
+) {
   chk_unused(...)
 
-  if (lifecycle::is_present(percent)) {
-    lifecycle::deprecate_soft("2.0.0", "ssd_hc(percent)", "ssd_hc(proportion)", id = "hc")
-    chk_vector(percent)
-    chk_numeric(percent)
-    chk_range(percent, c(0, 100))
-    proportion <- percent / 100
-  }
-
-  chk_vector(proportion)
-  chk_numeric(proportion)
-  chk_range(proportion)
+  proportion <- .hc_proportion(percent, proportion)
 
   if (lifecycle::is_present(multi_est)) {
-    lifecycle::deprecate_soft("2.3.1", "ssd_hc(multi_est)", "ssd_hc(est_method)")
+    lifecycle::deprecate_soft(
+      "2.3.1",
+      "ssd_hc(multi_est)",
+      "ssd_hc(est_method)"
+    )
 
     chk_flag(multi_est)
 
@@ -150,7 +164,11 @@ ssd_hc.fitdists <- function(
 
   chk_string(ci_method)
   if (ci_method == "weighted_arithmetic") {
-    lifecycle::deprecate_soft("2.3.1", I("ssd_hc(ci_method = 'weighted_arithmetic')"), I("ssd_hc(ci_method = 'MACL')"))
+    lifecycle::deprecate_soft(
+      "2.3.1",
+      I("ssd_hc(ci_method = 'weighted_arithmetic')"),
+      I("ssd_hc(ci_method = 'MACL')")
+    )
 
     ci_method <- "MACL"
   }
@@ -185,33 +203,24 @@ ssd_hc.fitdists <- function(
 #' fit <- ssd_fit_burrlioz(ssddata::ccme_boron)
 #' ssd_hc(fit)
 ssd_hc.fitburrlioz <- function(
-    x,
-    percent,
-    proportion = 0.05,
-    ...,
-    ci = FALSE,
-    level = 0.95,
-    nboot = 1000,
-    min_pboot = 0.8,
-    parametric = FALSE,
-    samples = FALSE,
-    save_to = NULL) {
+  x,
+  percent,
+  proportion = 0.05,
+  ...,
+  ci = FALSE,
+  level = 0.95,
+  nboot = 1000,
+  min_pboot = 0.8,
+  parametric = FALSE,
+  samples = FALSE,
+  save_to = NULL
+) {
   chk_length(x, upper = 1L)
   chk_named(x)
   chk_subset(names(x), c("burrIII3", "invpareto", "llogis", "lgumbel"))
   chk_unused(...)
 
-  if (lifecycle::is_present(percent)) {
-    lifecycle::deprecate_soft("2.0.0", "ssd_hc(percent)", "ssd_hc(proportion)", id = "hc")
-    chk_vector(percent)
-    chk_numeric(percent)
-    chk_range(percent, c(0, 100))
-    proportion <- percent / 100
-  }
-
-  chk_vector(proportion)
-  chk_numeric(proportion)
-  chk_range(proportion)
+  proportion <- .hc_proportion(percent, proportion)
 
   fun <- if (names(x) == "burrIII3") fit_burrlioz else fit_tmb
 

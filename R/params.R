@@ -33,7 +33,7 @@
 #' @param ci A flag specifying whether to estimate confidence intervals (by bootstrapping).
 #' @param ci_method A string specifying which method to use for estimating
 #' the standard error and confidence limits from the bootstrap samples.
-#' The default and recommended value is still `ci_method = "weighted_samples"` 
+#' The default and recommended value is still `ci_method = "weighted_samples"`
 #' which takes bootstrap samples
 #' from each distribution proportional to its AICc based weights and
 #' calculates the confidence limits (and SE) from this single set.
@@ -46,7 +46,7 @@
 #' limits while `ci_method = GMACL` which
 #' takes the weighted geometric mean of the confidence limits was added for completeness but is also not recommended.
 #' Finally `ci_method = "arithmetic_samples"` and `ci_method = "geometric_samples"`
-#' take the weighted arithmetic or geometric mean of the values for 
+#' take the weighted arithmetic or geometric mean of the values for
 #' each bootstrap iteration across all the distributions and then
 #' calculate the confidence limits (and SE) from the single set of samples.
 #' @param censoring A numeric vector of the left and right censoring values.
@@ -116,9 +116,8 @@
 #' @param pvalue A flag specifying whether to return p-values or the statistics (default) for the various tests.
 #' @param pred A data frame of the predictions.
 #' @param q	vector of quantiles.
-#' @param range_shape1 A numeric vector of length two of the lower and upper bounds for the shape1 parameter.
-#' @param range_shape2 A numeric vector of length two of the lower and upper bounds for the shape2 parameter.
-#' @param range_shape2 shape2 parameter.
+#' @param range_shape1 A numeric vector of length two of the lower and upper bounds for the shape1 parameter for the burrIII3 distribution.
+#' @param range_shape2 A numeric vector of length two of the lower and upper bounds for the shape2 parameter for the burrIII3 distribution.
 #' @param reweight A flag specifying whether to reweight weights by dividing by the largest weight.
 #' @param rescale A flag specifying whether to leave the values unchanged (FALSE) or to rescale concentration values by dividing by the geometric mean of the minimum and maximum positive finite values (TRUE) or a string specifying whether to leave the values unchanged ("no") or to rescale concentration values by dividing by the geometric mean of the minimum and maximum positive finite values ("geomean") or to logistically transform ("odds").
 #' @param ribbon A flag indicating whether to plot the confidence interval as a grey ribbon as opposed to green solid lines.

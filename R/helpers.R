@@ -121,8 +121,14 @@ rename_data <- function(data, left, right, weight) {
   data
 }
 
-is_at_boundary <- function(fit, data, min_pmix = 0.5, range_shape1 = c(0.05, 20), range_shape2 = c(0.05, 20),
-                           regex = ".*") {
+is_at_boundary <- function(
+  fit,
+  data,
+  min_pmix = 0.5,
+  range_shape1 = c(0.05, 20),
+  range_shape2 = c(0.05, 20),
+  regex = ".*"
+) {
   dist <- .dist_tmbfit(fit)
   if (!is_bounds(dist)) {
     return(FALSE)
@@ -170,18 +176,23 @@ adjust_data <- function(data, rescale, reweight, odds_max, silent) {
     rescale <- Inf
   }
 
-  list(data = data, censoring = censoring, rescale = rescale, weighted = weighted, unequal = unequal)
+  list(
+    data = data,
+    censoring = censoring,
+    rescale = rescale,
+    weighted = weighted,
+    unequal = unequal
+  )
 }
 
 mean_weighted_values <- function(data, weight = TRUE) {
-  data <- as.matrix(data[c("left", "right")])
-  x <- rowMeans(data, na.rm = TRUE)
+  x <- rowMeans(as.matrix(data[c("left", "right")]), na.rm = TRUE)
   if (!weight) {
     return(x)
   }
-  x <- x[weight > 0]
-  weight <- weight[weight > 0]
-  weight <- weight / min(weight)
-  weight <- round(weight)
-  rep(x, weight)
+  w <- data$weight
+  x <- x[w > 0]
+  w <- w[w > 0]
+  w <- round(w / min(w))
+  rep(x, w)
 }

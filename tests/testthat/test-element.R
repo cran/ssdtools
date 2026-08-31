@@ -15,22 +15,23 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-#' Cullen and Frey Plot
-#' `r lifecycle::badge('deprecated')`
-#'
-#' Plots a Cullen and Frey graph of the skewness and kurtosis
-#' for non-censored data.
-#'
-#' Deprecated for [fitdistrplus::descdist()].
-#'
-#' @inheritParams ssd_fit_dists
-#' @keywords internal
-#' @export
-ssd_plot_cf <- function(data, left = "Conc") {
-  lifecycle::deprecate_stop(
-    "0.3.5",
-    "ssd_plot_cf()",
-    "fitdistrplus::descdist()",
-    details = "Please use fitdistrplus::descdist(data$Conc, boot = 100L)."
+test_that("ssd_element_text_hc inherits from element_text", {
+  element <- ssd_element_text_hc()
+  expect_s3_class(element, "element_text_hc")
+  expect_s3_class(element, "element_text")
+})
+
+test_that("ssd_element_text_hc bolds multi-line labels only", {
+  grob <- ggplot2::element_grob(
+    ssd_element_text_hc(),
+    label = c("1", "\n1.26", "10"),
+    hjust = 0.5,
+    vjust = 1
   )
-}
+  expect_identical(unname(grob$children[[1]]$gp$font), c(1L, 2L, 1L))
+})
+
+test_that("ssd_element_text_hc is used by ssd_plot", {
+  gp <- ssd_plot(ssddata::ccme_boron, ssdtools::boron_pred)
+  expect_s3_class(gp@theme$axis.text.x, "element_text_hc")
+})

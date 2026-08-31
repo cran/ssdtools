@@ -12,7 +12,7 @@ library(ssdtools)
 dist <- ssd_fit_dists(ssddata::ccme_boron)
 ssd_plot_cdf(dist, average = NA)
 
-## ----message = FALSE, fig.alt = "A plot showing the model averaged fit with a mathematical expression in the xlabel with the units."----
+## ----message = FALSE, eval = requireNamespace("latex2exp", quietly = TRUE), fig.alt = "A plot showing the model averaged fit with a mathematical expression in the xlabel with the units."----
 library(ssdtools)
 
 ssd_plot(ssddata::ccme_boron, ssdtools::boron_pred, label = "Species", shape = "Group") +

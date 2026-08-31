@@ -25,18 +25,43 @@ hcp_noci <- function(value, est_method, ci_method, ...) {
   tibble(
     value = value,
     est_method = est_method,
-    ci_method = ci_method,
+    ci_method = ci_method
   )
 }
 
 hcp_average <- function(
-    x, value, data, ci, level, nboot, est_method,
-    min_pboot, min_pmix, parametric, rescale, weighted, ci_method, censoring,
-    range_shape1, range_shape2, control, hc, save_to,
-    samples, fun) {
+  x,
+  value,
+  data,
+  ci,
+  level,
+  nboot,
+  est_method,
+  min_pboot,
+  min_pmix,
+  parametric,
+  rescale,
+  weighted,
+  ci_method,
+  censoring,
+  range_shape1,
+  range_shape2,
+  control,
+  hc,
+  save_to,
+  samples,
+  fun
+) {
   if (.is_censored(censoring) && !identical_parameters(x)) {
-    wrn("Model averaged estimates cannot be calculated for censored data when the distributions have different numbers of parameters.")
+    wrn(
+      "Model averaged estimates cannot be calculated for censored data when the distributions have different numbers of parameters."
+    )
   }
+
+  ## Compute on the unique values so the various ci/est functions (some of
+  ## which collapse duplicates via group_by()) agree on the row structure,
+  ## then re-expand to the input `value` vector preserving order and duplicates.
+  uvalue <- unique(value)
 
   est_same <- FALSE
   ci_fun <- if (!ci) {
@@ -55,16 +80,30 @@ hcp_average <- function(
 
   hcp <- ci_fun(
     x,
-    value = value, ci = ci, level = level, nboot = nboot, est_method = est_method,
+    value = uvalue,
+    ci = ci,
+    level = level,
+    nboot = nboot,
+    est_method = est_method,
     min_pboot = min_pboot,
-    data = data, rescale = rescale, weighted = weighted, censoring = censoring,
-    min_pmix = min_pmix, range_shape1 = range_shape1, range_shape2 = range_shape2,
-    parametric = parametric, control = control, save_to = save_to, samples = samples,
-    ci_method = ci_method, hc = hc, fun = fun
+    data = data,
+    rescale = rescale,
+    weighted = weighted,
+    censoring = censoring,
+    min_pmix = min_pmix,
+    range_shape1 = range_shape1,
+    range_shape2 = range_shape2,
+    parametric = parametric,
+    control = control,
+    save_to = save_to,
+    samples = samples,
+    ci_method = ci_method,
+    hc = hc,
+    fun = fun
   )
 
   if (est_same) {
-    return(hcp)
+    return(hcp[match(value, hcp$value), ])
   }
 
   est_fun <- if (est_method == "multi") {
@@ -73,13 +112,27 @@ hcp_average <- function(
     hcp_ma
   }
   est <- est_fun(
-    x, value,
-    ci = FALSE, level = level, nboot = nboot, min_pboot = min_pboot,
-    data = data, rescale = rescale, weighted = weighted, censoring = censoring,
-    min_pmix = min_pmix, range_shape1 = range_shape1, range_shape2 = range_shape2,
-    parametric = parametric, control = control, save_to = save_to, samples = samples,
+    x,
+    uvalue,
+    ci = FALSE,
+    level = level,
+    nboot = nboot,
+    min_pboot = min_pboot,
+    data = data,
+    rescale = rescale,
+    weighted = weighted,
+    censoring = censoring,
+    min_pmix = min_pmix,
+    range_shape1 = range_shape1,
+    range_shape2 = range_shape2,
+    parametric = parametric,
+    control = control,
+    save_to = save_to,
+    samples = samples,
     est_method = est_method,
-    ci_method = "MACL", hc = hc
+    ci_method = "MACL",
+    hc = hc
   )
-  replace_estimates(hcp, est)
+  hcp <- replace_estimates(hcp, est)
+  hcp[match(value, hcp$value), ]
 }
